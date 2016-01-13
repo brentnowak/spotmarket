@@ -1,0 +1,6 @@
+[DATABASE]
+host = 127.0.0.1
+database = spotmarket
+port = 5432
+user = spotmarketadmin
+password = changeme
