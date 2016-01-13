@@ -15,15 +15,44 @@ Recommended Platform
 
 Install Notes
 ==================
-* Install Details
 
-### Packages
+# Debian
+
+Dependencies
+```shell
 apt-get install postgresql postgresql-contrib
 apt-get build-dep python-psycopg2
 pip install psycopg2
+pip install arrow
+```
 
-### crontab
+Install
+```shell
+git clone https://github.com/brentnowak/spotmarket
+chmod +x runjobs.sh
+```
+
+PostgreSQL
+```shell
+sudo su - postgres
+psql
+CREATE DATABASE spotmarket;
+CREATE USER spotmarketadmin WITH PASSWORD 'changeme';
+GRANT ALL PRIVILEGES ON DATABASE spotmarket TO spotmarketadmin;
+\q
+```
+
+Modify config.ini with database details
+```shell
+vim config.ini.change
+mv config.ini.change change.ini
+```
+
+crontab
+```shell 
+crontab -e
 0,30 * * * * ubuntu /home/ubuntu/spotmarket/runjobs.sh > /dev/null 2>&1
+```
 
 License Info
 ==================
