@@ -24,7 +24,8 @@ apt-get install postgresql postgresql-contrib
 apt-get build-dep python-psycopg2
 pip install ConfigParser  
 pip install psycopg2  
-pip install arrow```
+pip install arrow
+```
 
 **Install**
 ```shell
@@ -50,7 +51,8 @@ psql -d spotmarket -U spotmarketadmin -W
 
 **Database creation**
 
-Create database, tables, and indexes with the scripts located under \sql. You can connect to the database using the command listed above and create the tables or use a GUI tool such as pgAdmin.  
+Create database, tables, and indexes with the scripts located under \sql.  
+You can connect to the database using the command listed above and create the tables or use a GUI tool such as pgAdmin.  
 
 **Modify config.ini with database details**
 ```shell
