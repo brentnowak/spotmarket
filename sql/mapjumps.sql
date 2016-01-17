@@ -16,15 +16,6 @@ WITH (
 ALTER TABLE data.mapjumps
   OWNER TO spotmarketadmin;
 
--- Index: data."idx_mapjumps_systemkillID"
-
--- DROP INDEX data."idx_mapjumps_systemkillID";
-
-CREATE INDEX "idx_mapjumps_systemjumpID"
-  ON data.mapjumps
-  USING btree
-  ("systemjumpID");
-
 -- Index: data.idx_mapjumps_timestamp
 
 -- DROP INDEX data.idx_mapjumps_timestamp;
@@ -33,4 +24,3 @@ CREATE INDEX idx_mapjumps_timestamp
   ON data.mapjumps
   USING btree
   ("timestamp" DESC NULLS LAST);
-
