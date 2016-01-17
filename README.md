@@ -18,21 +18,21 @@ Install Notes
 
 # Debian
 
-Dependencies
-```shell
-apt-get install postgresql postgresql-contrib
+**Dependencies**
+```shell 
+apt-get install postgresql postgresql-contrib  
 apt-get build-dep python-psycopg2
-pip install psycopg2
-pip install arrow
-```
+pip install ConfigParser  
+pip install psycopg2  
+pip install arrow```
 
-Install
+**Install**
 ```shell
 git clone https://github.com/brentnowak/spotmarket
 chmod +x runjobs.sh
 ```
 
-PostgreSQL
+**PostgreSQL**
 ```shell
 sudo su - postgres
 psql
@@ -42,13 +42,23 @@ GRANT ALL PRIVILEGES ON DATABASE spotmarket TO spotmarketadmin;
 \q
 ```
 
-Modify config.ini with database details
+**Test database connection**
+
+```shell
+psql -d spotmarket -U spotmarketadmin -W
+```
+
+**Database creation**
+
+Create database, tables, and indexes with the scripts located under \sql. You can connect to the database using the command listed above and create the tables or use a GUI tool such as pgAdmin.  
+
+**Modify config.ini with database details**
 ```shell
 vim config.ini.change
 mv config.ini.change change.ini
 ```
 
-crontab
+**crontab**
 ```shell 
 crontab -e
 0,30 * * * * ubuntu /home/ubuntu/spotmarket/runjobs.sh > /dev/null 2>&1
