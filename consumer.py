@@ -35,11 +35,11 @@ jumpstimestamp = jumps_cachedUntil.format('YYYY-MM-DD HH:mm:ss')
 
 def main():
     # Run Map import
-    count_mapinsert = insertmap(mapapi_data)
+    count_mapinsert = insertmap(mapapi_data, maptimestamp)
     print("[" + str(maptimestamp) + "][Informational] Map Inserted: " + str(count_mapinsert))
 
     # Run Jumps import
-    count_jumpsinsert = insertjumps(jumpsapi_data)
+    count_jumpsinsert = insertjumps(jumpsapi_data, jumpstimestamp)
     print("[" + str(jumpstimestamp) + "][Informational] Jumps Inserted: " + str(count_jumpsinsert))
 
 

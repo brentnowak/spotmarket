@@ -19,7 +19,7 @@ port = config.get("DATABASE", "port")
 database_spotmarket = config.get("DATABASE", "database")
 
 # Connection String
-conn_string_spotmarket = "host=%s dbname=%s user=%s password=%s" % (host, database_spotmarket, user, password)
+conn_string = "host=%s dbname=%s user=%s password=%s" % (host, database_spotmarket, user, password)
 
 
 # Console
@@ -38,7 +38,7 @@ pd.set_option('display.width', desired_width)
 # Output    regionName
 #
 def regionname(regionID):
-    conn = psycopg2.connect(conn_string_spotmarket)
+    conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = 'SELECT "mapRegions"."regionName" FROM public."mapRegions" WHERE "mapRegions"."regionID" = %s'
     data = (regionID, )
@@ -53,7 +53,7 @@ def regionname(regionID):
 # Output    dataframe of SUM_factionKills grouped by timestamp
 #
 def getnpckills_byregion(regionID):
-    conn = psycopg2.connect(conn_string_spotmarket)
+    conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = """SELECT
       SUM(mapkills."factionKills") as SUM_factionKills, timestamp
@@ -76,7 +76,7 @@ def getnpckills_byregion(regionID):
 # Input         mapapi_data
 # Output        Database insert
 #
-def insertmap(mapapi_data):
+def insertmap(mapapi_data, maptimestamp):
     count_insert = 0
     for key,value in mapapi_data.iteritems():
         id = value['id']
@@ -103,9 +103,9 @@ def mapinsertrecord(timestamp, id, ship, faction, pod):
 # Input         jumpsapi_data
 # Output        Database insert
 #
-def insertjumps(jumps_data):
+def insertjumps(jumps_data, jumpstimestamp):
     count_insert = 0
-    for key,value in jumpsapi_data.iteritems():
+    for key,value in jumps_data.iteritems():
         id = key
         jumps = value
         jumpsinsertrecord(jumpstimestamp, id, jumps)

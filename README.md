@@ -26,6 +26,8 @@ apt-get install python-pip
 apt-get install git
 pip install ConfigParser
 pip install psycopg2
+pip install evelink
+pip install pandas
 pip install arrow
 ```
 
@@ -49,7 +51,7 @@ GRANT ALL PRIVILEGES ON DATABASE spotmarket TO spotmarketadmin;
 ```shell
 vim /etc/postgresql/9.3/main/pg_hba.conf
 ```
-Change line 85 from 'peer' to 'trust'
+Change line 85 from 'peer' to 'md5'
 Under 'IPv4 local connections' add a line for your local network
 
 ```shell
@@ -65,6 +67,7 @@ service postgresql restart
 
 ```shell
 psql -d spotmarket -U spotmarketadmin -W
+\q
 ```
 
 **Database Creation**
