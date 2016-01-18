@@ -22,8 +22,10 @@ Install Notes
 ```shell 
 apt-get install postgresql postgresql-contrib  
 apt-get build-dep python-psycopg2
-pip install ConfigParser  
-pip install psycopg2  
+apt-get install python-pip
+apt-get install git
+pip install ConfigParser
+pip install psycopg2
 pip install arrow
 ```
 
@@ -43,18 +45,34 @@ GRANT ALL PRIVILEGES ON DATABASE spotmarket TO spotmarketadmin;
 \q
 ```
 
-**Test database connection**
+**Local and IPv4 Access to PostgreSQL**
+```shell
+vim /etc/postgresql/9.3/main/pg_hba.conf
+```
+Change line 85 from 'peer' to 'trust'
+Under 'IPv4 local connections' add a line for your local network
+
+```shell
+vim /etc/postgresql/9.3/main/postgresql.conf
+```
+Uncomment line 59 and change the 'listen_address' value to '*'
+
+```shell
+service postgresql restart
+```
+
+**Test Database Connection**
 
 ```shell
 psql -d spotmarket -U spotmarketadmin -W
 ```
 
-**Database creation**
+**Database Creation**
 
 Create database, tables, and indexes with the scripts located under \sql.  
 You can connect to the database using the command listed above and create the tables or use a GUI tool such as pgAdmin.  
 
-**Modify config.ini with database details**
+**Modify config.ini with Database Details**
 ```shell
 vim config.ini.change
 mv config.ini.change change.ini
