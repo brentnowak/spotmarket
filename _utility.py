@@ -93,7 +93,7 @@ def insertmap(mapapi_data, maptimestamp):
 def mapinsertrecord(timestamp, id, ship, faction, pod):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    sql = 'INSERT INTO data."mapkills" (timestamp, "solarSystemID", "shipKills", "factionKills", "podKills") VALUES (%s, %s, %s, %s, %s)'
+    sql = 'UPSERT data."mapkills" (timestamp, "solarSystemID", "shipKills", "factionKills", "podKills") VALUES (%s, %s, %s, %s, %s)'
     data = (timestamp, id, ship, faction, pod, )
     cursor.execute(sql, data)
     conn.commit()
@@ -118,7 +118,7 @@ def insertjumps(jumps_data, jumpstimestamp):
 def jumpsinsertrecord(timestamp, id, jumps):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    sql = 'INSERT INTO data."mapjumps" (timestamp, "solarSystemID", "shipJumps") VALUES (%s, %s, %s)'
+    sql = 'UPSERT data."mapjumps" (timestamp, "solarSystemID", "shipJumps") VALUES (%s, %s, %s)'
     data = (timestamp, id, jumps, )
     cursor.execute(sql, data)
     conn.commit()
