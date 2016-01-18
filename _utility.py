@@ -83,9 +83,23 @@ def insertmap(mapapi_data, maptimestamp):
         ship = value['ship']
         faction = value['faction']
         pod = value['pod']
-        mapinsertrecord(maptimestamp, id, ship, faction, pod)
-        count_insert += 1
+        if len(mapcheckrowexists(maptimestamp, id, ship, faction, pod)) == 0:
+            mapinsertrecord(maptimestamp, id, ship, faction, pod)
+            count_insert += 1
     return count_insert
+
+#
+# Check if map record exists
+#
+def mapcheckrowexists(timestamp, id, ship, faction, pod):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = 'SELECT * FROM data."mapkills" WHERE timestamp = %s AND "mapkills"."solarSystemID" = %s AND "mapkills"."shipKills" = %s and "mapkills"."factionKills" = %s AND "mapkills"."podKills" = %s'
+    data = (timestamp, id, ship, faction, pod, )
+    cursor.execute(sql, data)
+    result = cursor.fetchall()
+    return result
+
 
 #
 # Insert mapapi_data record
@@ -93,7 +107,7 @@ def insertmap(mapapi_data, maptimestamp):
 def mapinsertrecord(timestamp, id, ship, faction, pod):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    sql = 'UPSERT data."mapkills" (timestamp, "solarSystemID", "shipKills", "factionKills", "podKills") VALUES (%s, %s, %s, %s, %s)'
+    sql = 'INSERT INTO data."mapkills" (timestamp, "solarSystemID", "shipKills", "factionKills", "podKills") VALUES (%s, %s, %s, %s, %s)'
     data = (timestamp, id, ship, faction, pod, )
     cursor.execute(sql, data)
     conn.commit()
@@ -108,9 +122,24 @@ def insertjumps(jumps_data, jumpstimestamp):
     for key,value in jumps_data.iteritems():
         id = key
         jumps = value
-        jumpsinsertrecord(jumpstimestamp, id, jumps)
-        count_insert += 1
+        if len(jumpcheckrowexists(jumpstimestamp, id, jumps)) == 0:
+            jumpsinsertrecord(jumpstimestamp, id, jumps)
+            count_insert += 1
     return count_insert
+
+
+#
+# Check if jump record exists
+#
+def jumpcheckrowexists(timestamp, id, jumps):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = 'SELECT * FROM data."mapjumps" WHERE timestamp = %s AND "mapjumps"."solarSystemID" = %s AND "mapjumps"."shipJumps" = %s'
+    data = (timestamp, id, jumps, )
+    cursor.execute(sql, data)
+    result = cursor.fetchall()
+    return result
+
 
 #
 # Insert jumpsapi_data record
@@ -118,7 +147,7 @@ def insertjumps(jumps_data, jumpstimestamp):
 def jumpsinsertrecord(timestamp, id, jumps):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    sql = 'UPSERT data."mapjumps" (timestamp, "solarSystemID", "shipJumps") VALUES (%s, %s, %s)'
+    sql = 'INSERT INTO data."mapjumps" (timestamp, "solarSystemID", "shipJumps") VALUES (%s, %s, %s)'
     data = (timestamp, id, jumps, )
     cursor.execute(sql, data)
     conn.commit()

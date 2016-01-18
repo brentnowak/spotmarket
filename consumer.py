@@ -4,8 +4,7 @@
 #-----------------------------------------------------------------------------
 # Version: 1.0
 # - Initial release
-# Version: 1.1
-# - Remove record check function before INSERT
+# Version: 1.0.1
 # - Move configuration and functions to _utility.py
 #-----------------------------------------------------------------------------
 
@@ -24,13 +23,13 @@ jumpresponse = jumpsapi.jumps_by_system()
 mapapi_cachedUntil = arrow.get(mapresponse.expires)
 jumps_cachedUntil = arrow.get(jumpresponse.expires)
 
-# Get dictionary
-mapapi_data = mapresponse.result[0]
-jumpsapi_data = jumpresponse.result[0]
-
 # Format timestamps
 maptimestamp = mapapi_cachedUntil.format('YYYY-MM-DD HH:mm:ss')
 jumpstimestamp = jumps_cachedUntil.format('YYYY-MM-DD HH:mm:ss')
+
+# Get dictionary
+mapapi_data = mapresponse.result[0]
+jumpsapi_data = jumpresponse.result[0]
 
 
 def main():
