@@ -2,9 +2,9 @@
 # consumer.py - EVE Online API consumer
 # Brent Nowak <brent613@gmail.com>
 #-----------------------------------------------------------------------------
-# Version: 1.0
+# Version: 0.1
 # - Initial release
-# Version: 1.0.1
+# Version: 0.11
 # - Move configuration and functions to _utility.py
 #-----------------------------------------------------------------------------
 

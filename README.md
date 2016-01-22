@@ -48,17 +48,20 @@ GRANT ALL PRIVILEGES ON DATABASE spotmarket TO spotmarketadmin;
 ```
 
 **Local and IPv4 Access to PostgreSQL**
+As root
 ```shell
 vim /etc/postgresql/9.3/main/pg_hba.conf
 ```
 Change line 85 from 'peer' to 'md5'
 Under 'IPv4 local connections' add a line for your local network
 
+As root
 ```shell
 vim /etc/postgresql/9.3/main/postgresql.conf
 ```
 Uncomment line 59 and change the 'listen_address' value to '*'
 
+As root
 ```shell
 service postgresql restart
 ```
