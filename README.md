@@ -48,6 +48,7 @@ GRANT ALL PRIVILEGES ON DATABASE spotmarket TO spotmarketadmin;
 ```
 
 **Local and IPv4 Access to PostgreSQL**
+
 As root
 ```shell
 vim /etc/postgresql/9.3/main/pg_hba.conf
