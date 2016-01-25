@@ -1,5 +1,5 @@
 body {
-  font: 10px sans-serif;
+    font: 10px sans-serif;
 }
 
 h1 {
@@ -16,20 +16,20 @@ h2 {
 
 .axis path,
 .axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
 }
 
 .x.axis path {
-  stroke: #000;
-  shape-rendering: crispEdges;
+    stroke: #000;
+    shape-rendering: crispEdges;
 }
 
 .line {
-  fill: none;
-  stroke: steelblue;
-  stroke-width: 1.5px;
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
 }
 
 .grid .tick {
@@ -38,5 +38,11 @@ h2 {
 }
 
 .grid path {
-      stroke-width: 1px;
+    stroke-width: 1px;
+}
+
+.legend rect {
+    fill: white;
+    stroke: gray;
+    opacity: 0.5;
 }

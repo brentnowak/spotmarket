@@ -52,23 +52,88 @@ def regionname(regionID):
 # Input     regionID
 # Output    dataframe of SUM_factionKills grouped by timestamp
 #
-def getnpckills_byregion(regionID):
+def getregions_byfaction(factionID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = """SELECT
+      "chrFactions"."factionName",
+      "chrFactions"."factionID",
+      "mapRegions"."regionName",
+      "mapRegions"."regionID"
+    FROM
+      public."chrFactions",
+      public."mapRegions"
+    WHERE
+      "mapRegions"."factionID" = "chrFactions"."factionID"
+      AND "mapRegions"."factionID" = %s
+    """
+    data = (factionID, )
+    cursor.execute(sql, data)
+    df = pd.DataFrame(cursor.fetchall(),columns=['factionName','factionID','regionName','regionID'])
+    cursor.close()
+    return df
+
+
+#
+# Input     dataframe of a single region
+# Output    dataframe of regions
+#
+def getnpckills_byregions(regions):
+    df = pd.DataFrame()
+    for region in regions:
+        df_result = getnpckills_byregion(region)
+        df = df.append(df_result)
+    df.reset_index()
+    return df
+
+
+#
+# Input     regionID
+# Output    dataframe of SUM_factionKills grouped by timestamp
+#
+def getnpckills_byuniverse():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = """SELECT
       SUM(mapkills."factionKills") as SUM_factionKills, timestamp
     FROM
+      data.mapkills
+    GROUP BY mapkills."timestamp"
+    ORDER BY timestamp DESC
+    """
+    cursor.execute(sql)
+    df = pd.DataFrame(cursor.fetchall(),columns=['SUM_factionKills', 'timestamp'])
+    df = df.set_index(['timestamp'])
+    cursor.close()
+    return df
+
+
+#
+# Input     regionID
+# Output    dataframe of SUM_factionKills grouped by timestamp
+#
+def getnpckills_byregion(regionID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = """SELECT
+      "mapSolarSystems"."regionID",
+      "mapRegions"."regionName",
+    SUM(mapkills."factionKills") as SUM_factionKills,
+      mapkills."timestamp"
+    FROM
       data.mapkills,
+      public."mapRegions",
       public."mapSolarSystems"
     WHERE
-      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID"
-        AND public."mapSolarSystems"."regionID" = %s
-    GROUP BY mapkills."timestamp"
+      "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
+      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      public."mapSolarSystems"."regionID" = %s
+    GROUP BY mapkills."timestamp", public."mapSolarSystems"."regionID", "mapRegions"."regionName"
     ORDER BY timestamp DESC
     """
     data = (regionID, )
     cursor.execute(sql, data)
-    df = pd.DataFrame(cursor.fetchall(),columns=['SUM_factionKills','timestamp'])
+    df = pd.DataFrame(cursor.fetchall(),columns=['regionID', 'regionName', 'SUM_factionKills', 'timestamp'])
     cursor.close()
     return df
 
