@@ -32,17 +32,22 @@ h2 {
     stroke-width: 1.5px;
 }
 
-.grid .tick {
-    stroke: lightgrey;
-    opacity: 0.7;
+.tick text{
+    font-size: 10px;
 }
 
-.grid path {
-    stroke-width: 1px;
+.tick line{
+    opacity: 0.2;
 }
 
 .legend rect {
-    fill: white;
+    fill: lightgray;
     stroke: gray;
-    opacity: 0.5;
+    opacity: 0.6;
+}
+
+.graph-svg-component {
+    background-color: #f2f2f2;
+    border: 1px solid black;
+
 }

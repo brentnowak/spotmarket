@@ -30,8 +30,10 @@ var y = d3.scale.linear()
 
 var xAxis = d3.svg.axis()
     .scale(x)
-    .ticks(6)
     .tickFormat(d3.time.format("%b-%d"))
+    .ticks(5)
+    .innerTickSize(-height)
+    .outerTickSize(0)
     .orient("bottom");
 
 var yAxis = d3.svg.axis()
@@ -45,6 +47,7 @@ var line = d3.svg.line()
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
+    .attr("class", "graph-svg-component")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -88,7 +91,7 @@ function type(d) {
 <script>
 (function () {
 
-var margin = {top: 20, right: 90, bottom: 30, left: 50},
+var margin = {top: 20, right: 90, bottom: 50, left: 50},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -104,6 +107,9 @@ var color = d3.scale.category10();
 
 var xAxis = d3.svg.axis()
     .scale(x)
+    .ticks(5)
+    .innerTickSize(-height)
+    .outerTickSize(0)
     .orient("bottom");
 
 var yAxis = d3.svg.axis()
@@ -118,6 +124,7 @@ var line = d3.svg.line()
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
+    .attr("class", "graph-svg-component")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -187,9 +194,9 @@ d3.tsv("data/npckills_regions_guristas_pirate.csv", function(error, data) {
 
 svg.append("text")
         .attr("x", (width / 2))
-        .attr("y", 10 - (margin.top / 2))
+        .attr("y", 480 - (margin.top / 2))
         .attr("text-anchor", "middle")
-        .style("font-size", "16px")
+        .style("font-size", "14px")
         .text("Guristas Pirates - NPC Kill Rates per Region");
 
 });
@@ -201,7 +208,7 @@ svg.append("text")
 <script>
 (function () {
 
-var margin = {top: 20, right: 50, bottom: 30, left: 50},
+var margin = {top: 20, right: 90, bottom: 50, left: 50},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -231,6 +238,7 @@ var line = d3.svg.line()
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
+    .attr("class", "graph-svg-component")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -299,7 +307,7 @@ d3.tsv("data/npckills_regions_guristas_pirates_sum.csv", function(error, data) {
 <script>
 (function () {
 
-var margin = {top: 20, right: 100, bottom: 30, left: 50},
+var margin = {top: 20, right: 90, bottom: 50, left: 50},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -315,6 +323,9 @@ var color = d3.scale.category10();
 
 var xAxis = d3.svg.axis()
     .scale(x)
+    .ticks(5)
+    .innerTickSize(-height)
+    .outerTickSize(0)
     .orient("bottom");
 
 var yAxis = d3.svg.axis()
@@ -329,6 +340,7 @@ var line = d3.svg.line()
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
+    .attr("class", "graph-svg-component")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -380,6 +392,7 @@ d3.tsv("data/npckills_regions_blood_raiders.csv", function(error, data) {
   city.append("path")
       .attr("class", "line")
       .attr("d", function(d) { return line(d.values); })
+      .attr("data-legend",function(d) { return d.name})
       .style("stroke", function(d) { return color(d.name); });
 
   city.append("text")
@@ -388,6 +401,19 @@ d3.tsv("data/npckills_regions_blood_raiders.csv", function(error, data) {
       .attr("x", 3)
       .attr("dy", ".35em")
       .text(function(d) { return d.name; });
+
+  legend = svg.append("g")
+    .attr("class","legend")
+    .attr("transform","translate(50,10)")
+    .style("font-size","12px")
+    .call(d3.legend)
+
+    svg.append("text")
+        .attr("x", (width / 2))
+        .attr("y", 480 - (margin.top / 2))
+        .attr("text-anchor", "middle")
+        .style("font-size", "14px")
+        .text("Blood Raiders - NPC Kill Rates per Region");
 });
 })();
 </script>
@@ -397,7 +423,7 @@ d3.tsv("data/npckills_regions_blood_raiders.csv", function(error, data) {
 <script>
 (function () {
 
-var margin = {top: 20, right: 50, bottom: 30, left: 50},
+var margin = {top: 20, right: 90, bottom: 50, left: 50},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -427,6 +453,7 @@ var line = d3.svg.line()
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
+    .attr("class", "graph-svg-component")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -495,7 +522,7 @@ d3.tsv("data/npckills_regions_sanshas_nation_sum.csv", function(error, data) {
 <script>
 (function () {
 
-var margin = {top: 20, right: 100, bottom: 30, left: 50},
+var margin = {top: 20, right: 90, bottom: 50, left: 50},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -511,6 +538,9 @@ var color = d3.scale.category10();
 
 var xAxis = d3.svg.axis()
     .scale(x)
+    .ticks(5)
+    .innerTickSize(-height)
+    .outerTickSize(0)
     .orient("bottom");
 
 var yAxis = d3.svg.axis()
@@ -525,6 +555,7 @@ var line = d3.svg.line()
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
+    .attr("class", "graph-svg-component")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -576,6 +607,7 @@ d3.tsv("data/npckills_regions_sanshas_nation.csv", function(error, data) {
   city.append("path")
       .attr("class", "line")
       .attr("d", function(d) { return line(d.values); })
+      .attr("data-legend",function(d) { return d.name})
       .style("stroke", function(d) { return color(d.name); });
 
   city.append("text")
@@ -584,6 +616,19 @@ d3.tsv("data/npckills_regions_sanshas_nation.csv", function(error, data) {
       .attr("x", 3)
       .attr("dy", ".35em")
       .text(function(d) { return d.name; });
+
+  legend = svg.append("g")
+    .attr("class","legend")
+    .attr("transform","translate(50,10)")
+    .style("font-size","12px")
+    .call(d3.legend)
+
+    svg.append("text")
+        .attr("x", (width / 2))
+        .attr("y", 480 - (margin.top / 2))
+        .attr("text-anchor", "middle")
+        .style("font-size", "14px")
+        .text("Sansha's Nation - NPC Kill Rates per Region");
 });
 })();
 </script>
@@ -593,7 +638,7 @@ d3.tsv("data/npckills_regions_sanshas_nation.csv", function(error, data) {
 <script>
 (function () {
 
-var margin = {top: 20, right: 50, bottom: 30, left: 50},
+var margin = {top: 20, right: 90, bottom: 50, left: 50},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -623,6 +668,7 @@ var line = d3.svg.line()
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
+    .attr("class", "graph-svg-component")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -691,7 +737,7 @@ d3.tsv("data/npckills_regions_blood_raiders_sum.csv", function(error, data) {
 <script>
 (function () {
 
-var margin = {top: 20, right: 100, bottom: 30, left: 50},
+var margin = {top: 20, right: 90, bottom: 50, left: 50},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -707,6 +753,9 @@ var color = d3.scale.category10();
 
 var xAxis = d3.svg.axis()
     .scale(x)
+    .ticks(5)
+    .innerTickSize(-height)
+    .outerTickSize(0)
     .orient("bottom");
 
 var yAxis = d3.svg.axis()
@@ -721,6 +770,7 @@ var line = d3.svg.line()
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
+    .attr("class", "graph-svg-component")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -772,6 +822,7 @@ d3.tsv("data/npckills_regions_angel_cartel.csv", function(error, data) {
   city.append("path")
       .attr("class", "line")
       .attr("d", function(d) { return line(d.values); })
+      .attr("data-legend",function(d) { return d.name})
       .style("stroke", function(d) { return color(d.name); });
 
   city.append("text")
@@ -780,6 +831,19 @@ d3.tsv("data/npckills_regions_angel_cartel.csv", function(error, data) {
       .attr("x", 3)
       .attr("dy", ".35em")
       .text(function(d) { return d.name; });
+
+  legend = svg.append("g")
+    .attr("class","legend")
+    .attr("transform","translate(50,10)")
+    .style("font-size","12px")
+    .call(d3.legend)
+
+    svg.append("text")
+        .attr("x", (width / 2))
+        .attr("y", 480 - (margin.top / 2))
+        .attr("text-anchor", "middle")
+        .style("font-size", "14px")
+        .text("Angel Cartel - NPC Kill Rates per Region");
 });
 })();
 </script>
@@ -789,7 +853,7 @@ d3.tsv("data/npckills_regions_angel_cartel.csv", function(error, data) {
 <script>
 (function () {
 
-var margin = {top: 20, right: 50, bottom: 30, left: 50},
+var margin = {top: 20, right: 90, bottom: 50, left: 50},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -819,6 +883,7 @@ var line = d3.svg.line()
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
+    .attr("class", "graph-svg-component")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -887,7 +952,7 @@ d3.tsv("data/npckills_regions_angel_cartel_sum.csv", function(error, data) {
 <script>
 (function () {
 
-var margin = {top: 20, right: 100, bottom: 30, left: 50},
+var margin = {top: 20, right: 90, bottom: 50, left: 50},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -903,6 +968,9 @@ var color = d3.scale.category10();
 
 var xAxis = d3.svg.axis()
     .scale(x)
+    .ticks(5)
+    .innerTickSize(-height)
+    .outerTickSize(0)
     .orient("bottom");
 
 var yAxis = d3.svg.axis()
@@ -917,6 +985,7 @@ var line = d3.svg.line()
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
+    .attr("class", "graph-svg-component")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -968,6 +1037,7 @@ d3.tsv("data/npckills_regions_serpentis_corporation.csv", function(error, data) 
   city.append("path")
       .attr("class", "line")
       .attr("d", function(d) { return line(d.values); })
+      .attr("data-legend",function(d) { return d.name})
       .style("stroke", function(d) { return color(d.name); });
 
   city.append("text")
@@ -976,6 +1046,19 @@ d3.tsv("data/npckills_regions_serpentis_corporation.csv", function(error, data) 
       .attr("x", 3)
       .attr("dy", ".35em")
       .text(function(d) { return d.name; });
+
+  legend = svg.append("g")
+    .attr("class","legend")
+    .attr("transform","translate(50,10)")
+    .style("font-size","12px")
+    .call(d3.legend)
+
+    svg.append("text")
+        .attr("x", (width / 2))
+        .attr("y", 480 - (margin.top / 2))
+        .attr("text-anchor", "middle")
+        .style("font-size", "14px")
+        .text("Serpentis Corporation - NPC Kill Rates per Region");
 });
 })();
 </script>
@@ -985,7 +1068,7 @@ d3.tsv("data/npckills_regions_serpentis_corporation.csv", function(error, data) 
 <script>
 (function () {
 
-var margin = {top: 20, right: 50, bottom: 30, left: 50},
+var margin = {top: 20, right: 90, bottom: 50, left: 50},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -1015,6 +1098,7 @@ var line = d3.svg.line()
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
+    .attr("class", "graph-svg-component")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
