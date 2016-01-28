@@ -4,6 +4,9 @@
 
 import psycopg2
 import ConfigParser
+import time
+import arrow
+import pycrest
 import pandas as pd
 
 #############################
@@ -103,6 +106,40 @@ def getnpckills_byuniverse():
     """
     cursor.execute(sql)
     df = pd.DataFrame(cursor.fetchall(),columns=['SUM_factionKills', 'timestamp'])
+    df = df.set_index(['timestamp'])
+    cursor.close()
+    return df
+
+
+#
+# Input     none
+# Output    dataframe of SUM_factionKills grouped by security
+#
+def getnpckills_byallsecurity():
+    df = getnpckills_bysecurity(0.5, 1.0, 'high')
+    df = df.append(getnpckills_bysecurity(0.0, 0.5, 'low'))
+    df = df.append(getnpckills_bysecurity(-1, 0.0, 'null'))
+    #wh space placeholder
+    df = df.groupby(by='timestamp').nth(0,dropna=True)
+    return df
+
+def getnpckills_bysecurity(low, high, name):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = """SELECT
+      SUM(mapkills."factionKills") as SUM_factionKills, timestamp
+    FROM
+      data.mapkills,
+      public."mapSolarSystems"
+    WHERE
+      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+     "mapSolarSystems"."security" BETWEEN %s AND %s
+    GROUP BY mapkills."timestamp"
+    ORDER BY timestamp DESC
+    """
+    data = (low, high, )
+    cursor.execute(sql, data)
+    df = pd.DataFrame(cursor.fetchall(),columns=[name, 'timestamp'])
     df = df.set_index(['timestamp'])
     cursor.close()
     return df
@@ -218,3 +255,94 @@ def jumpsinsertrecord(timestamp, id, jumps):
     conn.commit()
     return 0
 
+
+#
+# Input     CREST JSON
+# Output    Database insert
+
+def insertmarket(regionID, typeID, history):
+    count = 0
+    for row in history['items']:
+        volume = row['volume']
+        orderCount =  row['orderCount']
+        lowPrice = row['lowPrice']
+        highPrice = row['highPrice']
+        avgPrice = row['avgPrice']
+        timestamp = row['date']
+        result = markethistorycheckrowexists(typeID, regionID, timestamp, volume, orderCount)
+        if len(result) == 0:
+            markethistoryinsertrecord(typeID, regionID, timestamp, volume, orderCount, lowPrice, highPrice, avgPrice)
+            count += 1
+    return count
+
+
+#
+# Check if markethistory record exists
+#
+def markethistorycheckrowexists(typeID, regionID, timestamp, volume, orderCount):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT * FROM data."markethistory" WHERE
+          "markethistory"."typeID" = %s AND
+          "markethistory"."regionID" = %s AND
+          timestamp = %s AND
+          "markethistory"."volume" = %s AND
+          "markethistory"."orderCount" = %s'''
+    data = (typeID, regionID, timestamp, volume, orderCount, )
+    cursor.execute(sql, data)
+    result = cursor.fetchall()
+    return result
+
+
+#
+# Insert markethistory record
+#
+def markethistoryinsertrecord(typeID, regionID, timestamp, volume, orderCount, lowPrice, highPrice, avgPrice):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = 'INSERT INTO data."markethistory" ("typeID", "regionID", timestamp, "volume", "orderCount", "lowPrice", "highPrice", "avgPrice") VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'
+    data = (typeID, regionID, timestamp, volume, orderCount, lowPrice, highPrice, avgPrice, )
+    cursor.execute(sql, data)
+    conn.commit()
+    return 0
+
+
+#
+# Output list of ships by typeID
+#
+def getships():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      "invTypes"."typeID"
+    FROM
+      public."invTypes",
+      public."invGroups"
+    WHERE
+      "invGroups"."groupID" = "invTypes"."groupID" AND
+      "invGroups"."groupID" IN (26, 27, 234, 358, 380, 419, 420, 463, 513, 540, 541, 543, 830, 831, 832, 833, 834, 893, 894, 898, 900, 902, 906, 941, 963, 1022, 1201, 1202, 1305, 1527, 1534) AND
+      "invTypes"."typeID" NOT IN (635, 4005, 34475, 34467, 4469, 34479, 34463, 34459, 34465, 34473, 34457, 34471, 34477, 34461, 34469, 11011, 1904, 25560, 1912, 1914, 1916, 1918, 26840, 33685, 33553, 33639, 33641, 33643, 33645, 33647, 33649, 33651, 33653, 34445, 11936, 11938, 13202, 33627, 33623, 33625, 33629, 33631, 33633, 33635, 33637, 34227, 33683, 34219, 34221, 34223, 34231, 34233, 34235, 34241, 34243, 34245, 34253, 34255, 34257, 34229, 34118, 34151, 34225, 34213, 34215, 34217, 34237, 34239, 34247, 34249, 34251, 34441, 26842, 32790, 32840, 32842, 32844, 32846, 32848, 33395, 33397, 33673, 33675, 33869, 33871, 33873, 33875, 33877, 33879, 33881, 33883, 35779, 35781)
+      '''
+    cursor.execute(sql, )
+    result = cursor.fetchall() # Need to correct to return a list
+    return result
+
+
+#
+# Input     regionIDs, typeIDs
+# Output    database insert
+#
+def getmarkethistory(regionIDs, typeIDs):
+    eve = pycrest.EVE()
+    for regionID in regionIDs:
+        for typeID in typeIDs:
+            start_time = time.time()
+            url = "https://public-crest.eveonline.com/market/" + str(regionID) + "/types/" + str(typeID) + "/history/"
+            history = eve.get(url)
+            count = insertmarket(regionID, typeID, history)
+            timemark = arrow.get().to('US/Pacific').format('YYYY-MM-DD HH:mm:ss')
+            log = "[" + str(timemark) + "][consumer_markethistory.py][insert:" + str(count) + " @ " + str(round(count/(time.time() - start_time), 2)) + " rec/sec][regionID:" + str(regionID) + "][typeID:" + str(typeID) + "]"
+            print(log)
+            with open("logs/consumer_markethistory.log", "a") as f:
+                f.write(log + "\n")
+    return 0
