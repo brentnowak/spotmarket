@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------------
-# consumer.py - EVE Online API consumer
+# consumer_xml.py - EVE Online XML API consumer
 # Brent Nowak <brent613@gmail.com>
 #-----------------------------------------------------------------------------
 # Version: 0.1
