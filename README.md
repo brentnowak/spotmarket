@@ -5,6 +5,7 @@ spotmarket - EVE Online Market Evaluator
 
 Packages Used:
 * evelink 0.7.3 (https://github.com/eve-val/evelink)
+* PyCrest (https://github.com/Dreae/PyCrest)
 
 
 Recommended Platform
@@ -34,7 +35,11 @@ pip install arrow
 **Install**
 ```shell
 git clone https://github.com/brentnowak/spotmarket
-chmod +x runjobs.sh
+cd spotmarket
+chmod +x /scripts/consumer_xml.sh
+chmod +x /scripts/consumer_markethistory.sh
+touch /logs/consumer_xml.log
+touch /logs/consumer_markethistory.log
 ```
 
 **PostgreSQL**
@@ -88,7 +93,8 @@ mv config.ini.change change.ini
 **crontab**
 ```shell 
 crontab -e
-0,30 * * * * ubuntu /home/ubuntu/spotmarket/runjobs.sh > /dev/null 2>&1
+0,30 * * * * ubuntu /home/ubuntu/spotmarket/scripts/consumer_xml.sh > /dev/null 2>&1
+15 1,13 * * * ubuntu /home/ubuntu/spotmarket/scripts/consumer_markethistory.sh > /dev/null 2>&1
 ```
 
 License Info
