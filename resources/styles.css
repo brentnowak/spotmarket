@@ -41,13 +41,13 @@ h2 {
 }
 
 .legend rect {
-    fill: lightgray;
+    fill: white;
     stroke: gray;
     opacity: 0.6;
 }
 
 .graph-svg-component {
-    background-color: #f2f2f2;
+    background-color: white;
     border: 1px solid black;
 
 }
