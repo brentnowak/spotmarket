@@ -7,6 +7,8 @@
 #-----------------------------------------------------------------------------
 
 import pycrest
+import time
+import arrow
 from _utility import *
 
 
@@ -18,10 +20,13 @@ def main():
 
     for regionID in regions:
         for typeID in typeIDs:
+            start_time = time.time()
             url = "https://public-crest.eveonline.com/market/" + str(regionID) + "/types/" + str(typeID[0]) + "/history/"
             history = eve.get(url)
             count = insertmarket(regionID, typeID, history)
-            print("[Informational] Market Record Inserted: " + str(count))
+            timemark = arrow.get().to('US/Pacific').format('YYYY-MM-DD HH:mm:ss')
+            print("[" + str(timemark) + "][consumer_markethistory.py][insert:" + str(count) + " @ " + str(round(count/(time.time() - start_time), 2)) + "rec/sec][regionID:" + str(regionID) + "][typeID:" + str(typeID[0]) + "]")
+
 
 if __name__ == "__main__":
     main()
