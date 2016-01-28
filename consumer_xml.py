@@ -35,12 +35,16 @@ jumpsapi_data = jumpresponse.result[0]
 def main():
     # Run Map import
     count_mapinsert = insertmap(mapapi_data, maptimestamp)
-    print("[" + str(maptimestamp) + "][Informational] Map Inserted: " + str(count_mapinsert))
-
+    log = "[" + str(maptimestamp) + "][consumer_xml.py][map][insert:" + str(count_mapinsert) + "]"
+    print(log)
+    with open("logs/consumer_xml.log", "a") as f:
+        f.write(log + "\n")
     # Run Jumps import
     count_jumpsinsert = insertjumps(jumpsapi_data, jumpstimestamp)
-    print("[" + str(jumpstimestamp) + "][Informational] Jumps Inserted: " + str(count_jumpsinsert))
-
+    log = "[" + str(jumpstimestamp) + "][consumer_xml.py][jump][insert:" + str(count_jumpsinsert) + "]"
+    print(log)
+    with open("logs/consumer_xml.log", "a") as f:
+        f.write(log + "\n")
 
 if __name__ == "__main__":
     main()
