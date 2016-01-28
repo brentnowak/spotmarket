@@ -29,7 +29,7 @@ h2 {
 .line {
     fill: none;
     stroke: steelblue;
-    stroke-width: 1.5px;
+    stroke-width: 2.0px;
 }
 
 .tick text{
@@ -43,11 +43,10 @@ h2 {
 .legend rect {
     fill: white;
     stroke: gray;
-    opacity: 0.6;
+    opacity: 0.8;
 }
 
 .graph-svg-component {
     background-color: white;
     border: 1px solid black;
-
 }
