@@ -117,11 +117,11 @@ def getnpckills_byuniverse():
 #
 def getnpckills_byallsecurity():
     df = getnpckills_bysecurity(0.5, 1.0, 'high')
-    df = df.append(getnpckills_bysecurity(0.0, 0.5, 'low'))
-    df = df.append(getnpckills_bysecurity(-1, 0.0, 'null'))
+    df = df.combine_first(getnpckills_bysecurity(0.0, 0.5, 'low'))
+    df = df.combine_first(getnpckills_bysecurity(-1, 0.0, 'null'))
     #wh space placeholder
-    df = df.groupby(by='timestamp').nth(0,dropna=True)
     return df
+
 
 def getnpckills_bysecurity(low, high, name):
     conn = psycopg2.connect(conn_string)

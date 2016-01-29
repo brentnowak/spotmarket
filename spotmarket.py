@@ -4,6 +4,8 @@
 #-----------------------------------------------------------------------------
 # Version: 0.1
 # - Initial release
+# Version: 0.2
+# - Added NPC charting
 #-----------------------------------------------------------------------------
 
 import time
@@ -21,9 +23,9 @@ def main():
     start_time = time.time()
 
     # Universe
-    df = getnpckills_byuniverse()
+    df = getnpckills_byallsecurity()
     df = pd.rolling_mean(df.resample(conversion, fill_method='bfill'), window=v_window, min_periods=v_minperiods)
-    df.to_csv('data/npckills_universe.csv', index=True, sep='\t', columns=['SUM_factionKills'])
+    df.to_csv('data/npckills_universe.csv', index=True, sep='\t', columns=['high', 'low', 'null'])
 
     # Guristas Pirates
     # Tenal, Branch, Venal, Deklein, Pure Blind, Geminate, Vale of the Silent, Tribute
@@ -40,8 +42,8 @@ def main():
     df = df.pivot(index='timestamp', columns='regionName', values='SUM_factionKills')
     df = pd.rolling_mean(df.resample(conversion, fill_method='bfill'), window=v_window, min_periods=v_minperiods)
     df.to_csv('data/npckills_regions_guristas_pirate.csv', index=True, sep='\t', columns=list(df))
-    df['sum'] = df.sum(axis=1)
-    df.to_csv('data/npckills_regions_guristas_pirates_sum.csv', index=True, sep='\t', columns=['sum'])
+    df['total'] = df.sum(axis=1)
+    df.to_csv('data/npckills_regions_guristas_pirates_sum.csv', index=True, sep='\t', columns=['total'])
 
     # Sansha's Nation
     # Stain, Paragon Soul, Esoteria, Catch, Providence
@@ -55,8 +57,8 @@ def main():
     df = df.pivot(index='timestamp', columns='regionName', values='SUM_factionKills')
     df = pd.rolling_mean(df.resample(conversion, fill_method='bfill'), window=v_window, min_periods=v_minperiods)
     df.to_csv('data/npckills_regions_sanshas_nation.csv', index=True, sep='\t', columns=list(df))
-    df['sum'] = df.sum(axis=1)
-    df.to_csv('data/npckills_regions_sanshas_nation_sum.csv', index=True, sep='\t', columns=['sum'])
+    df['total'] = df.sum(axis=1)
+    df.to_csv('data/npckills_regions_sanshas_nation_sum.csv', index=True, sep='\t', columns=['total'])
 
 
     # Angel Cartel
@@ -78,8 +80,8 @@ def main():
     df = df.pivot(index='timestamp', columns='regionName', values='SUM_factionKills')
     df = pd.rolling_mean(df.resample(conversion, fill_method='bfill'), window=v_window, min_periods=v_minperiods)
     df.to_csv('data/npckills_regions_angel_cartel.csv', index=True, sep='\t', columns=list(df))
-    df['sum'] = df.sum(axis=1)
-    df.to_csv('data/npckills_regions_angel_cartel_sum.csv', index=True, sep='\t', columns=['sum'])
+    df['total'] = df.sum(axis=1)
+    df.to_csv('data/npckills_regions_angel_cartel_sum.csv', index=True, sep='\t', columns=['total'])
 
 
     # Blood Raiders
@@ -92,8 +94,8 @@ def main():
     df = df.pivot(index='timestamp', columns='regionName', values='SUM_factionKills')
     df = pd.rolling_mean(df.resample(conversion, fill_method='bfill'), window=v_window, min_periods=v_minperiods)
     df.to_csv('data/npckills_regions_blood_raiders.csv', index=True, sep='\t', columns=list(df))
-    df['sum'] = df.sum(axis=1)
-    df.to_csv('data/npckills_regions_blood_raiders_sum.csv', index=True, sep='\t', columns=['sum'])
+    df['total'] = df.sum(axis=1)
+    df.to_csv('data/npckills_regions_blood_raiders_sum.csv', index=True, sep='\t', columns=['total'])
 
 
     # Serpentis Corporation
@@ -108,11 +110,11 @@ def main():
     df = df.pivot(index='timestamp', columns='regionName', values='SUM_factionKills')
     df = pd.rolling_mean(df.resample(conversion, fill_method='bfill'), window=v_window, min_periods=v_minperiods)
     df.to_csv('data/npckills_regions_serpentis_corporation.csv', index=True, sep='\t', columns=list(df))
-    df['sum'] = df.sum(axis=1)
-    df.to_csv('data/npckills_regions_serpentis_corporation_sum.csv', index=True, sep='\t', columns=['sum'])
+    df['total'] = df.sum(axis=1)
+    df.to_csv('data/npckills_regions_serpentis_corporation_sum.csv', index=True, sep='\t', columns=['total'])
 
     # Track Runtime
-    print("Runtime:  %s seconds" % round((time.time() - start_time),2))
+    print("Runtime: %s seconds" % round((time.time() - start_time),2))
 
 if __name__ == "__main__":
     main()
