@@ -7,7 +7,7 @@ CREATE TABLE data.markethistory
   "markethistoryID" serial NOT NULL,
   "regionID" integer NOT NULL,
   "typeID" integer NOT NULL,
-  "volume" integer NOT NULL,
+  volume bigint NOT NULL,
   "orderCount" integer NOT NULL,
   "lowPrice" real NOT NULL,
   "highPrice" real NOT NULL,
