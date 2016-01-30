@@ -128,7 +128,67 @@ var svg = d3.select("body").append("svg")
 }
 
 graph({
-      selector: 'd3-graph-universe',
-      csv: 'static/data/npckills_universe.csv',
-      label: 'NPC Kill Rates per Security - 12H Resample - 1.5D Window'
-    });
+    selector: 'd3-graph-universe',
+    csv: 'static/data/npckills_universe.csv',
+    label: 'NPC Kill Rates per Security - 12H Resample - 1.5D Window'
+});
+
+graph({
+    selector: 'd3-graph-angel',
+    csv: 'static/data/npckills_regions_angel_cartel.csv',
+    label: 'NPC Kill Rates per Region - Angel Cartel - 12H Resample - 1.5D Window'
+});
+
+graph({
+    selector: 'd3-graph-angel-sum',
+    csv: 'static/data/npckills_regions_angel_cartel_sum.csv',
+    label: 'NPC Kill Rates for All Regions - Angel Cartel - 12H Resample - 1.5D Window'
+});
+
+graph({
+    selector: 'd3-graph-blood',
+    csv: 'static/data/npckills_regions_blood_raiders.csv',
+    label: 'NPC Kill Rates per Region - Blood Raiders - 12H Resample - 1.5D Window'
+});
+
+graph({
+    selector: 'd3-graph-blood-sum',
+    csv: 'static/data/npckills_regions_blood_raiders_sum.csv',
+    label: 'NPC Kill Rates for All Regions - Blood Raiders - 12H Resample - 1.5D Window'
+});
+
+graph({
+    selector: 'd3-graph-guristas',
+    csv: 'static/data/npckills_regions_guristas_pirate.csv',
+    label: 'NPC Kill Rates per Region - Guristas Pirates - 12H Resample - 1.5D Window'
+});
+
+graph({
+    selector: 'd3-graph-guristas-sum',
+    csv: 'static/data/npckills_regions_guristas_pirates_sum.csv',
+    label: 'NPC Kill Rates for All Regions - Guristas Pirates - 12H Resample - 1.5D Window'
+});
+
+graph({
+    selector: 'd3-graph-sanshas',
+    csv: 'static/data/npckills_regions_sanshas_nation.csv',
+    label: 'NPC Kill Rates per Region - Sansha’s Nation - 12H Resample - 1.5D Window'
+});
+
+graph({
+    selector: 'd3-graph-sanshas-sum',
+    csv: 'static/data/npckills_regions_sanshas_nation_sum.csv',
+    label: 'NPC Kill Rates for All Regions - Sansha’s Nation - 12H Resample - 1.5D Window'
+});
+
+graph({
+    selector: 'd3-graph-serpentis',
+    csv: 'static/data/npckills_regions_serpentis_corporation.csv',
+    label: 'NPC Kill Rates per Region - Serpentis Corporation - 12H Resample - 1.5D Window'
+});
+
+graph({
+    selector: 'd3-graph-serpentis-sum',
+    csv: 'static/data/npckills_regions_serpentis_corporation_sum.csv',
+    label: 'NPC Kill Rates for All Regions - Serpentis Corporation - 12H Resample - 1.5D Window'
+});
