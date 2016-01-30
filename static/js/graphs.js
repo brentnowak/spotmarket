@@ -49,7 +49,6 @@ var svg = d3.select("body").append("svg")
 	    .attr("height", height + margin.top + margin.bottom)
 	    .attr("class", "graph-svg-component")
 	  .append("g")
-	    .append(function() { return document.createElement("p") })
 	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 	d3.tsv(options.csv, function(error, data) {

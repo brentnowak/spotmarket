@@ -4,21 +4,40 @@ app = Flask(__name__)
 
 
 @app.route('/')
+
 def home():
-    title = "Test"
-    paragraph = ['test1', 'test2']
+    title = "Title Test"
+    paragraph = ['Paragraph 1', 'Paragraph 2', 'Paragraph 3']
     return render_template("index.html", title=title, paragraph=paragraph)
 
 
-@app.route('/npckills')
+@app.route('/dashboard_overview')
 def welcome():
-    title = "NPC Kills"
-    return render_template("npckills.html", title=title)
+    return render_template("dashboard_overview.html")
 
+@app.route('/dashboard_npc_universe')
+def dashboard_npc_universe():
+    return render_template("dashboard_npc_universe.html")
 
-@app.route('/universe')
-def reportsUniverse():
-    return render_template("universe.html")
+@app.route('/dashboard_npc_angel')
+def dashboard_npc_angel():
+    return render_template("dashboard_npc_angel.html")
+
+@app.route('/dashboard_npc_blood')
+def dashboard_npc_blood():
+    return render_template("dashboard_npc_blood.html")
+
+@app.route('/dashboard_npc_guristas')
+def dashboard_npc_guristas():
+    return render_template("dashboard_npc_guristas.html")
+
+@app.route('/dashboard_npc_sanshas')
+def dashboard_npc_sanshas():
+    return render_template("dashboard_npc_sanshas.html")
+
+@app.route('/dashboard_npc_serpentis')
+def dashboard_npc_serpentis():
+    return render_template("dashboard_npc_serpentis.html")
 
 
 if __name__ == '__main__':
