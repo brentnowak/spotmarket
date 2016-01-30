@@ -49,6 +49,7 @@ var svg = d3.select("body").append("svg")
 	    .attr("height", height + margin.top + margin.bottom)
 	    .attr("class", "graph-svg-component")
 	  .append("g")
+	    .append(function() { return document.createElement("p") })
 	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 	d3.tsv(options.csv, function(error, data) {
@@ -125,3 +126,9 @@ var svg = d3.select("body").append("svg")
 	});
 
 }
+
+graph({
+      selector: 'd3-graph-universe',
+      csv: 'static/data/npckills_universe.csv',
+      label: 'NPC Kill Rates per Security - 12H Resample - 1.5D Window'
+    });
