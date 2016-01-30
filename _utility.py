@@ -302,7 +302,7 @@ def markethistoryinsertrecord(typeID, regionID, timestamp, volume, orderCount, l
     cursor = conn.cursor()
     sql = 'INSERT INTO data."markethistory" ("typeID", "regionID", timestamp, "volume", "orderCount", "lowPrice", "highPrice", "avgPrice") VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'
     data = (typeID, regionID, timestamp, volume, orderCount, lowPrice, highPrice, avgPrice, )
-    cursor.execute(sql, data)
+    cursor.execute(sql, data, )
     conn.commit()
     return 0
 
@@ -346,3 +346,32 @@ def getmarkethistory(regionIDs, typeIDs):
             with open("logs/consumer_markethistory.log", "a") as f:
                 f.write(log + "\n")
     return 0
+
+#
+# Input none
+# Output dataframe
+#
+
+def gettoprattingsystems():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      mapkills."solarSystemID",
+      "mapSolarSystems"."solarSystemName",
+      SUM(mapkills."factionKills") AS SUM_factionKills,
+      "mapRegions"."regionName"
+    FROM
+      data.mapkills,
+      public."mapSolarSystems",
+      public."mapRegions"
+    WHERE
+      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
+      "mapSolarSystems"."security" < 0.0
+     GROUP BY mapkills."solarSystemID", "mapSolarSystems"."solarSystemName", "mapRegions"."regionName"
+     ORDER BY SUM(mapkills."factionKills") DESC'''
+    cursor.execute(sql, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['solarSystemID', 'solarSystemName', 'SUM_factionKills', 'regionName'])
+    cursor.close()
+    return df
+
