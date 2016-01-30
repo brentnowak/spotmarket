@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>{{ title }}</h1>
+
+{% for p in paragraph %}
+<p>{{ p }}</p>
+{% endfor %}
+
+{% endblock %}
