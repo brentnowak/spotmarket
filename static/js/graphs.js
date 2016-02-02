@@ -89,7 +89,8 @@ var svg = d3.select(options.selector).append("svg")
 	      .attr("y", 6)
 	      .attr("dy", ".71em")
 	      .style("text-anchor", "end")
-	      .text("SUM_factionKills");
+	      .text("SUM_factionKills")
+	      .style("font-size","10px");
 
 	  var city = svg.selectAll(".city")
 	      .data(cities)
@@ -107,6 +108,7 @@ var svg = d3.select(options.selector).append("svg")
 	      .attr("transform", function(d) { return "translate(" + x(d.value.timestamp) + "," + y(d.value.temperature) + ")"; })
 	      .attr("x", 3)
 	      .attr("dy", ".35em")
+	      .style("font-size","10px")
 	      .text(function(d) { return d.name; });
 
 	  legend = svg.append("g")
@@ -121,7 +123,6 @@ var svg = d3.select(options.selector).append("svg")
 	        .attr("text-anchor", "middle")
 	        .style("font-size", "14px")
 	        .text(options.label);
-
 	});
 }
 
@@ -129,6 +130,12 @@ graph({
     selector: '.d3-graph-universe',
     csv: 'static/data/npckills_universe.csv',
     label: 'NPC Kill Rates per Security - 12H Resample - 1.5D Window'
+});
+
+graph({
+    selector: '.d3-graph-universe-factions',
+    csv: 'static/data/npckills_factions.csv',
+    label: 'NPC Kill Rates per Faction - 12H Resample - 1.5D Window'
 });
 
 graph({

@@ -8,6 +8,8 @@ import time
 import arrow
 import pycrest
 import pandas as pd
+import fileinput
+import sys
 
 #############################
 # Database
@@ -119,7 +121,6 @@ def getnpckills_byallsecurity():
     df = getnpckills_bysecurity(0.5, 1.0, 'high')
     df = df.combine_first(getnpckills_bysecurity(0.0, 0.5, 'low'))
     df = df.combine_first(getnpckills_bysecurity(-1, 0.0, 'null'))
-    #wh space placeholder
     return df
 
 
@@ -347,11 +348,11 @@ def getmarkethistory(regionIDs, typeIDs):
                 f.write(log + "\n")
     return 0
 
+
 #
 # Input none
 # Output dataframe
 #
-
 def gettoprattingsystems():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
@@ -374,4 +375,102 @@ def gettoprattingsystems():
     df = pd.DataFrame(cursor.fetchall(),columns=['solarSystemID', 'solarSystemName', 'SUM_factionKills', 'regionName'])
     cursor.close()
     return df
+
+
+#
+#
+#
+#
+def gettoprattingregions():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      SUM(mapkills."factionKills") as SUM_factionKills,
+      "mapRegions"."regionName"
+    FROM
+      data.mapkills,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
+      "mapSolarSystems".security < 0.0
+    GROUP BY "mapRegions"."regionName"
+    ORDER BY SUM_factionKills DESC'''
+    cursor.execute(sql, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['SUM_factionKills', 'regionName'])
+    cursor.close()
+    return df
+
+
+def getnpckills_bysecurity_bytime():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+       SUM(mapkills."factionKills") as SUM_factionKills,
+       mapkills."timestamp",
+      "mapRegions"."regionName"
+    FROM
+      data.mapkills,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
+      "mapSolarSystems".security < 0.0
+    GROUP BY "mapRegions"."regionName", mapkills."timestamp"'''
+    cursor.execute(sql, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['SUM_factionKills', 'timestamp', 'regionName'])
+    cursor.close()
+    return df
+
+
+#
+# Input     dataframe.to_html
+# Output    remove border=1
+# pandas has a hard coded border=1
+#
+def cleartableborder(filename):
+    for line in fileinput.FileInput(filename, inplace=1):
+        line = line.replace('<table border="1" class="dataframe table table-striped">', '<table class="dataframe table table-striped">')
+        sys.stdout.write(line)
+    return 0
+
+#
+#
+#
+#
+def addkillsperday(df):
+    df['killsPerDay'] = df['SUM_factionKills'] / int(getdaterange_mapkills())
+    return df
+
+
+#
+# Input table
+# Output first and last timestamp
+#
+def getdaterange_mapkills():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      "timestamp"
+    FROM
+      data.mapkills
+    ORDER BY "timestamp" ASC
+    LIMIT 1'''
+    cursor.execute(sql, )
+    date_start = cursor.fetchone()
+
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      "timestamp"
+    FROM
+      data.mapkills
+    ORDER BY "timestamp" DESC
+    LIMIT 1'''
+    cursor.execute(sql, )
+    date_end = cursor.fetchone()
+
+    return 18
 
