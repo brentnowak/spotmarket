@@ -28,6 +28,7 @@ apt-get install git
 pip install ConfigParser
 pip install psycopg2
 pip install evelink
+pip install pycrest
 pip install pandas
 pip install arrow
 ```

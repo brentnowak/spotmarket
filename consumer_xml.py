@@ -36,7 +36,7 @@ sovtimestamp = sov_cachedUntil.format('YYYY-MM-DD HH:mm:ss')
 # Get dictionary
 mapapi_data = mapresponse.result[0]
 jumpsapi_data = jumpresponse.result[0]
-sovapi_data = mapresponse.result[0]
+sovapi_data = sovresponse.result[0]
 
 
 def main():
