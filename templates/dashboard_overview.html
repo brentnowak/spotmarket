@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1 class="page-header">Overview</h1>
+<h1 class="page-header">Faction Kill Overview</h1>
 
 <div class="row">
   <div class="col-md-6">
@@ -16,28 +16,66 @@
 
 <div class="row">
   <div class="col-md-6">
-      <h3 class="sub-header">Top Nullsec Ratting Regions</h3>
+      <h3 class="sub-header">Top Nullsec Regions</h3>
         <script>
         $(function() {
-        $("#toprattingregions").load("static/data/npckills_toprattingregions.html");
+        $("#toprattingregions_null").load("static/data/npckills_toprattingregions_nullsec.html");
         });
         </script>
-    <div id="toprattingregions" class="table-responsive"></div>
+    <div id="toprattingregions_null" class="table-responsive"></div>
   </div>
   <div class="col-md-6">
-      <h3 class="sub-header">Top Nullsec Ratting Systems</h3>
+      <h3 class="sub-header">Top Nullsec Systems</h3>
         <script>
         $(function() {
-        $("#toprattingsystems").load("static/data/npckills_toprattingsystems.html");
+        $("#toprattingsystems_null").load("static/data/npckills_toprattingsystems_nullsec.html");
         });
         </script>
-        <div id="toprattingsystems" class="table-responsive"></div>
+        <div id="toprattingsystems_null" class="table-responsive"></div>
   </div>
 </div>
 
+<div class="row">
+  <div class="col-md-6">
+      <h3 class="sub-header">Top Lowsec Regions</h3>
+        <script>
+        $(function() {
+        $("#toprattingregions_lowsec").load("static/data/npckills_toprattingregions_lowsec.html");
+        });
+        </script>
+    <div id="toprattingregions_lowsec" class="table-responsive"></div>
+  </div>
+  <div class="col-md-6">
+      <h3 class="sub-header">Top Lowsec Systems</h3>
+        <script>
+        $(function() {
+        $("#toprattingsystems_lowsec").load("static/data/npckills_toprattingsystems_lowsec.html");
+        });
+        </script>
+        <div id="toprattingsystems_lowsec" class="table-responsive"></div>
+  </div>
+</div>
 
-
-
+<div class="row">
+  <div class="col-md-6">
+      <h3 class="sub-header">Top Highsec Regions</h3>
+        <script>
+        $(function() {
+        $("#toprattingregions_highsec").load("static/data/npckills_toprattingregions_highsec.html");
+        });
+        </script>
+    <div id="toprattingregions_highsec" class="table-responsive"></div>
+  </div>
+  <div class="col-md-6">
+      <h3 class="sub-header">Top Highsec Systems</h3>
+        <script>
+        $(function() {
+        $("#toprattingsystems_highsec").load("static/data/npckills_toprattingsystems_highsec.html");
+        });
+        </script>
+        <div id="toprattingsystems_highsec" class="table-responsive"></div>
+  </div>
+</div>
 
 
 {% endblock %}

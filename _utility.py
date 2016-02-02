@@ -350,15 +350,15 @@ def getmarkethistory(regionIDs, typeIDs):
 
 
 #
-# Input none
-# Output dataframe
+# Need to parametrize by security class
 #
-def gettoprattingsystems():
+def gettoprattingsystems_nullsec():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
       mapkills."solarSystemID",
       "mapSolarSystems"."solarSystemName",
+      "mapSolarSystems"."security",
       SUM(mapkills."factionKills") AS SUM_factionKills,
       "mapRegions"."regionName"
     FROM
@@ -369,19 +369,73 @@ def gettoprattingsystems():
       "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
       "mapSolarSystems"."security" < 0.0
-     GROUP BY mapkills."solarSystemID", "mapSolarSystems"."solarSystemName", "mapRegions"."regionName"
+     GROUP BY mapkills."solarSystemID", "mapSolarSystems"."solarSystemName", "mapRegions"."regionName", "mapSolarSystems"."security"
      ORDER BY SUM(mapkills."factionKills") DESC'''
     cursor.execute(sql, )
-    df = pd.DataFrame(cursor.fetchall(),columns=['solarSystemID', 'solarSystemName', 'SUM_factionKills', 'regionName'])
+    df = pd.DataFrame(cursor.fetchall(),columns=['solarSystemID', 'solarSystemName', 'security', 'SUM_factionKills', 'regionName'])
+    cursor.close()
+    return df
+
+#
+# Need to parametrize by security class
+#
+def gettoprattingsystems_lowsec():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      mapkills."solarSystemID",
+      "mapSolarSystems"."solarSystemName",
+      "mapSolarSystems"."security",
+      SUM(mapkills."factionKills") AS SUM_factionKills,
+      "mapRegions"."regionName"
+    FROM
+      data.mapkills,
+      public."mapSolarSystems",
+      public."mapRegions"
+    WHERE
+      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
+      "mapSolarSystems"."security" BETWEEN 0.0 and 0.5
+     GROUP BY mapkills."solarSystemID", "mapSolarSystems"."solarSystemName", "mapRegions"."regionName", "mapSolarSystems"."security"
+     ORDER BY SUM(mapkills."factionKills") DESC'''
+    cursor.execute(sql, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['solarSystemID', 'solarSystemName', 'security', 'SUM_factionKills', 'regionName'])
     cursor.close()
     return df
 
 
 #
+# Need to parametrize by security class
 #
+def gettoprattingsystems_highsec():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      mapkills."solarSystemID",
+      "mapSolarSystems"."solarSystemName",
+      "mapSolarSystems"."security",
+      SUM(mapkills."factionKills") AS SUM_factionKills,
+      "mapRegions"."regionName"
+    FROM
+      data.mapkills,
+      public."mapSolarSystems",
+      public."mapRegions"
+    WHERE
+      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
+      "mapSolarSystems"."security" BETWEEN 0.5 and 1.0
+     GROUP BY mapkills."solarSystemID", "mapSolarSystems"."solarSystemName", "mapRegions"."regionName", "mapSolarSystems"."security"
+     ORDER BY SUM(mapkills."factionKills") DESC'''
+    cursor.execute(sql, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['solarSystemID', 'solarSystemName', 'security', 'SUM_factionKills', 'regionName'])
+    cursor.close()
+    return df
+
+
 #
+# Need to parametrize by security class
 #
-def gettoprattingregions():
+def gettoprattingregions_nullsec():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
@@ -395,6 +449,56 @@ def gettoprattingregions():
       mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
       "mapSolarSystems".security < 0.0
+    GROUP BY "mapRegions"."regionName"
+    ORDER BY SUM_factionKills DESC'''
+    cursor.execute(sql, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['SUM_factionKills', 'regionName'])
+    cursor.close()
+    return df
+
+
+#
+# Need to parametrize by security class
+#
+def gettoprattingregions_lowsec():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      SUM(mapkills."factionKills") as SUM_factionKills,
+      "mapRegions"."regionName"
+    FROM
+      data.mapkills,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
+      "mapSolarSystems".security BETWEEN 0.0 and 0.5
+    GROUP BY "mapRegions"."regionName"
+    ORDER BY SUM_factionKills DESC'''
+    cursor.execute(sql, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['SUM_factionKills', 'regionName'])
+    cursor.close()
+    return df
+
+
+#
+# Need to parametrize by security class
+#
+def gettoprattingregions_highsec():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      SUM(mapkills."factionKills") as SUM_factionKills,
+      "mapRegions"."regionName"
+    FROM
+      data.mapkills,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
+      "mapSolarSystems".security BETWEEN 0.5 and 1.0
     GROUP BY "mapRegions"."regionName"
     ORDER BY SUM_factionKills DESC'''
     cursor.execute(sql, )
@@ -474,3 +578,38 @@ def getdaterange_mapkills():
 
     return 18
 
+
+def getsolarsystemmapkills(solarSystemID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      mapkills."timestamp",
+      mapkills."factionKills",
+      mapkills."podKills",
+      mapkills."shipKills"
+    FROM
+      data.mapkills
+     WHERE mapkills."solarSystemID" = %s'''
+    data = (solarSystemID, )
+    cursor.execute(sql, data, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['timestamp', 'factionKills', 'podKills', 'shipKills'])
+    df = df.set_index(['timestamp'])
+    cursor.close()
+    return df
+
+
+def getsolarsystemmapjumps(solarSystemID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      mapjumps."timestamp",
+      mapjumps."shipJumps"
+    FROM
+      data.mapjumps
+    WHERE "solarSystemID" = %s'''
+    data = (solarSystemID, )
+    cursor.execute(sql, data, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['timestamp', 'shipJumps'])
+    df = df.set_index(['timestamp'])
+    cursor.close()
+    return df

@@ -17,7 +17,7 @@ def welcome():
 
 @app.route('/dashboard_npc_universe')
 def dashboard_npc_universe():
-    return render_template("dashboard_npc_universe.html")
+    return render_template("dashboard_universe.html")
 
 @app.route('/dashboard_npc_angel')
 def dashboard_npc_angel():
@@ -38,6 +38,17 @@ def dashboard_npc_sanshas():
 @app.route('/dashboard_npc_serpentis')
 def dashboard_npc_serpentis():
     return render_template("dashboard_npc_serpentis.html")
+
+# Solar System Detail
+
+@app.route('/30004468')
+def solarSystemID_30004468():
+    return render_template("30004468.html")
+
+@app.route('/30000182')
+def solarSystemID_30000182():
+    return render_template("30000182.html")
+
 
 
 if __name__ == '__main__':

@@ -2444,6 +2444,7 @@ table th[class*="col-"] {
   background-color: #ebcccc;
 }
 .table-responsive {
+  font-size: 12px;
   min-height: .01%;
   overflow-x: auto;
 }

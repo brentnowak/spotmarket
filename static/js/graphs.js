@@ -14,10 +14,11 @@ function graph(options) {
 		selector: 'body',
 		width: '960',
 		height: '500',
-		legend: '480'
+		legend: '480',
+		marginright: '90'
 	}, options);
 
-	var margin = {top: 20, right: 90, bottom: 50, left: 50},
+	var margin = {top: 20, right: options.marginright, bottom: 50, left: 50},
 	    width = options.width - margin.left - margin.right,
 	    height = options.height - margin.top - margin.bottom;
 
@@ -117,7 +118,7 @@ var svg = d3.select(options.selector).append("svg")
 	  legend = svg.append("g")
 	    .attr("class","legend")
 	    .attr("transform","translate(50,10)")
-	    .style("font-size","12px")
+	    .style("font-size","10px")
 	    .call(d3.legend)
 
 	svg.append("text")
@@ -132,6 +133,7 @@ var svg = d3.select(options.selector).append("svg")
 graph({
     width: '580',
     height: '340',
+    marginright: '20',
     selector: '.d3-graph-universe',
     csv: 'static/data/npckills_universe.csv'
 });
@@ -139,8 +141,41 @@ graph({
 graph({
     width: '580',
     height: '340',
+    marginright: '100',
     selector: '.d3-graph-universe-factions',
     csv: 'static/data/npckills_factions.csv'
+});
+
+graph({
+    width: '580',
+    height: '340',
+    marginright: '100',
+    selector: '.d3-graph-30004468-mapkills',
+    csv: 'static/data/30004468_mapkills.csv'
+});
+
+graph({
+    width: '580',
+    height: '340',
+    marginright: '100',
+    selector: '.d3-graph-30004468-mapjumps',
+    csv: 'static/data/30004468_mapjumps.csv'
+});
+
+graph({
+    width: '580',
+    height: '340',
+    marginright: '100',
+    selector: '.d3-graph-30000182-mapkills',
+    csv: 'static/data/30000182_mapkills.csv'
+});
+
+graph({
+    width: '580',
+    height: '340',
+    marginright: '100',
+    selector: '.d3-graph-30000182-mapjumps',
+    csv: 'static/data/30000182_mapjumps.csv'
 });
 
 graph({

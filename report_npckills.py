@@ -130,22 +130,50 @@ def main():
 
 
     # Top Nullsec Ratting Regions
-    df = gettoprattingregions()
+    df = gettoprattingregions_nullsec()
     df = df.head(20)
     df = addkillsperday(df)
-    df.to_html('static/data/npckills_toprattingregions.html', header=True, index=True, float_format=lambda x: '%10.2f' % x,classes='table table-striped', columns=['regionName', 'SUM_factionKills', 'killsPerDay'])
-    cleartableborder("static/data/npckills_toprattingregions.html")
+    df.to_html('static/data/npckills_toprattingregions_nullsec.html', header=True, index=True, float_format=lambda x: '%10.2f' % x,classes='table table-striped', columns=['regionName', 'SUM_factionKills', 'killsPerDay'])
+    cleartableborder("static/data/npckills_toprattingregions_nullsec.html")
 
 
     # Top Nullsec Ratting Systems
-    df = gettoprattingsystems()
+    df = gettoprattingsystems_nullsec()
     df = df.head(20)
     df = addkillsperday(df)
-    df.to_html('static/data/npckills_toprattingsystems.html', header=True, index=True, float_format=lambda x: '%10.2f' % x,classes='table table-striped', columns=['solarSystemName', 'regionName', 'SUM_factionKills', 'killsPerDay'])
-    cleartableborder("static/data/npckills_toprattingsystems.html")
+    df.to_html('static/data/npckills_toprattingsystems_nullsec.html', header=True, index=True, float_format=lambda x: '%10.2f' % x,classes='table table-striped', columns=['solarSystemName', 'security', 'regionName', 'SUM_factionKills', 'killsPerDay'])
+    cleartableborder("static/data/npckills_toprattingsystems_nullsec.html")
+
+    # Top Lowsec Ratting Regions
+    df = gettoprattingregions_lowsec()
+    df = df.head(20)
+    df = addkillsperday(df)
+    df.to_html('static/data/npckills_toprattingregions_lowsec.html', header=True, index=True, float_format=lambda x: '%10.2f' % x,classes='table table-striped', columns=['regionName', 'SUM_factionKills', 'killsPerDay'])
+    cleartableborder("static/data/npckills_toprattingregions_lowsec.html")
 
 
+    # Top Lowsec Ratting Systems
+    df = gettoprattingsystems_lowsec()
+    df = df.head(20)
+    df = addkillsperday(df)
+    df.to_html('static/data/npckills_toprattingsystems_lowsec.html', header=True, index=True, float_format=lambda x: '%10.2f' % x,classes='table table-striped', columns=['solarSystemName', 'security', 'regionName', 'SUM_factionKills', 'killsPerDay'])
+    cleartableborder("static/data/npckills_toprattingsystems_lowsec.html")
 
+
+    # Top Highsec Ratting Regions
+    df = gettoprattingregions_highsec()
+    df = df.head(20)
+    df = addkillsperday(df)
+    df.to_html('static/data/npckills_toprattingregions_highsec.html', header=True, index=True, float_format=lambda x: '%10.2f' % x,classes='table table-striped', columns=['regionName', 'SUM_factionKills', 'killsPerDay'])
+    cleartableborder("static/data/npckills_toprattingregions_highsec.html")
+
+
+    # Top Highsec Ratting Systems
+    df = gettoprattingsystems_highsec()
+    df = df.head(20)
+    df = addkillsperday(df)
+    df.to_html('static/data/npckills_toprattingsystems_highsec.html', header=True, index=True, float_format=lambda x: '%10.2f' % x,classes='table table-striped', columns=['solarSystemName', 'security', 'regionName', 'SUM_factionKills', 'killsPerDay'])
+    cleartableborder("static/data/npckills_toprattingsystems_highsec.html")
 
     # Track Runtime
     print("Runtime: %s seconds" % round((time.time() - start_time),2))
