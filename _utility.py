@@ -191,6 +191,7 @@ def insertmap(mapapi_data, maptimestamp):
             count_insert += 1
     return count_insert
 
+
 #
 # Check if map record exists
 #
@@ -613,3 +614,57 @@ def getsolarsystemmapjumps(solarSystemID):
     df = df.set_index(['timestamp'])
     cursor.close()
     return df
+
+
+#
+# Insert sov data
+#
+def insertsov(sovapi_data, sovtimestamp):
+    count_insert = 0
+    for key,value in sovapi_data.iteritems():
+        solarSystemID = value['id']
+        allianceID = value['alliance_id']
+        corporationID = value['corp_id']
+        factionID = value['faction_id'] # Not used
+        solarSystemName = value['name'] # Not used
+        if str(allianceID) != "None":   # Filter out factions
+            if getmaptopsov(solarSystemID) != allianceID:
+                insertmapsov(sovtimestamp, allianceID, corporationID, solarSystemID)
+                count_insert += 1
+    return count_insert
+
+
+#
+# Get latest sov record
+#
+def getmaptopsov(solarSystemID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      mapsov."allianceID"
+    FROM
+      data.mapsov
+    WHERE mapsov."solarSystemID" = %s
+    ORDER BY mapsov."timestamp" DESC
+    LIMIT 1
+    '''
+    data = (solarSystemID, )
+    cursor.execute(sql, data, )
+    result = cursor.fetchone()
+    return result[0]
+
+
+#
+# Insert latest sov record
+#
+def insertmapsov(timestamp, allianceID, corporationID, solarSystemID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = 'INSERT INTO data."mapsov" (timestamp, "allianceID", "corporationID", "solarSystemID") VALUES (%s, %s, %s, %s)'
+    data = (timestamp, allianceID, corporationID, solarSystemID, )
+    cursor.execute(sql, data)
+    conn.commit()
+    return 0
+
+
+
