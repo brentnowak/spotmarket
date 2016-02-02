@@ -8,9 +8,7 @@
 # - Move configuration and functions to _utility.py
 #-----------------------------------------------------------------------------
 
-import arrow
 import evelink.map
-
 from _utility import *
 
 # API

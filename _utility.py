@@ -651,7 +651,10 @@ def getmaptopsov(solarSystemID):
     data = (solarSystemID, )
     cursor.execute(sql, data, )
     result = cursor.fetchone()
-    return result[0]
+    if result == None:  # Error checking if table is empty
+            return 0
+    else:
+        return result[0]
 
 
 #
