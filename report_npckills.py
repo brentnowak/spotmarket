@@ -129,8 +129,15 @@ def main():
     df_faction.to_csv('static/data/npckills_factions.csv', index=True, sep='\t')
 
 
-    # NPC Dashboard
-    # Top Ratting Systems
+    # Top Nullsec Ratting Regions
+    df = gettoprattingregions()
+    df = df.head(20)
+    df = addkillsperday(df)
+    df.to_html('static/data/npckills_toprattingregions.html', header=True, index=True, float_format=lambda x: '%10.2f' % x,classes='table table-striped', columns=['regionName', 'SUM_factionKills', 'killsPerDay'])
+    cleartableborder("static/data/npckills_toprattingregions.html")
+
+
+    # Top Nullsec Ratting Systems
     df = gettoprattingsystems()
     df = df.head(20)
     df = addkillsperday(df)

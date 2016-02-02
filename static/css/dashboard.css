@@ -57,6 +57,7 @@ body {
   margin-left: -10px;
 }
 .nav-sidebar > li > a {
+  font-size: 16px;
   padding-right: 5px;
   padding-left: 5px;
 }

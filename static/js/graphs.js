@@ -11,12 +11,15 @@ function graph(options) {
 	options = _.extend({
 		csv: '',
 		label: '',
-		selector: 'body'
+		selector: 'body',
+		width: '960',
+		height: '500',
+		legend: '480'
 	}, options);
 
 	var margin = {top: 20, right: 90, bottom: 50, left: 50},
-	    width = 960 - margin.left - margin.right,
-	    height = 500 - margin.top - margin.bottom;
+	    width = options.width - margin.left - margin.right,
+	    height = options.height - margin.top - margin.bottom;
 
 	var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
 
@@ -119,7 +122,7 @@ var svg = d3.select(options.selector).append("svg")
 
 	svg.append("text")
 	        .attr("x", (width / 2))
-	        .attr("y", 480 - (margin.top / 2))
+	        .attr("y", options.legend - (margin.top / 2))
 	        .attr("text-anchor", "middle")
 	        .style("font-size", "14px")
 	        .text(options.label);
@@ -127,15 +130,17 @@ var svg = d3.select(options.selector).append("svg")
 }
 
 graph({
+    width: '580',
+    height: '340',
     selector: '.d3-graph-universe',
-    csv: 'static/data/npckills_universe.csv',
-    label: 'NPC Kill Rates per Security - 12H Resample - 1.5D Window'
+    csv: 'static/data/npckills_universe.csv'
 });
 
 graph({
+    width: '580',
+    height: '340',
     selector: '.d3-graph-universe-factions',
-    csv: 'static/data/npckills_factions.csv',
-    label: 'NPC Kill Rates per Faction - 12H Resample - 1.5D Window'
+    csv: 'static/data/npckills_factions.csv'
 });
 
 graph({
