@@ -628,7 +628,7 @@ def insertsov(sovapi_data, sovtimestamp):
         factionID = value['faction_id'] # Not used
         solarSystemName = value['name'] # Not used
         if str(allianceID) != "None":   # Filter out factions
-            if getmaptopsov(solarSystemID) != allianceID:
+            if getmaptopsov(solarSystemID) != corporationID:
                 insertmapsov(sovtimestamp, allianceID, corporationID, solarSystemID)
                 count_insert += 1
     return count_insert
@@ -641,7 +641,7 @@ def getmaptopsov(solarSystemID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      mapsov."allianceID"
+      mapsov."corporationID"
     FROM
       data.mapsov
     WHERE mapsov."solarSystemID" = %s
