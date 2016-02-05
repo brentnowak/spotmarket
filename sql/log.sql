@@ -5,8 +5,8 @@
 CREATE TABLE data.logs
 (
   "logID" serial NOT NULL,
-  "service" integer NOT NULL,
-  "severity" text NOT NULL,
+  "service" text NOT NULL,
+  "severity" int NOT NULL,
   "detail" text NOT NULL,
   "timestamp" timestamp without time zone NOT NULL,
   CONSTRAINT pk_logs PRIMARY KEY ("logID")
