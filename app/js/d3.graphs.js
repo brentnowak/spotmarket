@@ -4,6 +4,12 @@
  *         		csv: string,
  *         		label: string,
  *         		selector: string
+ *              width: int
+ *              height: int
+ *              legend: string
+ *              marginright: string
+ *              marginleft: string
+ *              dateformat: string
  * 				 }} options
  */
 function graph(options) {
@@ -15,14 +21,16 @@ function graph(options) {
 		width: '960',
 		height: '500',
 		legend: '480',
-		marginright: '90'
+		marginright: '90',
+		marginleft: '50',
+		dateformat: '%Y-%m-%d %H:%M:%S'
 	}, options);
 
-	var margin = {top: 20, right: options.marginright, bottom: 50, left: 50},
+	var margin = {top: 20, right: options.marginright, bottom: 50, left: options.marginleft},
 	    width = options.width - margin.left - margin.right,
 	    height = options.height - margin.top - margin.bottom;
 
-	var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
+	var parseDate = d3.time.format(options.dateformat).parse;
 
 	var x = d3.time.scale()
 	    .range([0, width]);
@@ -135,7 +143,7 @@ graph({
     height: '340',
     marginright: '20',
     selector: '.d3-graph-universe',
-    csv: 'static/data/npckills_universe.csv'
+    csv: 'data/npckills_universe.csv'
 });
 
 graph({
@@ -143,7 +151,7 @@ graph({
     height: '340',
     marginright: '100',
     selector: '.d3-graph-universe-factions',
-    csv: 'static/data/npckills_factions.csv'
+    csv: 'data/npckills_factions.csv'
 });
 
 graph({
@@ -151,7 +159,7 @@ graph({
     height: '340',
     marginright: '100',
     selector: '.d3-graph-30004468-mapkills',
-    csv: 'static/data/30004468_mapkills.csv'
+    csv: 'data/30004468_mapkills.csv'
 });
 
 graph({
@@ -159,7 +167,7 @@ graph({
     height: '340',
     marginright: '100',
     selector: '.d3-graph-30004468-mapjumps',
-    csv: 'static/data/30004468_mapjumps.csv'
+    csv: 'data/30004468_mapjumps.csv'
 });
 
 graph({
@@ -167,7 +175,7 @@ graph({
     height: '340',
     marginright: '100',
     selector: '.d3-graph-30000182-mapkills',
-    csv: 'static/data/30000182_mapkills.csv'
+    csv: 'data/30000182_mapkills.csv'
 });
 
 graph({
@@ -175,65 +183,88 @@ graph({
     height: '340',
     marginright: '100',
     selector: '.d3-graph-30000182-mapjumps',
-    csv: 'static/data/30000182_mapjumps.csv'
+    csv: 'data/30000182_mapjumps.csv'
 });
 
 graph({
+    marginleft: '80',
+    selector: '.d3-graph-market-angel',
+    csv: 'data/market_faction_angel.csv'
+});
+
+graph({
+    marginleft: '80',
+    selector: '.d3-graph-market-angel-kills',
+    dateformat: '%Y-%m-%d',
+    csv: 'data/market_faction_angel_kills.csv'
+});
+
+graph({
+    width: '580',
+    height: '340',
     selector: '.d3-graph-angel',
-    csv: 'static/data/npckills_regions_angel_cartel.csv',
-    label: 'NPC Kill Rates per Region - Angel Cartel - 12H Resample - 1.5D Window'
+    csv: 'data/npckills_regions_angel_cartel.csv'
 });
 
 graph({
+    width: '580',
+    height: '340',
     selector: '.d3-graph-angel-sum',
-    csv: 'static/data/npckills_regions_angel_cartel_sum.csv',
-    label: 'NPC Kill Rates for All Regions - Angel Cartel - 12H Resample - 1.5D Window'
+    csv: 'data/npckills_regions_angel_cartel_sum.csv'
 });
 
 graph({
+    width: '580',
+    height: '340',
     selector: '.d3-graph-blood',
-    csv: 'static/data/npckills_regions_blood_raiders.csv',
-    label: 'NPC Kill Rates per Region - Blood Raiders - 12H Resample - 1.5D Window'
+    csv: 'data/npckills_regions_blood_raiders.csv'
 });
 
 graph({
+    width: '580',
+    height: '340',
     selector: '.d3-graph-blood-sum',
-    csv: 'static/data/npckills_regions_blood_raiders_sum.csv',
-    label: 'NPC Kill Rates for All Regions - Blood Raiders - 12H Resample - 1.5D Window'
+    csv: 'data/npckills_regions_blood_raiders_sum.csv'
 });
 
 graph({
+    width: '580',
+    height: '340',
     selector: '.d3-graph-guristas',
-    csv: 'static/data/npckills_regions_guristas_pirate.csv',
-    label: 'NPC Kill Rates per Region - Guristas Pirates - 12H Resample - 1.5D Window'
+    csv: 'data/npckills_regions_guristas_pirate.csv'
 });
 
 graph({
+    width: '580',
+    height: '340',
     selector: '.d3-graph-guristas-sum',
-    csv: 'static/data/npckills_regions_guristas_pirates_sum.csv',
-    label: 'NPC Kill Rates for All Regions - Guristas Pirates - 12H Resample - 1.5D Window'
+    csv: 'data/npckills_regions_guristas_pirates_sum.csv'
 });
 
 graph({
+    width: '580',
+    height: '340',
     selector: '.d3-graph-sanshas',
-    csv: 'static/data/npckills_regions_sanshas_nation.csv',
-    label: 'NPC Kill Rates per Region - Sansha’s Nation - 12H Resample - 1.5D Window'
+    csv: 'data/npckills_regions_sanshas_nation.csv'
 });
 
 graph({
+    width: '580',
+    height: '340',
     selector: '.d3-graph-sanshas-sum',
-    csv: 'static/data/npckills_regions_sanshas_nation_sum.csv',
-    label: 'NPC Kill Rates for All Regions - Sansha’s Nation - 12H Resample - 1.5D Window'
+    csv: 'data/npckills_regions_sanshas_nation_sum.csv'
 });
 
 graph({
+    width: '580',
+    height: '340',
     selector: '.d3-graph-serpentis',
-    csv: 'static/data/npckills_regions_serpentis_corporation.csv',
-    label: 'NPC Kill Rates per Region - Serpentis Corporation - 12H Resample - 1.5D Window'
+    csv: 'data/npckills_regions_serpentis_corporation.csv'
 });
 
 graph({
+    width: '580',
+    height: '340',
     selector: '.d3-graph-serpentis-sum',
-    csv: 'static/data/npckills_regions_serpentis_corporation_sum.csv',
-    label: 'NPC Kill Rates for All Regions - Serpentis Corporation - 12H Resample - 1.5D Window'
+    csv: 'data/npckills_regions_serpentis_corporation_sum.csv'
 });

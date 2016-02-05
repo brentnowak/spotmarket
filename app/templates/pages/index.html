@@ -1,0 +1,92 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{header}}</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-lg-8">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            System Events
+                        </div>
+                            <div class="panel-body">
+                                <div class="list-group">
+                            <a href="#" class="list-group-item">
+                                <i class="fa fa-database fa-fw"></i> [consumer_xml.py][sov][insert:0]
+                                <span class="pull-right text-muted small"><em>4 minutes ago</em>
+                                </span>
+                            </a>
+                            <a href="#" class="list-group-item">
+                                <i class="fa fa-database fa-fw"></i> [consumer_xml.py][sov][insert:0]
+                                <span class="pull-right text-muted small"><em>4 minutes ago</em>
+                                </span>
+                            </a>
+                            <a href="#" class="list-group-item">
+                                <i class="fa fa-database fa-fw"></i> [consumer_xml.py][map][insert:2414]
+                                <span class="pull-right text-muted small"><em>4 minutes ago</em>
+                                </span>
+                            </a>
+                             <a href="#" class="list-group-item">
+                                <i class="fa fa-database fa-fw"></i> [consumer_xml.py][jump][insert:4726]
+                                <span class="pull-right text-muted small"><em>4 minutes ago</em>
+                                </span>
+                            </a>
+                            <a href="#" class="list-group-item">
+                                <i class="fa fa-upload fa-fw"></i> [consumer_markethistory.py][insert:421 @ 18.74 rec/sec][regionID:10000002][typeID:17924]
+                                <span class="pull-right text-muted small"><em>11:32 AM</em>
+                                </span>
+                            </a>
+                            <a href="#" class="list-group-item">
+                                <i class="fa fa-bolt fa-fw"></i> [consumer_markethistory.py][insert:422 @ 17.79 rec/sec][regionID:10000002][typeID:17926]
+                                <span class="pull-right text-muted small"><em>11:13 AM</em>
+                                </span>
+                            </a>
+                            <a href="#" class="list-group-item">
+                                <i class="fa fa-warning fa-fw"></i> Server Not Responding
+                                <span class="pull-right text-muted small"><em>10:57 AM</em>
+                                </span>
+                            </a>
+                            <a href="#" class="list-group-item">
+                                <i class="fa fa-shopping-cart fa-fw"></i> New Order Placed
+                                <span class="pull-right text-muted small"><em>9:49 AM</em>
+                                </span>
+                            </a>
+                            <a href="#" class="list-group-item">
+                                <i class="fa fa-money fa-fw"></i> Payment Received
+                                <span class="pull-right text-muted small"><em>Yesterday</em>
+                                </span>
+                            </a>
+                            </div>
+                            </div>
+                        <div class="panel-footer">
+                            Panel Footer
+                        </div>
+                    </div>
+                </div>
+        </div>
+    <!-- /.col-lg-12 -->
+    </div>
+<!-- /.row -->
+
+
+
+
+    <!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+
+{% endblock %}
