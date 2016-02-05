@@ -38,26 +38,25 @@ sovapi_data = sovresponse.result[0]
 
 
 def main():
+    service = "consumer_xml.py"
+
     # Run Map import
     count_mapinsert = insertmap(mapapi_data, maptimestamp)
-    log = "[" + str(maptimestamp) + "][consumer_xml.py][map][insert:" + str(count_mapinsert) + "]"
-    print(log)
-    with open("logs/consumer_xml.log", "a") as f:
-        f.write(log + "\n")
+    detail = "[map] insert " + str(count_mapinsert)
+    print(detail)
+    insertlog(service, 0, detail, maptimestamp)
 
     # Run Jumps import
     count_jumpsinsert = insertjumps(jumpsapi_data, jumpstimestamp)
-    log = "[" + str(jumpstimestamp) + "][consumer_xml.py][jump][insert:" + str(count_jumpsinsert) + "]"
-    print(log)
-    with open("logs/consumer_xml.log", "a") as f:
-        f.write(log + "\n")
+    detail = "[jump] insert " + str(count_jumpsinsert)
+    print(detail)
+    insertlog(service, 0, detail, jumpstimestamp)
 
     # Run Sov import
     count_sovinsert = insertsov(sovapi_data, sovtimestamp)
-    log = "[" + str(jumpstimestamp) + "][consumer_xml.py][sov][insert:" + str(count_sovinsert) + "]"
-    print(log)
-    with open("logs/consumer_xml.log", "a") as f:
-        f.write(log + "\n")
+    detail = "[sov] insert " + str(count_sovinsert)
+    print(detail)
+    insertlog(service, 0, detail, sovtimestamp)
 
 if __name__ == "__main__":
     main()

@@ -9,6 +9,7 @@ import arrow
 import pycrest
 import pandas as pd
 import fileinput
+import json
 import sys
 
 #############################
@@ -51,6 +52,25 @@ def regionname(regionID):
     result = cursor.fetchall()
     cursor.close()
     return result
+
+
+#
+# Input     typeID
+# Output    typeName
+#
+def typeidname(typeID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      "invTypes"."typeName"
+    FROM
+      public."invTypes"
+      WHERE "invTypes"."typeID" = %s'''
+    data = (typeID, )
+    cursor.execute(sql, data)
+    result = cursor.fetchone()
+    cursor.close()
+    return result[0]
 
 
 #
@@ -670,4 +690,86 @@ def insertmapsov(timestamp, allianceID, corporationID, solarSystemID):
     return 0
 
 
+#############################
+# Market
+#############################
+
+def getmarkethistory_typeid(typeID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      markethistory."typeID",
+      "invTypes"."typeName",
+      markethistory."regionID",
+      to_char(markethistory."timestamp", 'YYYY-MM-dd HH24:MI:SS') AS timestamp,
+      markethistory.volume,
+      markethistory."orderCount",
+      markethistory."lowPrice",
+      markethistory."highPrice",
+      markethistory."avgPrice"
+    FROM
+      public."invTypes",
+      data.markethistory
+     WHERE markethistory."typeID" = "invTypes"."typeID" AND
+     markethistory."typeID" = %s
+     ORDER BY markethistory."timestamp" DESC'''
+    data = (typeID, )
+    cursor.execute(sql, data, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['typeID', 'typeName', 'regionID', 'timestamp', 'volume', 'orderCount', 'lowPrice', 'highPrice', 'avgPrice'])
+    cursor.close()
+    return df
+
+def getfactionkills_byfaction():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      mapkills."timestamp",
+      SUM (mapkills."factionKills") AS SUM_factionKills
+    FROM
+      data.mapkills,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
+      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapRegions"."regionID" IN ('10000031', '10000056', '10000062', '10000061', '10000025', '10000012', '10000008', '10000006', '10000005', '10000009', '10000011', '10000014')
+    GROUP BY mapkills."timestamp"
+    ORDER BY mapkills."timestamp" DESC'''
+    cursor.execute(sql, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['timestamp', 'SUM_factionKills'])
+    df = df.set_index(['timestamp'])
+    cursor.close()
+    return df
+
+
+#############################
+# Log File
+#############################
+
+def getlog():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      *
+    FROM
+      data.logs
+    ORDER BY logs."timestamp" DESC
+    LIMIT 20
+    '''
+    cursor.execute(sql, )
+    result = json.dumps(cursor.fetchall(), indent=2)
+    if len(result) < 1:     # Handle a empty table
+        return ['No Data']
+    else:
+        return result
+
+
+def insertlog(service, severity, detail, timestamp):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = 'INSERT INTO data."logs" (timestamp, "service", "severity", "detail") VALUES (%s, %s, %s, %s)'
+    data = (timestamp, service, severity, detail, )
+    cursor.execute(sql, data)
+    conn.commit()
+    return 0
 
