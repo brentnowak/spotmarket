@@ -84,6 +84,14 @@ psql -d spotmarket -U spotmarketadmin -W
 Create database, tables, and indexes with the scripts located under \sql.  
 You can connect to the database using the command listed above and create the tables or use a GUI tool such as pgAdmin.  
 
+**Import Eve Static Data**
+
+```shell
+wget https://www.fuzzwork.co.uk/dump/postgres-latest.dmp.bz2
+bzip2 -d postgres-latest.dmp.bz2
+pg_restore -i -h localhost -p 5432 -U spotmarketadmin -d spotmarket -v "postgres-latest.dmp"
+```
+
 **Modify config.ini with Database Details**
 ```shell
 vim config.ini.change
