@@ -746,9 +746,16 @@ def getfactionkills_byfaction():
 # Log File
 #############################
 
+from psycopg2.extras import RealDictCursor
+
+
+def date_handler(obj):
+    return obj.isoformat() if hasattr(obj, 'isoformat') else obj
+
+
 def getlog():
     conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
       *
     FROM
@@ -757,11 +764,11 @@ def getlog():
     LIMIT 20
     '''
     cursor.execute(sql, )
-    result = json.dumps(cursor.fetchall(), indent=2)
-    if len(result) < 1:     # Handle a empty table
-        return ['No Data']
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
     else:
-        return result
+        return results
 
 
 def insertlog(service, severity, detail, timestamp):
@@ -773,3 +780,152 @@ def insertlog(service, severity, detail, timestamp):
     conn.commit()
     return 0
 
+
+#############################
+# Dashboard
+#############################
+
+def databasecountmapkills():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = 'SELECT COUNT(*) FROM data."mapkills"'
+    cursor.execute(sql, )
+    result = cursor.fetchone()
+    return int(result[0])
+
+
+def databasecountmapjumps():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = 'SELECT COUNT(*) FROM data."mapjumps"'
+    cursor.execute(sql, )
+    result = cursor.fetchone()
+    return int(result[0])
+
+
+def databasecountmapsov():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = 'SELECT COUNT(*) FROM data."mapsov"'
+    cursor.execute(sql, )
+    result = cursor.fetchone()
+    return int(result[0])
+
+
+def databasecountmarkethistory():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = 'SELECT COUNT(*) FROM data."markethistory"'
+    cursor.execute(sql, )
+    result = cursor.fetchone()
+    return int(result[0])
+
+
+def toprattingevents():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      mapkills."timestamp",
+      SUM(mapkills."factionKills") AS SUM_factionKills,
+      "mapSolarSystems"."solarSystemName",
+      "mapRegions"."regionName"
+    FROM
+      data.mapkills,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      "mapSolarSystems"."regionID" = "mapRegions"."regionID"
+    GROUP BY "mapSolarSystems"."solarSystemName", mapkills."timestamp", "mapRegions"."regionName"
+    ORDER BY SUM_factionKills DESC
+    LIMIT 30
+    '''
+    cursor.execute(sql, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
+
+
+def topnullrattingsystems():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      SUM(mapkills."factionKills") AS SUM_factionKills,
+      "mapSolarSystems"."solarSystemName",
+      "mapSolarSystems"."security",
+      "mapRegions"."regionName"
+    FROM
+      data.mapkills,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
+      "mapSolarSystems"."security" < 0.0
+    GROUP BY "mapSolarSystems"."solarSystemName", "mapSolarSystems"."security", "mapRegions"."regionName"
+    ORDER BY SUM_factionKills DESC
+    LIMIT 30
+    '''
+    cursor.execute(sql, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
+
+
+def topnullrattingregions():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      SUM(mapkills."factionKills") AS SUM_factionKills,
+      "mapRegions"."regionName"
+    FROM
+      data.mapkills,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
+      "mapSolarSystems"."security" < 0.0
+    GROUP BY "mapRegions"."regionName"
+    ORDER BY SUM_factionKills DESC
+    LIMIT 30
+    '''
+    cursor.execute(sql, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
+
+
+#############################
+# factionReport
+#############################
+
+
+def getregionrecordtimestamps():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+    mapkills."timestamp"
+    FROM
+      data.mapkills,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
+      "mapRegions"."regionID" IN ('10000031', '10000056', '10000062', '10000061', '10000025', '10000012', '10000008', '10000006', '10000005', '10000009', '10000011', '10000014')
+    GROUP BY mapkills."timestamp"
+    ORDER BY mapkills."timestamp" DESC
+    LIMIT 20'''
+    cursor.execute(sql, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results

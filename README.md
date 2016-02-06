@@ -21,7 +21,7 @@ Install Notes
 
 **Dependencies**
 ```shell 
-apt-get install postgresql postgresql-contrib  
+apt-get install postgresql postgresql-contrib
 apt-get build-dep python-psycopg2
 apt-get install python-pip
 apt-get install git
@@ -31,6 +31,7 @@ pip install evelink
 pip install pycrest
 pip install pandas
 pip install arrow
+pip install flask
 ```
 
 **Install**
@@ -39,8 +40,6 @@ git clone https://github.com/brentnowak/spotmarket
 cd spotmarket
 chmod +x /scripts/consumer_xml.sh
 chmod +x /scripts/consumer_markethistory.sh
-touch /logs/consumer_xml.log
-touch /logs/consumer_markethistory.log
 ```
 
 **PostgreSQL**

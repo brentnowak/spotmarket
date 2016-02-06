@@ -1,14 +1,16 @@
 from flask import render_template
 from app import app
+from _utility import *
 
 @app.route('/login.html')
 def login():
     return render_template('pages/login.html', title="Login")
 
 @app.route('/')
+
 @app.route('/index.html')
 def index():
-    return render_template('pages/index.html', title="Dashboard", header="Dashboard")
+    return render_template('pages/index.html', title="Dashboard", header="Dashboard", eventList=getlog(), countmapkills=databasecountmapkills(), countmapjumps=databasecountmapjumps(), countsov=databasecountmapsov(), countmarket=databasecountmarkethistory(), toprattingevents=toprattingevents(), topnullrattingsystems=topnullrattingsystems(), topnullrattingregions=topnullrattingregions())
 
 @app.route('/blank.html')
 def blank():
@@ -60,7 +62,7 @@ def grid():
 
 @app.route('/factionReport_angel.html')
 def faction_report_angel():
-    return render_template('pages/factionReports/angel.html', title="Angel Cartel", header="Angel Cartel", nav="Angel Cartel")
+    return render_template('pages/factionReports/angel.html', title="Angel Cartel", header="Angel Cartel", nav="Angel Cartel", regionrecordtimestamps=getregionrecordtimestamps())
 
 @app.route('/factionReport_blood.html')
 def faction_report_blood():
