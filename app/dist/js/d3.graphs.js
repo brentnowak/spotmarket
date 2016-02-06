@@ -185,23 +185,11 @@ graph({
     selector: '.d3-graph-30000182-mapjumps',
     csv: 'dist/data/30000182_mapjumps.csv'
 });
-/**
-graph({
-    marginleft: '80',
-    selector: '.d3-graph-market-angel',
-    csv: 'dist/data/market_faction_angel.csv'
-});
 
-graph({
-    marginleft: '80',
-    selector: '.d3-graph-market-angel-kills',
-    dateformat: '%Y-%m-%d',
-    csv: 'dist/data/market_faction_angel_kills.csv'
-});
-**/
 graph({
     width: '580',
     height: '340',
+    marginright: '20',
     selector: '.d3-graph-angel',
     csv: 'dist/data/npckills_regions_angel_cartel.csv'
 });
@@ -209,6 +197,7 @@ graph({
 graph({
     width: '580',
     height: '340',
+    marginright: '20',
     selector: '.d3-graph-angel-sum',
     csv: 'dist/data/npckills_regions_angel_cartel_sum.csv'
 });
@@ -244,14 +233,14 @@ graph({
 graph({
     width: '580',
     height: '340',
-    selector: '.d3-graph-sanshas',
+    selector: '.d3-graph-sansha',
     csv: 'dist/data/npckills_regions_sanshas_nation.csv'
 });
 
 graph({
     width: '580',
     height: '340',
-    selector: '.d3-graph-sanshas-sum',
+    selector: '.d3-graph-sansha-sum',
     csv: 'dist/data/npckills_regions_sanshas_nation_sum.csv'
 });
 
