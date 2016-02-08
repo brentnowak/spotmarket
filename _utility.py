@@ -929,3 +929,217 @@ def getregionrecordtimestamps():
         return "No Data"
     else:
         return results
+
+
+def indexrattingbyfactionkills():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      SUM(mapkills."factionKills") as SUM_factionKills,
+      "mapSolarSystems"."solarSystemName",
+      "mapSolarSystems"."solarSystemID",
+      "mapRegions"."regionName"
+    FROM
+      data.mapkills,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
+      "mapSolarSystems"."security" < 0.0
+    GROUP BY "mapSolarSystems"."solarSystemName", "mapSolarSystems"."solarSystemID", "mapRegions"."regionName"
+    ORDER BY SUM_factionKills DESC
+    '''
+    cursor.execute(sql, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['SUM_factionKills', 'solarSystemName', 'solarSystemID', 'regionID'])
+    df = df.set_index(['solarSystemID'])
+    cursor.close()
+    return df
+
+
+def indexrattingbyjumps():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      SUM(mapjumps."shipJumps") as SUM_shipJumps,
+      "mapSolarSystems"."solarSystemID"
+    FROM
+      data.mapjumps,
+      public."mapSolarSystems"
+    WHERE
+      mapjumps."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      "mapSolarSystems"."security" < 0.0
+    GROUP BY "mapSolarSystems"."solarSystemID"
+    ORDER BY SUM_shipJumps ASC
+    '''
+    cursor.execute(sql, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['SUM_shipJumps', 'solarSystemID'])
+    df = df.set_index(['solarSystemID'])
+    cursor.close()
+    return df
+
+
+def indexrattingbyshipkills():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      SUM(mapkills."shipKills") as SUM_shipKills,
+      "mapSolarSystems"."solarSystemID"
+    FROM
+      data.mapkills,
+      public."mapSolarSystems"
+    WHERE
+      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      "mapSolarSystems"."security" < 0.0
+    GROUP BY "mapSolarSystems"."solarSystemID"
+    ORDER BY SUM_shipKills ASC
+    '''
+    cursor.execute(sql, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['SUM_shipKills', 'solarSystemID'])
+    df = df.set_index(['solarSystemID'])
+    cursor.close()
+    return df
+
+
+def indexrattingbypodkills():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      SUM(mapkills."podKills") as SUM_podKills,
+      "mapSolarSystems"."solarSystemID"
+    FROM
+      data.mapkills,
+      public."mapSolarSystems"
+    WHERE
+      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      "mapSolarSystems"."security" < 0.0
+    GROUP BY "mapSolarSystems"."solarSystemID"
+    ORDER BY SUM_podKills ASC
+    '''
+    cursor.execute(sql, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['SUM_podKills', 'solarSystemID'])
+    df = df.set_index(['solarSystemID'])
+    cursor.close()
+    return df
+
+
+def indexsolarsystemgatecount():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      "mapSolarSystemJumps"."fromSolarSystemID" as solarSystemID,
+      COUNT(*) as gateCount
+    FROM
+      public."mapSolarSystemJumps"
+     GROUP BY solarSystemID
+    '''
+    cursor.execute(sql, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['solarSystemID', 'gateCount'])
+    df = df.set_index(['solarSystemID'])
+    cursor.close()
+    return df
+
+
+def indexrattinguniverse():
+    df1 = indexrattingbyfactionkills()
+    df2 = indexrattingbyjumps()
+    df3 = indexrattingbyshipkills()
+    df4 = indexrattingbypodkills()
+    df5 = indexsolarsystemgatecount()
+
+    df1 = df1.combine_first(df2)
+    df1 = df1.combine_first(df3)
+    df1 = df1.combine_first(df4)
+    df1 = df1.combine_first(df5)
+
+    df1['safetyIndex'] = 100
+    df1 = df1.sort_values(by='SUM_factionKills', ascending=False)
+    df1 = df1.head(30)
+    return df1
+
+
+def rattinghistorytopsystemsbyregion(regionID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      mapkills."solarSystemID",
+      SUM(mapkills."factionKills") as SUM_factionKills
+    FROM
+      data.mapkills,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
+      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapSolarSystems"."regionID" = %s
+    GROUP BY
+     mapkills."solarSystemID"
+    ORDER BY SUM_factionKills DESC
+    LIMIT 20'''
+    data = (regionID, )
+    cursor.execute(sql, data, )
+    results = cursor.fetchall()
+    cursor.close()
+    return results
+
+
+def rattinghistorybyregion(regionID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      mapkills."timestamp",
+      mapkills."factionKills",
+      mapkills."solarSystemID",
+      "mapSolarSystems"."solarSystemName",
+      "mapRegions"."regionName"
+    FROM
+      data.mapkills,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
+      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapSolarSystems"."regionID" = %s
+    GROUP BY mapkills."timestamp",
+     mapkills."factionKills",
+     mapkills."solarSystemID",
+     "mapSolarSystems"."solarSystemName",
+     "mapRegions"."regionName"
+    '''
+    data = (regionID, )
+    cursor.execute(sql, data, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['timestamp', 'factionKills', 'solarSystemID', 'solarSystemName', 'regionName'])
+    df = df.set_index(['timestamp'])
+    cursor.close()
+    return df
+
+
+def rattinghistorybysystem(solarSystemID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      mapkills."timestamp",
+      mapkills."factionKills",
+      mapkills."solarSystemID",
+      "mapSolarSystems"."solarSystemName",
+      "mapRegions"."regionName"
+    FROM
+      data.mapkills,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
+      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapSolarSystems"."solarSystemID" = %s
+    GROUP BY mapkills."timestamp",
+     mapkills."factionKills",
+     mapkills."solarSystemID",
+     "mapSolarSystems"."solarSystemName",
+     "mapRegions"."regionName"
+    '''
+    data = (solarSystemID, )
+    cursor.execute(sql, data, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['timestamp', 'factionKills', 'solarSystemID', 'solarSystemName', 'regionName'])
+    df = df.set_index(['timestamp'])
+    cursor.close()
+    return df

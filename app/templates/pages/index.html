@@ -14,59 +14,32 @@
         <!-- /.row -->
     </div>
 
-
-
     <div class="row">
         <div class="col-lg-12">
-            <div class="col-md-4">
-                <div class="panel panel-primary">
+            <div class="col-md-6">
+                <div class="panel panel-info">
                     <div class="panel-heading">
-                        <span class="glyphicon glyphicon-file"></span> Database Records
+                        <span class="glyphicon glyphicon-stats"></span> Universe
                     </div>
                     <div class="panel-body">
-                            <div class="list-group">
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-database fa-fw"></i> mapkills {{ countmapkills }}
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-database fa-fw"></i> mapjumps {{ countmapjumps }}
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-database fa-fw"></i> mapsov {{ countsov }}
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-database fa-fw"></i> markethistory {{ countmarket }}
-                                    </span>
-                                </a>
-                            </div>
+                        <div class="d3-graph-universe"></div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-8">
-                <div class="panel panel-primary">
+            <div class="col-md-6">
+                <div class="panel panel-info">
                     <div class="panel-heading">
-                        <span class="glyphicon glyphicon-file"></span> System Logs
+                        <span class="glyphicon glyphicon-stats"></span> Faction Regions
                     </div>
                         <div class="panel-body">
-                            <div class="list-group">
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-database fa-fw"></i> {{ eventList }}
-                                    <span class="pull-right text-muted small"><em>4 minutes ago</em>
-                                    </span>
-                                </a>
-                            </div>
+                            <div class="d3-graph-universe-factions"></div>
                         </div>
                 </div>
             </div>
         </div><!-- /.col-lg-12 -->
     </div><!-- /.row -->
 
-    <div class="d3-graph-universe"></div>
-
-        <div class="row">
+    <div class="row">
         <div class="col-lg-12">
             <div class="col-md-4">
                 <div class="panel panel-info">
@@ -100,8 +73,6 @@
             </div>
         </div><!-- /.col-lg-12 -->
     </div><!-- /.row -->
-
-
 
 
     <!-- /.container-fluid -->

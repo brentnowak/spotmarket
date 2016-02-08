@@ -10,7 +10,11 @@ def login():
 
 @app.route('/index.html')
 def index():
-    return render_template('pages/index.html', title="Dashboard", header="Dashboard", eventList=getlog(), countmapkills=databasecountmapkills(), countmapjumps=databasecountmapjumps(), countsov=databasecountmapsov(), countmarket=databasecountmarkethistory(), toprattingevents=toprattingevents(), topnullrattingsystems=topnullrattingsystems(), topnullrattingregions=topnullrattingregions())
+    return render_template('pages/index.html', title="NPC Kills", header="NPC Kills", toprattingevents=toprattingevents(), topnullrattingsystems=topnullrattingsystems(), topnullrattingregions=topnullrattingregions())
+
+@app.route('/system.html')
+def system():
+    return render_template('pages/system.html', title="System", header="System", eventList=getlog(), countmapkills=databasecountmapkills(), countmapjumps=databasecountmapjumps(), countsov=databasecountmapsov(), countmarket=databasecountmarkethistory())
 
 @app.route('/blank.html')
 def blank():
@@ -79,3 +83,12 @@ def faction_report_sansha():
 @app.route('/factionReport_serpentis.html')
 def faction_report_serpentis():
     return render_template('pages/factionReports/serpentis.html', title="Serpentis", header="Serpentis", nav="Serpentis")
+
+#
+# indexReports
+#
+
+@app.route('/indexReport_universe.html')
+def index_report_universe():
+    return render_template('pages/indexReports/universe.html', title="Universe", header="Universe", nav="Universe")
+
