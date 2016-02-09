@@ -47,7 +47,16 @@
                         <span class="glyphicon glyphicon-fire"></span> Top Ratting Events
                     </div>
                     <div class="panel-body">
-                        {{ toprattingevents }}
+                        <table data-toggle="table" data-url="/api/toprattingevents" data-show-refresh="true" data-height="300">
+                            <thead>
+                                <tr>
+                                    <th data-field="timestamp">timestamp</th>
+                                    <th data-field="sum_factionkills">SUM_factionKills</th>
+                                    <th data-field="solarSystemName">solarSystemName</th>
+                                    <th data-field="regionName">regionName</th>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -57,7 +66,16 @@
                         <span class="glyphicon glyphicon-fire"></span> Top Null Ratting Systems
                     </div>
                         <div class="panel-body">
-                            {{ topnullrattingsystems }}
+                            <table data-toggle="table" data-url="/api/topnullrattingsystems" data-show-refresh="true" data-height="300">
+                                <thead>
+                                    <tr>
+                                        <th data-field="sum_factionkills">SUM_factionKills</th>
+                                        <th data-field="solarSystemName">solarSystemName</th>
+                                        <th data-field="security">security</th>
+                                        <th data-field="regionName">regionName</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                 </div>
             </div>
@@ -67,7 +85,14 @@
                         <span class="glyphicon glyphicon-fire"></span> Top Null Ratting Regions
                     </div>
                         <div class="panel-body">
-                            {{ topnullrattingregions }}
+                            <table data-toggle="table" data-url="/api/topnullrattingregions" data-show-refresh="true" data-height="300">
+                                <thead>
+                                    <tr>
+                                        <th data-field="sum_factionkills">SUM_factionKills</th>
+                                        <th data-field="regionName">regionName</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                 </div>
             </div>

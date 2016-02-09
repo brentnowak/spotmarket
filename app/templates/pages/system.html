@@ -24,19 +24,19 @@
                     <div class="panel-body">
                             <div class="list-group">
                                 <a href="#" class="list-group-item">
-                                    <i class="fa fa-database fa-fw"></i> mapkills {{ countmapkills }}
+                                    <i class="fa fa-database fa-fw"></i> mapkills Text
                                     </span>
                                 </a>
                                 <a href="#" class="list-group-item">
-                                    <i class="fa fa-database fa-fw"></i> mapjumps {{ countmapjumps }}
+                                    <i class="fa fa-database fa-fw"></i> mapjumps Text
                                     </span>
                                 </a>
                                 <a href="#" class="list-group-item">
-                                    <i class="fa fa-database fa-fw"></i> mapsov {{ countsov }}
+                                    <i class="fa fa-database fa-fw"></i> mapsov Text
                                     </span>
                                 </a>
                                 <a href="#" class="list-group-item">
-                                    <i class="fa fa-database fa-fw"></i> markethistory {{ countmarket }}
+                                    <i class="fa fa-database fa-fw"></i> markethistory Text
                                     </span>
                                 </a>
                             </div>
@@ -49,60 +49,22 @@
                         <span class="glyphicon glyphicon-file"></span> System Logs
                     </div>
                         <div class="panel-body">
-                            <div class="list-group">
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-database fa-fw"></i> {{ eventList }}
-                                    </span>
-                                </a>
-                            </div>
+                            <table data-toggle="table" data-sort-name="logID" data-sort-order="desc" data-show-refresh="true" data-striped="true" data-url="/api/system/log" data-height="400">
+                            <thead>
+                                <tr>
+                                    <th data-field="logID">ID</th>
+                                    <th data-field="timestamp">Timestamp</th>
+                                    <th data-field="severity">Severity</th>
+                                    <th data-field="service">Service</th>
+                                    <th data-field="detail">Detail</th>
+                                </tr>
+                            </thead>
+                            </table>
                         </div>
                 </div>
             </div>
         </div><!-- /.col-lg-12 -->
     </div><!-- /.row -->
-
-    <script type='text/javascript'>
-    $(document).ready(function () {
-        $('#example').dataTable({
-            "processing": true,
-            "ajax": {
-                "url": 'json.txt',
-                "dataSrc": function (json) {
-                    var arr = Object.keys(json).map(function(k) { return json[k] });
-                    return arr;
-                }
-            },
-            "columnDefs": [
-                {
-                    "targets": [2],
-                    "visible": true,
-                    "searchable": true
-                }
-            ],
-            "columns": [
-                {
-                    "data": "eventid"
-                },
-                {
-                    "data": "country"
-                },
-                {
-                    "data": "venue"
-                }
-            ]
-        });
-    });
-    </script>
-
-        <table id="example" class="table table-striped table-bordered" cellspacing="0" width="50%">
-            <thead>
-                <tr>
-                    <th>Country</th>
-                    <th>Event</th>
-                    <th>Venue</th>
-                </tr>
-            </thead>
-        </table>
 
     <!-- /.container-fluid -->
 </div>

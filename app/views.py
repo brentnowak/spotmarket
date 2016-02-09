@@ -7,14 +7,13 @@ def login():
     return render_template('pages/login.html', title="Login")
 
 @app.route('/')
-
 @app.route('/index.html')
 def index():
-    return render_template('pages/index.html', title="NPC Kills", header="NPC Kills", toprattingevents=toprattingevents(), topnullrattingsystems=topnullrattingsystems(), topnullrattingregions=topnullrattingregions())
+    return render_template('pages/index.html', title="Home", header="Home")
 
 @app.route('/system.html')
 def system():
-    return render_template('pages/system.html', title="System", header="System", eventList=getlog(), countmapkills=databasecountmapkills(), countmapjumps=databasecountmapjumps(), countsov=databasecountmapsov(), countmarket=databasecountmarkethistory())
+    return render_template('pages/system.html', title="System", header="System")
 
 @app.route('/blank.html')
 def blank():
@@ -60,13 +59,14 @@ def icons():
 def grid():
     return render_template('pages/grid.html', title="Grid", header="Grid", nav="Grid Page")
 
+
 #
 #   factionReport
 #
 
 @app.route('/factionReport_angel.html')
 def faction_report_angel():
-    return render_template('pages/factionReports/angel.html', title="Angel Cartel", header="Angel Cartel", nav="Angel Cartel", regionrecordtimestamps=getregionrecordtimestamps())
+    return render_template('pages/factionReports/angel.html', title="Angel Cartel", header="Angel Cartel", nav="Angel Cartel")
 
 @app.route('/factionReport_blood.html')
 def faction_report_blood():
@@ -84,6 +84,7 @@ def faction_report_sansha():
 def faction_report_serpentis():
     return render_template('pages/factionReports/serpentis.html', title="Serpentis", header="Serpentis", nav="Serpentis")
 
+
 #
 # indexReports
 #
@@ -92,3 +93,40 @@ def faction_report_serpentis():
 def index_report_universe():
     return render_template('pages/indexReports/universe.html', title="Universe", header="Universe", nav="Universe")
 
+
+#
+# API
+#
+@app.route('/api/toprattingevents')
+def api_toprattingevents():
+    return toprattingevents()
+
+@app.route('/api/topnullrattingsystems')
+def api_topnullrattingsystems():
+    return topnullrattingsystems()
+
+@app.route('/api/topnullrattingregions')
+def api_topnullrattingregions():
+    return topnullrattingregions()
+
+# System
+
+@app.route('/api/system/log')
+def api_systemlog():
+    return getlog()
+
+@app.route('/api/system/countmapkills')
+def api_systemcountmapkills():
+    return databasecountmapkills()
+
+@app.route('/api/system/countmapjumps')
+def api_systemcountmapjumps():
+    return databasecountmapjumps()
+
+@app.route('/api/system/countmapsov')
+def api_systemcountmapsov():
+    return databasecountmapsov()
+
+@app.route('/api/system/countmarkethistory')
+def api_systemcountmarkethistory():
+    return databasecountmarkethistory()

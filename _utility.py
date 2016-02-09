@@ -790,8 +790,11 @@ def databasecountmapkills():
     cursor = conn.cursor()
     sql = 'SELECT COUNT(*) FROM data."mapkills"'
     cursor.execute(sql, )
-    result = cursor.fetchone()
-    return int(result[0])
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
 
 
 def databasecountmapjumps():
@@ -800,7 +803,11 @@ def databasecountmapjumps():
     sql = 'SELECT COUNT(*) FROM data."mapjumps"'
     cursor.execute(sql, )
     result = cursor.fetchone()
-    return int(result[0])
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
 
 
 def databasecountmapsov():
@@ -809,7 +816,11 @@ def databasecountmapsov():
     sql = 'SELECT COUNT(*) FROM data."mapsov"'
     cursor.execute(sql, )
     result = cursor.fetchone()
-    return int(result[0])
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
 
 
 def databasecountmarkethistory():
@@ -818,12 +829,16 @@ def databasecountmarkethistory():
     sql = 'SELECT COUNT(*) FROM data."markethistory"'
     cursor.execute(sql, )
     result = cursor.fetchone()
-    return int(result[0])
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
 
 
 def toprattingevents():
     conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
       mapkills."timestamp",
       SUM(mapkills."factionKills") AS SUM_factionKills,
@@ -850,7 +865,7 @@ def toprattingevents():
 
 def topnullrattingsystems():
     conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
       SUM(mapkills."factionKills") AS SUM_factionKills,
       "mapSolarSystems"."solarSystemName",
@@ -878,7 +893,7 @@ def topnullrattingsystems():
 
 def topnullrattingregions():
     conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
       SUM(mapkills."factionKills") AS SUM_factionKills,
       "mapRegions"."regionName"
