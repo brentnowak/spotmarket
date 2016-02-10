@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------------
-# consumer_xml.py - EVE Online XML API consumer
+# consumer_map.py - EVE Online XML API consumer
 # Brent Nowak <brent613@gmail.com>
 #-----------------------------------------------------------------------------
 # Version: 0.1
@@ -38,7 +38,7 @@ sovapi_data = sovresponse.result[0]
 
 
 def main():
-    service = "consumer_xml.py"
+    service = "consumer_map.py"
 
     # Run Map import
     count_mapinsert = insertmap(mapapi_data, maptimestamp)

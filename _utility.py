@@ -779,6 +779,15 @@ def insertlog(service, severity, detail, timestamp):
     conn.commit()
     return 0
 
+def insertlog_timestamp(service, severity, detail, timestamp):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = 'INSERT INTO data."logs" (timestamp, "service", "severity", "detail") VALUES (to_timestamp(%s), %s, %s, %s)'
+    data = (timestamp, service, severity, detail, )
+    cursor.execute(sql, data)
+    conn.commit()
+    return 0
+
 
 #############################
 # Dashboard

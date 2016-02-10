@@ -1,3 +1,3 @@
 #!/bin/bash
 cd /home/ubuntu/scripts/spotmarket
-python consumer_wallet.py
+python consumer_map.py
