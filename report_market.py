@@ -28,7 +28,6 @@ def main():
     dfkills = dfkills.combine_first(df)
     dfkills = dfkills.dropna()
 
-    dfkills.to_csv('app/data/market_faction_angel.csv', index=False, sep=',', columns=list(dfkills))
     print(dfkills)
 
     #for typeID in typeIDs:
