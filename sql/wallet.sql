@@ -12,7 +12,7 @@ CREATE TABLE data.wallet
   price double precision NOT NULL,
   "clientID" bigint NOT NULL,
   "clientName" character varying(255) NOT NULL,
-  "characterID" integer NOT NULL,
+  "walletID" integer NOT NULL,
   "stationID" bigint NOT NULL,
   "stationName" character varying(255) NOT NULL,
   "transactionType" character varying(4) NOT NULL,
