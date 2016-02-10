@@ -15,6 +15,10 @@ def index():
 def system():
     return render_template('pages/system.html', title="System", header="System")
 
+@app.route('/settings.html')
+def settings():
+    return render_template('pages/settings.html', title="Settings", header="Settings")
+
 @app.route('/blank.html')
 def blank():
     return render_template('pages/blank.html', title="Blank", header="Blank", nav="Blank Page")
@@ -86,6 +90,23 @@ def faction_report_serpentis():
 
 
 #
+#   securityReport
+#
+
+@app.route('/securityReport_highsec.html')
+def securityreporthighsec():
+    return render_template('pages/securityReports/securityReport_highsec.html', title="Highsec", header="Highsec", nav="Highsec")
+
+@app.route('/securityReport_lowsec.html')
+def securityreportlowsec():
+    return render_template('pages/securityReports/securityReport_lowsec.html', title="Lowsec", header="Lowsec", nav="Lowsec")
+
+@app.route('/securityReport_nullsec.html')
+def securityreportnullsec():
+    return render_template('pages/securityReports/securityReport_nullsec.html', title="Nullsec", header="Nullsec", nav="Nullsec")
+
+
+#
 # indexReports
 #
 
@@ -105,9 +126,49 @@ def api_toprattingevents():
 def api_topnullrattingsystems():
     return topnullrattingsystems()
 
-@app.route('/api/topnullrattingregions')
-def api_topnullrattingregions():
-    return topnullrattingregions()
+# Highsec
+@app.route('/api/gettoprattingregions_nullsec')
+def api_gettoprattingregions_nullsec():
+    df = gettoprattingregions_nullsec()
+    df = addkillsperday(df)
+    return df.reset_index().to_json(orient='records')
+
+
+@app.route('/api/gettoprattingsystems_nullsec')
+def api_gettoprattingsystemss_nullsec():
+    df = gettoprattingsystems_nullsec()
+    df = addkillsperday(df)
+    return df.reset_index().to_json(orient='records')
+
+
+# Lowsec
+@app.route('/api/gettoprattingregions_lowsec')
+def api_gettoprattingregions_lowsec():
+    df = gettoprattingregions_lowsec()
+    df = addkillsperday(df)
+    return df.reset_index().to_json(orient='records')
+
+
+@app.route('/api/gettoprattingsystems_lowsec')
+def api_gettoprattingsystemss_lowsec():
+    df = gettoprattingsystems_lowsec()
+    df = addkillsperday(df)
+    return df.reset_index().to_json(orient='records')
+
+
+# Highsec
+@app.route('/api/gettoprattingregions_highsec')
+def api_gettoprattingregions_highsec():
+    df = gettoprattingregions_highsec()
+    df = addkillsperday(df)
+    return df.reset_index().to_json(orient='records')
+
+
+@app.route('/api/gettoprattingsystems_highsec')
+def api_gettoprattingsystemss_highsec():
+    df = gettoprattingsystems_highsec()
+    df = addkillsperday(df)
+    return df.reset_index().to_json(orient='records')
 
 # System
 
@@ -130,3 +191,8 @@ def api_systemcountmapsov():
 @app.route('/api/system/countmarkethistory')
 def api_systemcountmarkethistory():
     return databasecountmarkethistory()
+
+# Market Items
+@app.route('/api/marketitems')
+def api_marketitems():
+    return databasemarketitems()

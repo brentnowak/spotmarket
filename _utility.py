@@ -342,8 +342,7 @@ def getships():
       public."invGroups"
     WHERE
       "invGroups"."groupID" = "invTypes"."groupID" AND
-      "invGroups"."groupID" IN (26, 27, 234, 358, 380, 419, 420, 463, 513, 540, 541, 543, 830, 831, 832, 833, 834, 893, 894, 898, 900, 902, 906, 941, 963, 1022, 1201, 1202, 1305, 1527, 1534) AND
-      "invTypes"."typeID" NOT IN (635, 4005, 34475, 34467, 4469, 34479, 34463, 34459, 34465, 34473, 34457, 34471, 34477, 34461, 34469, 11011, 1904, 25560, 1912, 1914, 1916, 1918, 26840, 33685, 33553, 33639, 33641, 33643, 33645, 33647, 33649, 33651, 33653, 34445, 11936, 11938, 13202, 33627, 33623, 33625, 33629, 33631, 33633, 33635, 33637, 34227, 33683, 34219, 34221, 34223, 34231, 34233, 34235, 34241, 34243, 34245, 34253, 34255, 34257, 34229, 34118, 34151, 34225, 34213, 34215, 34217, 34237, 34239, 34247, 34249, 34251, 34441, 26842, 32790, 32840, 32842, 32844, 32846, 32848, 33395, 33397, 33673, 33675, 33869, 33871, 33873, 33875, 33877, 33879, 33881, 33883, 35779, 35781)
+      "invGroups"."groupID" IN (1041)
       '''
     cursor.execute(sql, )
     result = cursor.fetchall() # Need to correct to return a list
@@ -802,7 +801,6 @@ def databasecountmapjumps():
     cursor = conn.cursor()
     sql = 'SELECT COUNT(*) FROM data."mapjumps"'
     cursor.execute(sql, )
-    result = cursor.fetchone()
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
     if len(results) < 1:     # Handle a empty table
         return "No Data"
@@ -815,7 +813,6 @@ def databasecountmapsov():
     cursor = conn.cursor()
     sql = 'SELECT COUNT(*) FROM data."mapsov"'
     cursor.execute(sql, )
-    result = cursor.fetchone()
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
     if len(results) < 1:     # Handle a empty table
         return "No Data"
@@ -828,7 +825,6 @@ def databasecountmarkethistory():
     cursor = conn.cursor()
     sql = 'SELECT COUNT(*) FROM data."markethistory"'
     cursor.execute(sql, )
-    result = cursor.fetchone()
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
     if len(results) < 1:     # Handle a empty table
         return "No Data"
@@ -1158,3 +1154,32 @@ def rattinghistorybysystem(solarSystemID):
     df = df.set_index(['timestamp'])
     cursor.close()
     return df
+
+#############################
+# marketitems
+#############################
+
+def databasemarketitems():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''SELECT
+      marketitems."typeID",
+      "invTypes"."typeName",
+      "invMarketGroups"."marketGroupName",
+      marketitems.enabled,
+      marketitems."importResult",
+      marketitems."importTimestamp"
+    FROM
+      data.marketitems,
+      public."invTypes",
+      public."invMarketGroups"
+    WHERE
+      marketitems."typeID" = "invTypes"."typeID" AND
+      "invTypes"."marketGroupID" = "invMarketGroups"."marketGroupID"
+    '''
+    cursor.execute(sql, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
