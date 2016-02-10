@@ -19,6 +19,14 @@ def system():
 def settings():
     return render_template('pages/settings.html', title="Settings", header="Settings")
 
+@app.route('/wallet.html')
+def wallet():
+    return render_template('pages/wallet.html', title="Wallet", header="Wallet")
+
+@app.route('/sovereignty.html')
+def sovereignty():
+    return render_template('pages/sovereignty.html', title="Sovereignty", header="Sovereignty")
+
 @app.route('/blank.html')
 def blank():
     return render_template('pages/blank.html', title="Blank", header="Blank", nav="Blank Page")
@@ -171,7 +179,6 @@ def api_gettoprattingsystemss_highsec():
     return df.reset_index().to_json(orient='records')
 
 # System
-
 @app.route('/api/system/log')
 def api_systemlog():
     return getlog()
@@ -192,7 +199,20 @@ def api_systemcountmapsov():
 def api_systemcountmarkethistory():
     return databasecountmarkethistory()
 
+
 # Market Items
 @app.route('/api/marketitems')
 def api_marketitems():
     return databasemarketitems()
+
+
+# Wallet
+@app.route('/api/wallet/transactions')
+def api_wallettransactions():
+    return getwallettransactions()
+
+
+# Sovereignty
+@app.route('/api/sov/events')
+def api_getsovevents():
+    return getsovevents()

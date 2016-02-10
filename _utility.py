@@ -1183,3 +1183,66 @@ def databasemarketitems():
         return "No Data"
     else:
         return results
+
+
+#############################
+# Wallet
+#############################
+
+def getwallettransactions():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''SELECT
+      wallet."transactionDateTime",
+      wallet."transactionID",
+      wallet."typeID",
+      wallet."typeName",
+      wallet.quantity,
+      wallet.price,
+      wallet."clientName",
+      wallet."stationID",
+      wallet."stationName",
+      wallet."transactionType",
+      wallet.personal,
+      wallet.profit
+    FROM
+      data.wallet
+    ORDER BY wallet."transactionDateTime" DESC
+    '''
+    cursor.execute(sql, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
+
+
+#############################
+# sovereignty
+#############################
+
+def getsovevents():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''SELECT
+      mapsov."timestamp",
+      mapsov."solarSystemID",
+      mapsov."allianceID",
+      mapsov."corporationID",
+      "mapSolarSystems"."solarSystemName",
+      "mapRegions"."regionName"
+    FROM
+      data.mapsov,
+      public."mapSolarSystems",
+      public."mapRegions"
+    WHERE
+        mapsov."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+        "mapRegions"."regionID" = "mapSolarSystems"."regionID"
+    ORDER BY mapsov."timestamp" DESC
+    '''
+    cursor.execute(sql, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
