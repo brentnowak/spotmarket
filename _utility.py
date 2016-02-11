@@ -284,7 +284,7 @@ def jumpsinsertrecord(timestamp, id, jumps):
 # Input     CREST JSON
 # Output    Database insert
 
-def insertmarket(regionID, typeID, history):
+def insertmarketrecord(regionID, typeID, history):
     count = 0
     for row in history['items']:
         volume = row['volume']
@@ -348,6 +348,7 @@ def getships():
       '''
     cursor.execute(sql, )
     result = cursor.fetchall() # Need to correct to return a list
+    cursor.close()
     return result
 
 
@@ -355,19 +356,25 @@ def getships():
 # Input     regionIDs, typeIDs
 # Output    database insert
 #
-def getmarkethistory(regionIDs, typeIDs):
+def getmarkethistory(regionID, typeID):
     eve = pycrest.EVE()
-    for regionID in regionIDs:
-        for typeID in typeIDs:
-            start_time = time.time()
-            url = "https://public-crest.eveonline.com/market/" + str(regionID) + "/types/" + str(typeID) + "/history/"
-            history = eve.get(url)
-            count = insertmarket(regionID, typeID, history)
-            timemark = arrow.get().to('US/Pacific').format('YYYY-MM-DD HH:mm:ss')
-            log = "[" + str(timemark) + "][consumer_markethistory.py][insert:" + str(count) + " @ " + str(round(count/(time.time() - start_time), 2)) + " rec/sec][regionID:" + str(regionID) + "][typeID:" + str(typeID) + "]"
-            print(log)
-            with open("logs/consumer_markethistory.log", "a") as f:
-                f.write(log + "\n")
+    start_time = time.time()
+    url = "https://public-crest.eveonline.com/market/" + str(regionID) + "/types/" + str(typeID) + "/history/"
+    history = eve.get(url)
+    count = insertmarketrecord(regionID, typeID, history)
+    timemark = arrow.utcnow().format('YYYY-MM-DD HH:mm:ss')
+    log = "[typeID:" + str(typeID) + "][regionID:" + str(regionID) + "] insert: " + str(count) + " @ " + str(round(count/(time.time() - start_time), 2)) + " rec/sec"
+    insertlog("consumer_markethistory.py", 0, log, timemark)
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''UPDATE
+    data.marketitems
+    SET "importResult" = 1
+    WHERE marketitems."typeID" = %s
+    '''
+    data = (typeID, )
+    cursor.execute(sql, data, )
+    conn.close()
     return 0
 
 
@@ -734,7 +741,31 @@ def insertmapsov(timestamp, allianceID, corporationID, solarSystemID):
     data = (timestamp, allianceID, corporationID, solarSystemID, )
     cursor.execute(sql, data)
     conn.commit()
+    conn.close()
     return 0
+
+
+def getfactionkills_byfaction():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      mapkills."timestamp",
+      SUM (mapkills."factionKills") AS SUM_factionKills
+    FROM
+      data.mapkills,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
+      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapRegions"."regionID" IN ('10000031', '10000056', '10000062', '10000061', '10000025', '10000012', '10000008', '10000006', '10000005', '10000009', '10000011', '10000014')
+    GROUP BY mapkills."timestamp"
+    ORDER BY mapkills."timestamp" DESC'''
+    cursor.execute(sql, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['timestamp', 'SUM_factionKills'])
+    df = df.set_index(['timestamp'])
+    conn.close()
+    return df
 
 
 #############################
@@ -766,27 +797,7 @@ def getmarkethistory_typeid(typeID):
     cursor.close()
     return df
 
-def getfactionkills_byfaction():
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
-    sql = '''SELECT
-      mapkills."timestamp",
-      SUM (mapkills."factionKills") AS SUM_factionKills
-    FROM
-      data.mapkills,
-      public."mapRegions",
-      public."mapSolarSystems"
-    WHERE
-      "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
-      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
-      "mapRegions"."regionID" IN ('10000031', '10000056', '10000062', '10000061', '10000025', '10000012', '10000008', '10000006', '10000005', '10000009', '10000011', '10000014')
-    GROUP BY mapkills."timestamp"
-    ORDER BY mapkills."timestamp" DESC'''
-    cursor.execute(sql, )
-    df = pd.DataFrame(cursor.fetchall(),columns=['timestamp', 'SUM_factionKills'])
-    df = df.set_index(['timestamp'])
-    cursor.close()
-    return df
+
 
 
 #############################
@@ -804,8 +815,8 @@ def getlog():
       *
     FROM
       data.logs
-    ORDER BY logs."timestamp" DESC
-    LIMIT 20
+    ORDER BY logs."logID" DESC
+    LIMIT 200
     '''
     cursor.execute(sql, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
