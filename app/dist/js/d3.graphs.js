@@ -9,6 +9,7 @@
  *              legend: string
  *              marginright: string
  *              marginleft: string
+ *              ylegend: string
  *              dateformat: string
  * 				 }} options
  */
@@ -23,6 +24,7 @@ function graph(options) {
 		legend: '480',
 		marginright: '90',
 		marginleft: '50',
+		ylegend: 'SUM_factionKills',
 		dateformat: '%Y-%m-%d %H:%M:%S'
 	}, options);
 
@@ -101,7 +103,7 @@ var svg = d3.select(options.selector).append("svg")
 	      .attr("y", 6)
 	      .attr("dy", ".71em")
 	      .style("text-anchor", "end")
-	      .text("SUM_factionKills")
+	      .text(options.ylegend)
 	      .style("font-size","10px");
 
 	  var city = svg.selectAll(".city")
@@ -152,38 +154,6 @@ graph({
     marginright: '100',
     selector: '.d3-graph-universe-factions',
     csv: 'dist/data/npckills_factions.csv'
-});
-
-graph({
-    width: '580',
-    height: '340',
-    marginright: '100',
-    selector: '.d3-graph-30004468-mapkills',
-    csv: 'dist/data/30004468_mapkills.csv'
-});
-
-graph({
-    width: '580',
-    height: '340',
-    marginright: '100',
-    selector: '.d3-graph-30004468-mapjumps',
-    csv: 'dist/data/30004468_mapjumps.csv'
-});
-
-graph({
-    width: '580',
-    height: '340',
-    marginright: '100',
-    selector: '.d3-graph-30000182-mapkills',
-    csv: 'dist/data/30000182_mapkills.csv'
-});
-
-graph({
-    width: '580',
-    height: '340',
-    marginright: '100',
-    selector: '.d3-graph-30000182-mapjumps',
-    csv: 'dist/data/30000182_mapjumps.csv'
 });
 
 graph({
@@ -256,4 +226,20 @@ graph({
     height: '340',
     selector: '.d3-graph-serpentis-sum',
     csv: 'dist/data/npckills_regions_serpentis_corporation_sum.csv'
+});
+
+graph({
+    selector: '.d3-graph-mapjumps-tradehubs',
+    ylegend: 'jumpCount',
+    label: 'Jump Activity per Trade Hub - No Resample - k162space.com',
+    legend: '480',
+    csv: 'dist/data/mapjumps_tradehubs.csv'
+});
+
+graph({
+    selector: '.d3-graph-mapjumps-tradehubs-jitatoamarr',
+    ylegend: 'jumpCount',
+    label: 'Jump Activity - Jita <-> Amarr - No Resample - k162space.com',
+    legend: '480',
+    csv: 'dist/data/mapjumps_tradehubs_jitatoamarr.csv'
 });

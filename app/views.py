@@ -119,9 +119,17 @@ def securityreportnullsec():
 #
 
 @app.route('/indexReport_universe.html')
-def index_report_universe():
+def indexreport_universe():
     return render_template('pages/indexReports/universe.html', title="Universe", header="Universe", nav="Universe")
 
+
+
+#
+# jumpReports
+#
+@app.route('/jumpReports_tradehubs.html')
+def jumpreport_tradehubs():
+    return render_template('pages/jumpReports/jumpReports_tradehubs.html', title="Trade Hubs", header="Trade Hubs", nav="Trade Hubs")
 
 #
 # API
@@ -200,10 +208,14 @@ def api_systemcountmarkethistory():
     return databasecountmarkethistory()
 
 
-# Market Items
+# Settings
 @app.route('/api/marketitems')
 def api_marketitems():
     return databasemarketitems()
+
+@app.route('/api/characters')
+def api_characters():
+    return getcharacters()
 
 
 # Wallet

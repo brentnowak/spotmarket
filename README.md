@@ -38,7 +38,8 @@ pip install flask
 ```shell
 git clone https://github.com/brentnowak/spotmarket
 cd spotmarket
-chmod +x /scripts/consumer_xml.sh
+chmod +x /scripts/consumer_map.sh
+chmod +x /scripts/consumer_wallet.sh
 chmod +x /scripts/consumer_markethistory.sh
 ```
 
@@ -101,7 +102,7 @@ mv config.ini.change change.ini
 **crontab**
 ```shell 
 crontab -e
-0,30 * * * * ubuntu /home/ubuntu/spotmarket/scripts/consumer_xml.sh > /dev/null 2>&1
+0,30 * * * * ubuntu /home/ubuntu/spotmarket/scripts/consumer_map.sh > /dev/null 2>&1
 15 1,13 * * * ubuntu /home/ubuntu/spotmarket/scripts/consumer_markethistory.sh > /dev/null 2>&1
 ```
 

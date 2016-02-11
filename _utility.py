@@ -12,6 +12,8 @@ import fileinput
 import json
 import sys
 
+from psycopg2.extras import RealDictCursor
+
 #############################
 # Database
 #############################
@@ -635,6 +637,52 @@ def getsolarsystemmapjumps(solarSystemID):
     return df
 
 
+def gettradehubjumps(limit):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      mapjumps."timestamp",
+      mapjumps."shipJumps",
+      "mapSolarSystems"."solarSystemName"
+    FROM
+      data.mapjumps,
+      public."mapSolarSystems"
+    WHERE
+      mapjumps."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      mapjumps."solarSystemID" IN (30000142, 30002187, 30002510, 30002659)
+     ORDER BY mapjumps."timestamp" DESC
+     LIMIT %s'''
+    data = (limit, )
+    cursor.execute(sql, data, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['timestamp', 'shipJumps', 'solarSystemName'])
+    df = df.set_index(['timestamp'])
+    cursor.close()
+    return df
+
+
+def gettradehub_jitatoamarr(limit):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      mapjumps."timestamp",
+      mapjumps."shipJumps",
+      "mapSolarSystems"."solarSystemName"
+    FROM
+      data.mapjumps,
+      public."mapSolarSystems"
+    WHERE
+      mapjumps."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      mapjumps."solarSystemID" IN (30000142, 30000144, 30000139, 30002791, 30002788, 30002789, 30003504, 30003503, 30003491, 30002187)
+     ORDER BY mapjumps."timestamp" DESC
+     LIMIT %s'''
+    data = (limit, )
+    cursor.execute(sql, data, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['timestamp', 'shipJumps', 'solarSystemName'])
+    df = df.set_index(['timestamp'])
+    cursor.close()
+    return df
+
+
 #
 # Insert sov data
 #
@@ -744,9 +792,6 @@ def getfactionkills_byfaction():
 #############################
 # Log File
 #############################
-
-from psycopg2.extras import RealDictCursor
-
 
 def date_handler(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
@@ -1165,7 +1210,7 @@ def rattinghistorybysystem(solarSystemID):
     return df
 
 #############################
-# marketitems
+# Settings
 #############################
 
 def databasemarketitems():
@@ -1185,6 +1230,22 @@ def databasemarketitems():
     WHERE
       marketitems."typeID" = "invTypes"."typeID" AND
       "invTypes"."marketGroupID" = "invMarketGroups"."marketGroupID"
+    '''
+    cursor.execute(sql, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
+
+
+def getcharacters():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''SELECT
+      *
+    FROM
+      data.characters
     '''
     cursor.execute(sql, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
