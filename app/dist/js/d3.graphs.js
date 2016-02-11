@@ -229,17 +229,17 @@ graph({
 });
 
 graph({
+    width: '580',
+    height: '340',
     selector: '.d3-graph-mapjumps-tradehubs',
     ylegend: 'jumpCount',
-    label: 'Jump Activity per Trade Hub - No Resample - k162space.com',
-    legend: '480',
     csv: 'dist/data/mapjumps_tradehubs.csv'
 });
 
 graph({
+    width: '580',
+    height: '340',
     selector: '.d3-graph-mapjumps-tradehubs-jitatoamarr',
     ylegend: 'jumpCount',
-    label: 'Jump Activity - Jita <-> Amarr - No Resample - k162space.com',
-    legend: '480',
     csv: 'dist/data/mapjumps_tradehubs_jitatoamarr.csv'
 });
