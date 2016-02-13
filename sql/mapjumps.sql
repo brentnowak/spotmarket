@@ -8,7 +8,7 @@ CREATE TABLE data.mapjumps
   "timestamp" timestamp without time zone NOT NULL,
   "shipJumps" integer NOT NULL,
   "solarSystemID" integer NOT NULL,
-  CONSTRAINT pk_mapjumps PRIMARY KEY ("systemjumpID")
+  CONSTRAINT pk_mapjumps PRIMARY KEY ("timestamp, shipJumps, solarSystemID")
 )
 WITH (
   OIDS=FALSE
@@ -24,3 +24,8 @@ CREATE INDEX idx_mapjumps_timestamp
   ON data.mapjumps
   USING btree
   ("timestamp" DESC NULLS LAST);
+
+CREATE INDEX idx_mapjumps_solarsystemid
+  ON data.mapjumps
+  USING btree
+  ("solarSystemID" DESC NULLS LAST);

@@ -42,7 +42,7 @@ def main():
 
     # Run Map import
     start_time = time.time()
-    count_mapinsert = insertmap(mapapi_data, maptimestamp)
+    count_mapinsert = insertmaprecords(mapapi_data, maptimestamp)
     detail = "[map] insert " + str(count_mapinsert) + " @ " + str(round(count_mapinsert/(time.time() - start_time), 2)) + " rec/sec"
     insertlog(service, 0, detail, maptimestamp)
 

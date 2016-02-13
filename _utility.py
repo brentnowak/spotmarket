@@ -197,74 +197,55 @@ def getnpckills_byregion(regionID):
     cursor.close()
     return df
 
+
 #
-# Input         mapapi_data
-# Output        Database insert
+# Usage         consumer_map.py
+# Input         mapapi_data, maptimestamp
+# Output        'mapkills' Database insert
 #
-def insertmap(mapapi_data, maptimestamp):
-    count_insert = 0
+def insertmaprecords(mapapi_data, maptimestamp):
+    insertcount = 0
     for key,value in mapapi_data.iteritems():
-        id = value['id']
-        ship = value['ship']
-        faction = value['faction']
-        pod = value['pod']
-        if len(mapcheckrowexists(maptimestamp, id, ship, faction, pod)) == 0:
-            mapinsertrecord(maptimestamp, id, ship, faction, pod)
-            count_insert += 1
-    return count_insert
+        try:
+            id = value['id']
+            ship = value['ship']
+            faction = value['faction']
+            pod = value['pod']
+            conn = psycopg2.connect(conn_string)
+            cursor = conn.cursor()
+            sql = 'SELECT * FROM data."mapkills" WHERE timestamp = %s AND "mapkills"."solarSystemID" = %s AND "mapkills"."shipKills" = %s and "mapkills"."factionKills" = %s AND "mapkills"."podKills" = %s'
+            data = (maptimestamp, id, ship, faction, pod, )
+            cursor.execute(sql, data)
+        except psycopg2.IntegrityError:
+            conn.rollback()
+        else:
+            conn.commit()
+            insertcount += 1
+    return insertcount
 
 
 #
-# Check if map record exists
-#
-def mapcheckrowexists(timestamp, id, ship, faction, pod):
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
-    sql = 'SELECT * FROM data."mapkills" WHERE timestamp = %s AND "mapkills"."solarSystemID" = %s AND "mapkills"."shipKills" = %s and "mapkills"."factionKills" = %s AND "mapkills"."podKills" = %s'
-    data = (timestamp, id, ship, faction, pod, )
-    cursor.execute(sql, data)
-    result = cursor.fetchall()
-    return result
-
-
-#
-# Insert mapapi_data record
-#
-def mapinsertrecord(timestamp, id, ship, faction, pod):
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
-    sql = 'INSERT INTO data."mapkills" (timestamp, "solarSystemID", "shipKills", "factionKills", "podKills") VALUES (%s, %s, %s, %s, %s)'
-    data = (timestamp, id, ship, faction, pod, )
-    cursor.execute(sql, data)
-    conn.commit()
-    return 0
-
-#
-# Input         jumpsapi_data
-# Output        Database insert
+# Usage         consumer_map.py
+# Input         jumpsapi_data, jumpstimestamp
+# Output        'mapjumps' Database insert
 #
 def insertjumps(jumps_data, jumpstimestamp):
-    count_insert = 0
+    insertcount = 0
     for key,value in jumps_data.iteritems():
-        id = key
-        jumps = value
-        if len(jumpcheckrowexists(jumpstimestamp, id, jumps)) == 0:
-            jumpsinsertrecord(jumpstimestamp, id, jumps)
-            count_insert += 1
-    return count_insert
-
-
-#
-# Check if jump record exists
-#
-def jumpcheckrowexists(timestamp, id, jumps):
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
-    sql = 'SELECT * FROM data."mapjumps" WHERE timestamp = %s AND "mapjumps"."solarSystemID" = %s AND "mapjumps"."shipJumps" = %s'
-    data = (timestamp, id, jumps, )
-    cursor.execute(sql, data)
-    result = cursor.fetchall()
-    return result
+        try:
+            id = key
+            jumps = value
+            conn = psycopg2.connect(conn_string)
+            cursor = conn.cursor()
+            sql = 'SELECT * FROM data."mapjumps" WHERE timestamp = %s AND "mapjumps"."solarSystemID" = %s AND "mapjumps"."shipJumps" = %s'
+            data = (jumpstimestamp, id, jumps, )
+            cursor.execute(sql, data)
+        except psycopg2.IntegrityError:
+            conn.rollback()
+        else:
+            conn.commit()
+            insertcount += 1
+    return insertcount
 
 
 #
