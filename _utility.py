@@ -203,9 +203,9 @@ def getnpckills_byregion(regionID):
 # Input         mapapi_data, maptimestamp
 # Output        'mapkills' Database insert
 #
-def insertmaprecords(mapapi_data, maptimestamp):
+def insertkillsrecords(killsapi_data, maptimestamp):
     insertcount = 0
-    for key,value in mapapi_data.iteritems():
+    for key,value in killsapi_data.iteritems():
         try:
             id = value['id']
             ship = value['ship']
@@ -213,9 +213,9 @@ def insertmaprecords(mapapi_data, maptimestamp):
             pod = value['pod']
             conn = psycopg2.connect(conn_string)
             cursor = conn.cursor()
-            sql = 'SELECT * FROM data."mapkills" WHERE timestamp = %s AND "mapkills"."solarSystemID" = %s AND "mapkills"."shipKills" = %s and "mapkills"."factionKills" = %s AND "mapkills"."podKills" = %s'
+            sql = 'INSERT INTO data."mapkills" (timestamp, "solarSystemID", "shipKills", "factionKills", "podKills") VALUES (%s, %s, %s, %s, %s)'
             data = (maptimestamp, id, ship, faction, pod, )
-            cursor.execute(sql, data)
+            cursor.execute(sql, data, )
         except psycopg2.IntegrityError:
             conn.rollback()
         else:
@@ -229,7 +229,7 @@ def insertmaprecords(mapapi_data, maptimestamp):
 # Input         jumpsapi_data, jumpstimestamp
 # Output        'mapjumps' Database insert
 #
-def insertjumps(jumps_data, jumpstimestamp):
+def insertjumpsrecords(jumps_data, jumpstimestamp):
     insertcount = 0
     for key,value in jumps_data.iteritems():
         try:
@@ -237,9 +237,9 @@ def insertjumps(jumps_data, jumpstimestamp):
             jumps = value
             conn = psycopg2.connect(conn_string)
             cursor = conn.cursor()
-            sql = 'SELECT * FROM data."mapjumps" WHERE timestamp = %s AND "mapjumps"."solarSystemID" = %s AND "mapjumps"."shipJumps" = %s'
+            sql = 'INSERT INTO data."mapjumps" (timestamp, "solarSystemID", "shipJumps") VALUES (%s, %s, %s)'
             data = (jumpstimestamp, id, jumps, )
-            cursor.execute(sql, data)
+            cursor.execute(sql, data, )
         except psycopg2.IntegrityError:
             conn.rollback()
         else:

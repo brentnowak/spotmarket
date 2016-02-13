@@ -8,7 +8,7 @@ CREATE TABLE data.mapjumps
   "timestamp" timestamp without time zone NOT NULL,
   "shipJumps" integer NOT NULL,
   "solarSystemID" integer NOT NULL,
-  CONSTRAINT pk_mapjumps PRIMARY KEY ("timestamp, shipJumps, solarSystemID")
+  CONSTRAINT pk_mapjumps PRIMARY KEY ("timestamp", "shipJumps", "solarSystemID")
 )
 WITH (
   OIDS=FALSE

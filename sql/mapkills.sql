@@ -10,7 +10,7 @@ CREATE TABLE data.mapkills
   "podKills" integer NOT NULL,
   "shipKills" integer NOT NULL,
   "solarSystemID" integer NOT NULL,
-  CONSTRAINT pk_mapkills PRIMARY KEY ("timestamp, factionKills, podKills, solarSystemID")
+  CONSTRAINT pk_mapkills PRIMARY KEY ("timestamp", "factionKills", "podKills", "solarSystemID")
 )
 WITH (
   OIDS=FALSE

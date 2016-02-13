@@ -59,8 +59,8 @@ As root
 ```shell
 vim /etc/postgresql/9.3/main/pg_hba.conf
 ```
-Change line 85 from 'peer' to 'md5'
-Under 'IPv4 local connections' add a line for your local network
+Change line 85 and 90 from 'peer' to 'md5'.
+Under 'IPv4 local connections' add a line for your local network if you wish to connect to your database instance over your network.
 
 As root
 ```shell
@@ -81,8 +81,14 @@ psql -d spotmarket -U spotmarketadmin -W
 ```
 
 **Database Creation**
+If you have setup the server instance correctly, you should be presented with a prompt that indicates you are connected.
+```shell
+psql (9.3.11)
+Type "help" for help.
 
-Create database, tables, and indexes with the scripts located under \sql.  
+spotmarket=>
+```
+Create the schema and tables by pasting in the scripts located under \sql directory.  
 You can connect to the database using the command listed above and create the tables or use a GUI tool such as pgAdmin.  
 
 **Import Eve Static Data**
@@ -91,6 +97,7 @@ You can connect to the database using the command listed above and create the ta
 wget https://www.fuzzwork.co.uk/dump/postgres-latest.dmp.bz2
 bzip2 -d postgres-latest.dmp.bz2
 pg_restore -i -h localhost -p 5432 -U spotmarketadmin -d spotmarket -v "postgres-latest.dmp"
+rm postgres-latest.dmp
 ```
 
 **Modify config.ini with Database Details**
