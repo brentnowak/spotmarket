@@ -41,21 +41,21 @@ def main():
     service = "consumer_map.py"
 
     # Run Map import
+    start_time = time.time()
     count_mapinsert = insertmap(mapapi_data, maptimestamp)
-    detail = "[map] insert " + str(count_mapinsert)
-    print(detail)
+    detail = "[map] insert " + str(count_mapinsert) + " @ " + str(round(count_mapinsert/(time.time() - start_time), 2)) + " rec/sec"
     insertlog(service, 0, detail, maptimestamp)
 
     # Run Jumps import
+    start_time = time.time()
     count_jumpsinsert = insertjumps(jumpsapi_data, jumpstimestamp)
-    detail = "[jump] insert " + str(count_jumpsinsert)
-    print(detail)
+    detail = "[jump] insert " + str(count_jumpsinsert) + " @ " + str(round(count_jumpsinsert/(time.time() - start_time), 2)) + " rec/sec"
     insertlog(service, 0, detail, jumpstimestamp)
 
     # Run Sov import
+    start_time = time.time()
     count_sovinsert = insertsov(sovapi_data, sovtimestamp)
-    detail = "[sov] insert " + str(count_sovinsert)
-    print(detail)
+    detail = "[sov] insert " + str(count_sovinsert)  + " @ " + str(round(count_sovinsert/(time.time() - start_time), 2)) + " rec/sec"
     insertlog(service, 0, detail, sovtimestamp)
 
 if __name__ == "__main__":
