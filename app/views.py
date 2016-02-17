@@ -2,6 +2,11 @@ from flask import render_template
 from app import app
 from _utility import *
 
+
+#
+# Main pages
+#
+
 @app.route('/login.html')
 def login():
     return render_template('pages/login.html', title="Login")
@@ -9,11 +14,11 @@ def login():
 @app.route('/')
 @app.route('/index.html')
 def index():
-    return render_template('pages/index.html', title="Home", header="Home")
+    return render_template('pages/index.html', title="Dashboard", header="Dashboard")
 
-@app.route('/system.html')
+@app.route('/logs.html')
 def system():
-    return render_template('pages/system.html', title="System", header="System")
+    return render_template('pages/logs.html', title="Logs", header="Logs")
 
 @app.route('/settings.html')
 def settings():
@@ -30,22 +35,6 @@ def sovereignty():
 @app.route('/blank.html')
 def blank():
     return render_template('pages/blank.html', title="Blank", header="Blank", nav="Blank Page")
-
-@app.route('/flot.html')
-def flot():
-    return render_template('pages/flot.html', title="Flot", header="Flot Charts", nav="Flot Page")
-
-@app.route('/morris.html')
-def morris():
-    return render_template('pages/morris.html', title="Morris", header="Morris.js Charts", nav="Morris Page")
-
-@app.route('/tables.html')
-def tables():
-    return render_template('pages/tables.html', title="Tables", header="Tables", nav="Tables Page")
-
-@app.route('/forms.html')
-def forms():
-    return render_template('pages/forms.html', title="Forms", header="Forms", nav="Forms Page")
 
 @app.route('/panels-wells.html')
 def panels_wells():
@@ -123,6 +112,17 @@ def indexreport_universe():
     return render_template('pages/indexReports/universe.html', title="Universe", header="Universe", nav="Universe")
 
 
+#
+# regionReports
+#
+@app.route('/regionReport.html')
+def regionreport():
+    return render_template('pages/regionReports/regionReport.html',
+                           regionID="10000060",
+                           title="Region 1",
+                           header="Region 1",
+                           nav="Region 1")
+
 
 #
 # jumpReports
@@ -130,6 +130,7 @@ def indexreport_universe():
 @app.route('/jumpReports_tradehubs.html')
 def jumpreport_tradehubs():
     return render_template('pages/jumpReports/jumpReports_tradehubs.html', title="Trade Hubs", header="Trade Hubs", nav="Trade Hubs")
+
 
 #
 # API
@@ -228,3 +229,29 @@ def api_wallettransactions():
 @app.route('/api/sov/events')
 def api_getsovevents():
     return getsovevents()
+
+
+# Simple Lookups
+@app.route('/api/regionName/<regionID>')
+def api_regionID(regionID):
+    return regionName(regionID)
+
+# Market
+@app.route('/api/typeName/<typeID>')
+def api_typeID(typeID):
+    return getmarkethistory_typeid(typeID)
+
+@app.route('/api/d3/<typeID>')
+def api_d3_typeID(typeID):
+    return getmarkethistory_d3_typeid(typeID)
+
+
+# Region
+@app.route('/api/region/sovereignty/<regionID>')
+def api_regionsovereignty(regionID):
+    return getsovbyregion(regionID)
+
+@app.route('/api/gettoprattingbyregion/<regionID>')
+def api_gettoprattingbyregion(regionID):
+    df = gettoprattingbyregion(regionID)
+    return df.reset_index().to_json(orient='records')

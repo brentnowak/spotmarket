@@ -113,6 +113,11 @@ crontab -e
 15 1,13 * * * ubuntu /home/ubuntu/spotmarket/scripts/consumer_markethistory.sh > /dev/null 2>&1
 ```
 
+Flask Web Service
+```
+python spotmarket_flask.py &
+```
+
 License Info
 ==================
 

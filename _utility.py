@@ -45,22 +45,24 @@ pd.set_option('display.width', desired_width)
 # Input     regionID
 # Output    regionName
 #
-def regionname(regionID):
+def regionName(regionID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = 'SELECT "mapRegions"."regionName" FROM public."mapRegions" WHERE "mapRegions"."regionID" = %s'
     data = (regionID, )
-    cursor.execute(sql, data)
-    result = cursor.fetchall()
-    cursor.close()
-    return result
+    cursor.execute(sql, data, )
+    results = json.dumps(cursor.fetchone(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
 
 
 #
 # Input     typeID
 # Output    typeName
 #
-def typeidname(typeID):
+def typeName(typeID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
@@ -69,10 +71,12 @@ def typeidname(typeID):
       public."invTypes"
       WHERE "invTypes"."typeID" = %s'''
     data = (typeID, )
-    cursor.execute(sql, data)
-    result = cursor.fetchone()
-    cursor.close()
-    return result[0]
+    cursor.execute(sql, data, )
+    results = json.dumps(cursor.fetchone(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
 
 
 #
@@ -239,6 +243,31 @@ def insertjumpsrecords(jumps_data, jumpstimestamp):
             cursor = conn.cursor()
             sql = 'INSERT INTO data."mapjumps" (timestamp, "solarSystemID", "shipJumps") VALUES (%s, %s, %s)'
             data = (jumpstimestamp, id, jumps, )
+            cursor.execute(sql, data, )
+        except psycopg2.IntegrityError:
+            conn.rollback()
+        else:
+            conn.commit()
+            insertcount += 1
+    return insertcount
+
+
+#
+# Usage         consumer_alliance.py
+# Input         alliance_data
+# Output        'alliances' Database insert
+#
+def insertalliancesrecords(alliance_data):
+    insertcount = 0
+    for key,value in alliance_data.iteritems():
+        try:
+            allianceID = value['id']
+            ticker = value['ticker']
+            name = value['name']
+            conn = psycopg2.connect(conn_string)
+            cursor = conn.cursor()
+            sql = 'INSERT INTO data."alliances" ("allianceID", "ticker", "name") VALUES (%s, %s, %s)'
+            data = (allianceID, ticker, name, )
             cursor.execute(sql, data, )
         except psycopg2.IntegrityError:
             conn.rollback()
@@ -755,12 +784,12 @@ def getfactionkills_byfaction():
 
 def getmarkethistory_typeid(typeID):
     conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
       markethistory."typeID",
       "invTypes"."typeName",
       markethistory."regionID",
-      to_char(markethistory."timestamp", 'YYYY-MM-dd HH24:MI:SS') AS timestamp,
+      to_char(markethistory."timestamp", 'YYYY-MM-dd') AS timestamp,
       markethistory.volume,
       markethistory."orderCount",
       markethistory."lowPrice",
@@ -774,11 +803,32 @@ def getmarkethistory_typeid(typeID):
      ORDER BY markethistory."timestamp" DESC'''
     data = (typeID, )
     cursor.execute(sql, data, )
-    df = pd.DataFrame(cursor.fetchall(),columns=['typeID', 'typeName', 'regionID', 'timestamp', 'volume', 'orderCount', 'lowPrice', 'highPrice', 'avgPrice'])
-    cursor.close()
-    return df
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
 
 
+def getmarkethistory_d3_typeid(typeID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''SELECT
+      to_char(markethistory."timestamp", 'YYYY-MM-dd') AS timestamp,
+      markethistory."lowPrice",
+      markethistory."highPrice",
+      markethistory."avgPrice"
+    FROM
+      data.markethistory
+     WHERE markethistory."typeID" = %s
+     ORDER BY markethistory."timestamp" DESC'''
+    data = (typeID, )
+    cursor.execute(sql, data, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
 
 
 #############################
@@ -1231,21 +1281,6 @@ def databasemarketitems():
         return results
 
 
-def getcharacters():
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
-    sql = '''SELECT
-      *
-    FROM
-      data.characters
-    '''
-    cursor.execute(sql, )
-    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
-    if len(results) < 1:     # Handle a empty table
-        return "No Data"
-    else:
-        return results
-
 
 #############################
 # Wallet
@@ -1285,8 +1320,7 @@ def getcharacters():
     sql = '''SELECT
       *
     FROM
-      data.characters
-    WHERE characters."walletEnable" = 1'''
+      data.characters'''
     cursor.execute(sql, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
     if len(results) < 1:     # Handle a empty table
@@ -1334,18 +1368,22 @@ def getsovevents():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      mapsov."timestamp",
+      to_char(mapsov."timestamp", 'YYYY-MM-dd HH:mm:ss') AS timestamp,
       mapsov."solarSystemID",
       mapsov."allianceID",
       mapsov."corporationID",
       "mapSolarSystems"."solarSystemName",
-      "mapRegions"."regionName"
+      "mapRegions"."regionName",
+      alliances.name AS allianceName,
+      alliances.ticker
     FROM
       data.mapsov,
+      data.alliances,
       public."mapSolarSystems",
       public."mapRegions"
     WHERE
         mapsov."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+        mapsov."allianceID" = alliances."allianceID" AND
         "mapRegions"."regionID" = "mapSolarSystems"."regionID"
     ORDER BY mapsov."timestamp" DESC
     '''
@@ -1355,3 +1393,99 @@ def getsovevents():
         return "No Data"
     else:
         return results
+
+
+#############################
+# regionReport
+#############################
+
+def getsovbyregion(regionID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''SELECT
+      "mapSolarSystems"."solarSystemID",
+      "mapSolarSystems"."solarSystemName",
+      "mapSolarSystems".security,
+      mapsov."allianceID",
+      alliances.ticker,
+      alliances.name
+    FROM
+      data.alliances,
+      public."mapSolarSystems",
+      data.mapsov,
+      public."mapRegions"
+    WHERE
+      "mapSolarSystems"."solarSystemID" = mapsov."solarSystemID" AND
+      "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
+      mapsov."allianceID" = alliances."allianceID" AND
+      "mapRegions"."regionID" = %s
+    '''
+    data = (regionID, )
+    cursor.execute(sql, data, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
+
+def getrattingbyregion(regionID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''
+        SELECT
+      "mapSolarSystems"."solarSystemName",
+      "mapSolarSystems".security,
+      alliances.ticker,
+      alliances.name,
+      mapsov."allianceID",
+      SUM(mapkills."factionKills") as SUM_factionKills,
+      mapkills."timestamp"
+    FROM
+      data.alliances,
+      public."mapSolarSystems",
+      data.mapsov,
+      data.mapkills
+    WHERE
+      "mapSolarSystems"."solarSystemID" = mapsov."solarSystemID" AND
+      mapsov."allianceID" = alliances."allianceID" AND
+      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      "mapSolarSystems"."regionID" = %s
+    GROUP BY
+      mapkills."solarSystemID", "mapSolarSystems"."solarSystemName", "mapSolarSystems".security,  alliances.ticker, alliances.name, mapsov."allianceID", mapkills."timestamp"
+    '''
+    data = (regionID, )
+    cursor.execute(sql, data, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['solarSystemName', 'security', 'ticker', 'name', 'allianceID', 'SUM_factionKills', 'timestamp'])
+    df = df.set_index(['timestamp'])
+    cursor.close()
+    return df
+
+def gettoprattingbyregion(regionID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''
+        SELECT
+      "mapSolarSystems"."solarSystemName",
+      "mapSolarSystems".security,
+      alliances.ticker,
+      alliances.name,
+      mapsov."allianceID",
+      SUM(mapkills."factionKills") as SUM_factionKills
+    FROM
+      data.alliances,
+      public."mapSolarSystems",
+      data.mapsov,
+      data.mapkills
+    WHERE
+      "mapSolarSystems"."solarSystemID" = mapsov."solarSystemID" AND
+      mapsov."allianceID" = alliances."allianceID" AND
+      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      "mapSolarSystems"."regionID" = %s
+    GROUP BY
+      mapkills."solarSystemID", "mapSolarSystems"."solarSystemName", "mapSolarSystems".security,  alliances.ticker, alliances.name, mapsov."allianceID"
+    '''
+    data = (regionID, )
+    cursor.execute(sql, data, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['solarSystemName', 'security', 'ticker', 'name', 'allianceID', 'SUM_factionKills'])
+    cursor.close()
+    return df

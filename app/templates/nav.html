@@ -210,7 +210,11 @@
                 <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
             </a>
             <ul class="dropdown-menu dropdown-user">
-                <li><a href="/settings.html"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                <li>
+                    <a href="/settings.html"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                </li>
+                <li>
+                    <a href="/logs.html"><i class="fa fa-gear fa-fw"></i> Logs</a>
                 </li>
             </ul>
             <!-- /.dropdown-user -->
@@ -223,10 +227,7 @@
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
                 <li>
-                    <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> NPC Kills</a>
-                </li>
-                <li>
-                    <a href="system.html"><i class="fa fa-dashboard fa-fw"></i> System</a>
+                    <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                 </li>
                 <li>
                     <a href="#"><i class="fa fa-sitemap fa-fw"></i> Faction Reports<span class="fa arrow"></span></a>
@@ -283,6 +284,15 @@
                     <!-- /.nav-second-level -->
                 </li>
                 <li>
+                    <a href="#"><i class="fa fa-sitemap fa-fw"></i> Region Reports<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="/regionReport.html">One Region</a>
+                        </li>
+                    </ul>
+                    <!-- /.nav-second-level -->
+                </li>
+                <li>
                     <a href="#"><i class="fa fa-sitemap fa-fw"></i> Jump Reports<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
@@ -298,20 +308,6 @@
                     <a href="sovereignty.html"><i class="fa fa-table fa-fw"></i> Sovereignty</a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
-                        {{nav_link(name="Flot Charts", url="flot.html", active=name)}}
-                        {{nav_link(name="Morris.js Charts", url="morris.html", active=name)}}
-                    </ul>
-                    <!-- /.nav-second-level -->
-                </li>
-                <li>
-                    <a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>
-                </li>
-                <li>
-                    <a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>
-                </li>
-                <li>
                     <a href="#"><i class="fa fa-wrench fa-fw"></i> UI Elements<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         {{nav_link(name="Panels and Wells", url="panels-wells.html", active=name)}}
@@ -320,18 +316,6 @@
                         {{nav_link(name="Typography", url="typography.html", active=name)}}
                         {{nav_link(name="Icons", url="icons.html", active=name)}}
                         {{nav_link(name="Grid", url="grid.html", active=name)}}
-                    </ul>
-                    <!-- /.nav-second-level -->
-                </li>
-                {% if name == "Blank Page" or name == "Login Page" %}
-                <li class="active">
-                {% else %}
-                <li>
-                {% endif %}
-                    <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
-                        {{nav_link(name="Blank Page", url="blank.html", active=name)}}
-                        {{nav_link(name="Login Page", url="login.html", active=name)}}
                     </ul>
                     <!-- /.nav-second-level -->
                 </li>
