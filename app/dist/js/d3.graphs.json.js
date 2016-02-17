@@ -1,7 +1,6 @@
 /**
  * Append graph to DOM.
  * @param  {{
- *         		csv: string,
  *         		label: string,
  *         		selector: string
  *              width: int
@@ -16,7 +15,7 @@
 function graph(options) {
 
 	options = _.extend({
-		csv: '',
+		json: '',
 		label: '',
 		selector: 'body',
 		width: 960,
@@ -24,7 +23,7 @@ function graph(options) {
 		legend: 480,
 		marginright: 80,
 		marginleft: 50,
-		ylegend: 'SUM_factionKills',
+		ylegend: 'price',
 		dateformat: '%Y-%m-%d %H:%M:%S'
 	}, options);
 
@@ -65,8 +64,10 @@ var svg = d3.select(options.selector).append("svg")
 	  .append("g")
 	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-	d3.tsv(options.csv, function(error, data) {
-	  if (error) throw error;
+	d3.json('/api/d3/17932', function (data) {
+    data.forEach(function(d) {
+      d.date = parseDate(d.date);
+    });
 
 	  color.domain(d3.keys(data[0]).filter(function(key) { return key !== "timestamp"; }));
 
@@ -143,103 +144,8 @@ var svg = d3.select(options.selector).append("svg")
 graph({
     width: 580,
     height: 340,
-    marginright: 25,
-    selector: '.d3-graph-universe',
-    csv: 'dist/data/npckills_universe.csv'
-});
-
-graph({
-    width: 580,
-    height: 340,
-    marginright: 105,
-    selector: '.d3-graph-universe-factions',
-    csv: 'dist/data/npckills_factions.csv'
-});
-
-graph({
-    width: 580,
-    height: 340,
-    selector: '.d3-graph-angel',
-    csv: 'dist/data/npckills_regions_angel_cartel.csv'
-});
-
-graph({
-    width: 580,
-    height: 340,
-    selector: '.d3-graph-angel-sum',
-    csv: 'dist/data/npckills_regions_angel_cartel_sum.csv'
-});
-
-graph({
-    width: 580,
-    height: 340,
-    selector: '.d3-graph-blood',
-    csv: 'dist/data/npckills_regions_blood_raiders.csv'
-});
-
-graph({
-    width: 580,
-    height: 340,
-    selector: '.d3-graph-blood-sum',
-    csv: 'dist/data/npckills_regions_blood_raiders_sum.csv'
-});
-
-graph({
-    width: 580,
-    height: 340,
-    selector: '.d3-graph-guristas',
-    csv: 'dist/data/npckills_regions_guristas_pirate.csv'
-});
-
-graph({
-    width: 580,
-    height: 340,
-    selector: '.d3-graph-guristas-sum',
-    csv: 'dist/data/npckills_regions_guristas_pirates_sum.csv'
-});
-
-graph({
-    width: 580,
-    height: 340,
-    selector: '.d3-graph-sansha',
-    csv: 'dist/data/npckills_regions_sanshas_nation.csv'
-});
-
-graph({
-    width: 580,
-    height: 340,
-    selector: '.d3-graph-sansha-sum',
-    csv: 'dist/data/npckills_regions_sanshas_nation_sum.csv'
-});
-
-graph({
-    width: 580,
-    height: 340,
-    selector: '.d3-graph-serpentis',
-    csv: 'dist/data/npckills_regions_serpentis_corporation.csv'
-});
-
-graph({
-    width: 580,
-    height: 340,
-    selector: '.d3-graph-serpentis-sum',
-    csv: 'dist/data/npckills_regions_serpentis_corporation_sum.csv'
-});
-
-graph({
-    width: 580,
-    height: 340,
-    marginright: 35,
-    selector: '.d3-graph-mapjumps-tradehubs',
-    ylegend: 'jumpCount',
-    csv: 'dist/data/mapjumps_tradehubs.csv'
-});
-
-graph({
-    width: 580,
-    height: 340,
-    marginright: 55,
-    selector: '.d3-graph-mapjumps-tradehubs-jitatoamarr',
-    ylegend: 'jumpCount',
-    csv: 'dist/data/mapjumps_tradehubs_jitatoamarr.csv'
+    marginright: 50,
+    marginleft: 80,
+    selector: '.d3-graph-price-17932',
+    json: '/api/d3/17932'
 });
