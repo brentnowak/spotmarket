@@ -15,49 +15,50 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="col-md-6">
-                <div class="panel panel-red">
-                    <div class="panel-heading">
-                        <span class="glyphicon glyphicon-fire"></span> Top Nullsec Ratting Regions
-                    </div>
-                    <div class="panel-body">
-                        <table data-toggle="table" data-sort-name="SUM_factionKills" data-sort-order="desc" data-show-refresh="true" data-striped="true" data-show-toggle="true" data-search="true" data-url="/api/gettoprattingregions_nullsec" data-height="400">
-                            <thead>
-                                <tr>
-                                    <th data-field="index" data-sortable="true">index</th>
-                                    <th data-field="SUM_factionKills" data-sortable="true">SUM_factionKills</th>
-                                    <th data-field="regionName" data-sortable="true">regionName</th>
-                                    <th data-field="killsPerDay" data-sortable="true">killsPerDay</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
+            <div class="panel panel-red">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-fire"></span> Top Nullsec Ratting Regions
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="panel panel-red">
-                    <div class="panel-heading">
-                        <span class="glyphicon glyphicon-fire"></span> Top Nullsec Ratting Systems
-                    </div>
-                        <div class="panel-body">
-                            <table data-toggle="table" data-sort-name="SUM_factionKills" data-sort-order="desc" data-show-refresh="true" data-striped="true" data-show-toggle="true" data-search="true" data-url="/api/gettoprattingsystems_nullsec" data-height="400">
-                                <thead>
-                                    <tr>
-                                    <th data-field="index" data-sortable="true">index</th>
-                                    <th data-field="solarSystemName" data-sortable="true">solarSystemName</th>
-                                    <th data-field="security" data-sortable="true">security</th>
-                                    <th data-field="SUM_factionKills" data-sortable="true">SUM_factionKills</th>
-                                    <th data-field="regionName" data-sortable="true">regionName</th>
-                                    <th data-field="killsPerDay" data-sortable="true">killsPerDay</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
+                <div class="panel-body">
+                    <table data-toggle="table" data-sort-name="SUM_factionKills" data-sort-order="desc" data-show-refresh="true" data-striped="true" data-show-toggle="true" data-search="true" data-url="/api/gettoprattingregions_nullsec" data-height="400">
+                        <thead>
+                            <tr>
+                                <th data-field="index" data-sortable="true">index</th>
+                                <th data-field="SUM_factionKills" data-sortable="true" data-formatter="numberCom" data-align="right">SUM_factionKills</th>
+                                <th data-field="regionName" data-sortable="true" data-align="right">regionName</th>
+                                <th data-field="killsPerDay" data-sortable="true" data-formatter="numberDec" data-align="right">killsPerDay</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
         </div><!-- /.col-lg-12 -->
     </div><!-- /.row -->
 
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-red">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-fire"></span> Top Nullsec Ratting Systems
+                </div>
+                    <div class="panel-body">
+                        <table data-toggle="table" data-sort-name="SUM_factionKills" data-sort-order="desc" data-show-refresh="true" data-striped="true" data-show-toggle="true" data-search="true" data-url="/api/gettoprattingsystems_nullsec" data-height="400">
+                            <thead>
+                                <tr>
+                                <th data-field="index" data-sortable="true">index</th>
+                                <th data-field="solarSystemName" data-sortable="true" data-align="right">solarSystemName</th>
+                                <th data-field="regionName" data-sortable="true" data-align="right">regionName</th>
+                                <th data-field="security" data-sortable="true" data-formatter="numberDec" data-align="right">security</th>
+                                <th data-field="SUM_factionKills" data-sortable="true" data-formatter="numberCom" data-align="right">SUM_factionKills</th>
+                                <th data-field="killsPerDay" data-sortable="true" data-formatter="numberDec" data-align="right">killsPerDay</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+            </div>
+        </div><!-- /.col-lg-12 -->
+    </div><!-- /.row -->
 
     </div>
     <!-- /.container-fluid -->
