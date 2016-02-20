@@ -132,6 +132,36 @@ def jumpreport_tradehubs():
     return render_template('pages/jumpReports/jumpReports_tradehubs.html', title="Trade Hubs", header="Trade Hubs", nav="Trade Hubs")
 
 
+
+#
+# moonReports
+#
+@app.route('/moonReports_sov.html')
+def moonreport_sov():
+    return render_template('pages/moonReports/moonReports_sov.html', title="Sovereignty", header="Sovereignty", nav="Sovereignty")
+
+@app.route('/moonReports_gases.html')
+def moonreport_gases():
+    return render_template('pages/moonReports/moonReports_gases.html', title="Gasses", header="Gasses", nav="Gasses")
+
+@app.route('/moonReports_r8.html')
+def moonreport_r8():
+    return render_template('pages/moonReports/moonReports_r8.html', title="Rarity 8", header="Rarity 8", nav="Rarity 8")
+
+@app.route('/moonReports_r16.html')
+def moonreport_r16():
+    return render_template('pages/moonReports/moonReports_r16.html', title="Rarity 16", header="Rarity 16", nav="Rarity 16")
+
+@app.route('/moonReports_r32.html')
+def moonreport_r32():
+    return render_template('pages/moonReports/moonReports_r32.html', title="Rarity 32", header="Rarity 32", nav="Rarity 32")
+
+@app.route('/moonReports_r64.html')
+def moonreport_r64():
+    return render_template('pages/moonReports/moonReports_r64.html', title="Rarity 64", header="Rarity 64", nav="Rarity 64")
+
+
+
 #
 # API
 #
@@ -255,3 +285,21 @@ def api_regionsovereignty(regionID):
 def api_gettoprattingbyregion(regionID):
     df = gettoprattingbyregion(regionID)
     return df.reset_index().to_json(orient='records')
+
+# Moons
+@app.route('/api/moonminerals/regionid/<regionID>')
+def api_moonmineralsbyregion(regionID):
+    return getmoonmineralsbyregion(regionID)
+
+@app.route('/api/moonminerals/typeid/<typeID>')
+def api_moonmineralsbytype(typeID):
+    return getmoonmineralsbytypeid(typeID)
+
+@app.route('/api/moonminerals/alliance/<typeID>')
+def api_moonmineralsbyalliance(typeID):
+    return getmoonmineralsbyalliance(typeID)
+
+@app.route('/api/moonminerals/alliance/')
+def api_moonmineralsbyallalliance():
+    return getmoonmineralsbysov()
+

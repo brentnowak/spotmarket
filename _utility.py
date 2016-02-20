@@ -1489,3 +1489,155 @@ def gettoprattingbyregion(regionID):
     df = pd.DataFrame(cursor.fetchall(),columns=['solarSystemName', 'security', 'ticker', 'name', 'allianceID', 'SUM_factionKills'])
     cursor.close()
     return df
+
+
+#############################
+# moonReport
+#############################
+
+def getmoonmineralsbyregion(regionID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''SELECT
+      moonminerals."moonID",
+      "mapDenormalize"."itemName",
+      "invTypes"."typeID",
+      "invTypes"."typeName",
+      "mapSolarSystems"."solarSystemName",
+      "mapSolarSystems".security,
+      "mapRegions"."regionName",
+      mapsov."allianceID",
+      alliances.name,
+      alliances.ticker
+    FROM
+      data.moonminerals,
+      public."mapDenormalize",
+      public."invTypes",
+      public."mapSolarSystems",
+      public."mapRegions",
+      data.alliances,
+      data.mapsov
+    WHERE
+      "mapDenormalize"."itemID" = moonminerals."moonID" AND
+      "invTypes"."typeID" = moonminerals."typeID" AND
+      "mapSolarSystems"."solarSystemID" = "mapDenormalize"."solarSystemID" AND
+      "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
+      alliances."allianceID" = mapsov."allianceID" AND
+      mapsov."solarSystemID" = "mapDenormalize"."solarSystemID" AND
+      "mapRegions"."regionID" = %s
+    '''
+    data = (regionID, )
+    cursor.execute(sql, data, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
+
+
+def getmoonmineralsbytypeid(typeID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''SELECT
+      moonminerals."moonID",
+      "mapDenormalize"."itemName",
+      "invTypes"."typeID",
+      "invTypes"."typeName",
+      "mapSolarSystems"."solarSystemName",
+      "mapSolarSystems".security,
+      "mapRegions"."regionName",
+      mapsov."allianceID",
+      alliances.name,
+      alliances.ticker
+    FROM
+      data.moonminerals,
+      public."mapDenormalize",
+      public."invTypes",
+      public."mapSolarSystems",
+      public."mapRegions",
+      data.alliances,
+      data.mapsov
+    WHERE
+      "mapDenormalize"."itemID" = moonminerals."moonID" AND
+      "invTypes"."typeID" = moonminerals."typeID" AND
+      "mapSolarSystems"."solarSystemID" = "mapDenormalize"."solarSystemID" AND
+      "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
+      alliances."allianceID" = mapsov."allianceID" AND
+      mapsov."solarSystemID" = "mapDenormalize"."solarSystemID" AND
+      "invTypes"."typeID" = %s
+    '''
+    data = (typeID, )
+    cursor.execute(sql, data, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
+
+def getmoonmineralsbyalliance(typeID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''SELECT
+    COUNT(moonminerals."moonID") as SUM_moonID,
+      alliances.name
+    FROM
+      data.moonminerals,
+      public."mapDenormalize",
+      public."invTypes",
+      public."mapSolarSystems",
+      public."mapRegions",
+      data.alliances,
+      data.mapsov
+    WHERE
+      "mapDenormalize"."itemID" = moonminerals."moonID" AND
+      "invTypes"."typeID" = moonminerals."typeID" AND
+      "mapSolarSystems"."solarSystemID" = "mapDenormalize"."solarSystemID" AND
+      "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
+      alliances."allianceID" = mapsov."allianceID" AND
+      mapsov."solarSystemID" = "mapDenormalize"."solarSystemID" AND
+      "invTypes"."typeID" = %s
+    GROUP BY
+      alliances.name,
+      alliances.ticker
+    ORDER BY
+      SUM_moonID DESC'''
+    data = (typeID, )
+    cursor.execute(sql, data, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
+
+def getmoonmineralsbysov():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''SELECT
+    COUNT(moonminerals."moonID") as SUM_moonID,
+      alliances.name
+    FROM
+      data.moonminerals,
+      public."mapDenormalize",
+      public."invTypes",
+      public."mapSolarSystems",
+      public."mapRegions",
+      data.alliances,
+      data.mapsov
+    WHERE
+      "mapDenormalize"."itemID" = moonminerals."moonID" AND
+      "invTypes"."typeID" = moonminerals."typeID" AND
+      "mapSolarSystems"."solarSystemID" = "mapDenormalize"."solarSystemID" AND
+      "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
+      alliances."allianceID" = mapsov."allianceID" AND
+      mapsov."solarSystemID" = "mapDenormalize"."solarSystemID"
+    GROUP BY
+      alliances.name,
+      alliances.ticker
+    ORDER BY
+      SUM_moonID DESC'''
+    cursor.execute(sql, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
