@@ -1676,6 +1676,7 @@ def getdeadendsystems(gateCountLimit):
       "mapSolarSystems"."solarSystemID",
       "mapSolarSystems"."solarSystemName",
       "mapRegions"."regionName",
+      alliances."allianceID",
       alliances.ticker,
       alliances.name
     FROM
@@ -1695,11 +1696,43 @@ def getdeadendsystems(gateCountLimit):
       "mapSolarSystems"."solarSystemID",
       "mapSolarSystems"."solarSystemName",
       "mapRegions"."regionName",
+      alliances."allianceID",
       alliances.ticker,
       alliances.name
-    HAVING COUNT("mapSolarSystemJumps"."fromSolarSystemID") <= %s'''
+    HAVING COUNT("mapSolarSystemJumps"."fromSolarSystemID") = %s'''
     data = (gateCountLimit, )
     cursor.execute(sql, data, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
+
+def getconquerablestationslist():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''SELECT
+      conquerablestations."solarSystemID",
+      conquerablestations."stationID",
+      conquerablestations.name AS stationName,
+      alliances."allianceID",
+      alliances.ticker,
+      alliances.name AS allianceName,
+      "mapSolarSystems"."solarSystemName",
+      "mapSolarSystems".security,
+      "mapRegions"."regionName"
+    FROM
+      data.conquerablestations,
+      data.alliances,
+      data.mapsov,
+      public."mapSolarSystems",
+      public."mapRegions"
+    WHERE
+      conquerablestations."solarSystemID" = mapsov."solarSystemID" AND
+      conquerablestations."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      mapsov."allianceID" = alliances."allianceID" AND
+      "mapRegions"."regionID" = "mapSolarSystems"."regionID"'''
+    cursor.execute(sql, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
     if len(results) < 1:     # Handle a empty table
         return "No Data"

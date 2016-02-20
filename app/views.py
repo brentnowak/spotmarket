@@ -27,10 +27,6 @@ def settings():
 def wallet():
     return render_template('pages/wallet.html', title="Wallet", header="Wallet")
 
-@app.route('/map/sovereignty')
-def sovereignty():
-    return render_template('pages/sovereignty.html', title="Sovereignty", header="Sovereignty")
-
 @app.route('/blank.html')
 def blank():
     return render_template('pages/blank.html', title="Blank", header="Blank", nav="Blank Page")
@@ -163,6 +159,16 @@ def moonreport_r32():
 @app.route('/report/moon/r64')
 def moonreport_r64():
     return render_template('pages/moonReports/r64.html', title="Rarity 64", header="Rarity 64", nav="Rarity 64")
+
+
+# Map
+@app.route('/map/sovereignty')
+def map_sovereignty():
+    return render_template('pages/mapReports/sovereignty.html', title="Sovereignty", header="Sovereignty")
+
+@app.route('/map/conquerablestations')
+def map_conquerablestations():
+    return render_template('pages/mapReports/conquerablestations.html', title="Conquerable Stations", header="Conquerable Stations")
 
 
 #
@@ -310,3 +316,8 @@ def api_moonmineralsbyallalliance():
 @app.route('/api/report/index/deadend/<gateCountLimit>')
 def api_getdeadendsystems(gateCountLimit):
     return getdeadendsystems(gateCountLimit)
+
+# Map
+@app.route('/api/map/conquerablestations')
+def api_conquerablestations():
+    return getconquerablestationslist()
