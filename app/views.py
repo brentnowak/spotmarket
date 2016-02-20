@@ -6,7 +6,6 @@ from _utility import *
 #
 # Main pages
 #
-
 @app.route('/login.html')
 def login():
     return render_template('pages/login.html', title="Login")
@@ -89,7 +88,6 @@ def faction_report_serpentis():
 #
 #   securityReport
 #
-
 @app.route('/report/security/highsec')
 def securityreporthighsec():
     return render_template('pages/securityReports/highsec.html', title="Highsec", header="Highsec", nav="Highsec")
@@ -106,14 +104,17 @@ def securityreportnullsec():
 #
 # indexReports
 #
-
 @app.route('/report/index/universe')
 def indexreport_universe():
     return render_template('pages/indexReports/universe.html', title="Universe", header="Universe", nav="Universe")
 
 @app.route('/report/index/deadend')
 def indexreport_deadend():
-    return render_template('pages/indexReports/deadend.html', title="Dead End Systems", header="Dead End Systems", nav="Dead End Systems")
+    return render_template('pages/indexReports/deadend.html',
+                           title="Dead End Systems",
+                           header="Dead End Systems",
+                           nav="Dead End Systems",
+                           systemList=json.loads(getdeadendsystems(1)))
 
 
 #
@@ -134,7 +135,6 @@ def regionreport(regionID):
 @app.route('/report/jump/tradehubs')
 def jumpreport_tradehubs():
     return render_template('pages/jumpReports/tradehubs.html', title="Trade Hubs", header="Trade Hubs", nav="Trade Hubs")
-
 
 
 #
@@ -163,7 +163,6 @@ def moonreport_r32():
 @app.route('/report/moon/r64')
 def moonreport_r64():
     return render_template('pages/moonReports/r64.html', title="Rarity 64", header="Rarity 64", nav="Rarity 64")
-
 
 
 #
@@ -307,3 +306,7 @@ def api_moonmineralsbyalliance(typeID):
 def api_moonmineralsbyallalliance():
     return getmoonmineralsbysov()
 
+# Index
+@app.route('/api/report/index/deadend/<gateCountLimit>')
+def api_getdeadendsystems(gateCountLimit):
+    return getdeadendsystems(gateCountLimit)
