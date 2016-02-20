@@ -64,10 +64,18 @@ var svg = d3.select(options.selector).append("svg")
 	  .append("g")
 	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-	d3.json('/api/d3/17932', function (data) {
-    data.forEach(function(d) {
-      d.date = parseDate(d.date);
-    });
+    // Initialize empty array
+    var data = [];
+
+    // Get JSON data and wait for the response
+    d3.json("/api/d3/17932", function(error, json) {
+
+      $.each(json, function(d,i){
+        data.push({
+          timestamp: i.timestamp,
+          temperature: i.avgPrice
+        })
+      })
 
 	  color.domain(d3.keys(data[0]).filter(function(key) { return key !== "timestamp"; }));
 
