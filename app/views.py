@@ -12,23 +12,23 @@ def login():
     return render_template('pages/login.html', title="Login")
 
 @app.route('/')
-@app.route('/index.html')
+@app.route('/dashboard')
 def index():
-    return render_template('pages/index.html', title="Dashboard", header="Dashboard")
+    return render_template('pages/dashboard.html', title="Dashboard", header="Dashboard")
 
-@app.route('/logs.html')
+@app.route('/system/logs')
 def system():
     return render_template('pages/logs.html', title="Logs", header="Logs")
 
-@app.route('/settings.html')
+@app.route('/system/settings')
 def settings():
     return render_template('pages/settings.html', title="Settings", header="Settings")
 
-@app.route('/wallet.html')
+@app.route('/trade/wallet')
 def wallet():
     return render_template('pages/wallet.html', title="Wallet", header="Wallet")
 
-@app.route('/sovereignty.html')
+@app.route('/map/sovereignty')
 def sovereignty():
     return render_template('pages/sovereignty.html', title="Sovereignty", header="Sovereignty")
 
@@ -65,23 +65,23 @@ def grid():
 #   factionReport
 #
 
-@app.route('/factionReport_angel.html')
+@app.route('/report/faction/angel')
 def faction_report_angel():
     return render_template('pages/factionReports/angel.html', title="Angel Cartel", header="Angel Cartel", nav="Angel Cartel")
 
-@app.route('/factionReport_blood.html')
+@app.route('/report/faction/blood')
 def faction_report_blood():
     return render_template('pages/factionReports/blood.html', title="Blood Raiders", header="Blood Raiders", nav="Blood Raiders")
 
-@app.route('/factionReport_guristas.html')
+@app.route('/report/faction/guristas')
 def faction_report_guristas():
     return render_template('pages/factionReports/guristas.html', title="Guristas", header="Guristas", nav="Guristas")
 
-@app.route('/factionReport_sansha.html')
+@app.route('/report/faction/sansha')
 def faction_report_sansha():
     return render_template('pages/factionReports/sansha.html', title="Sansha's Nation", header="Sansha's Nation", nav="Sansha's Nation")
 
-@app.route('/factionReport_serpentis.html')
+@app.route('/report/faction/serpentis')
 def faction_report_serpentis():
     return render_template('pages/factionReports/serpentis.html', title="Serpentis", header="Serpentis", nav="Serpentis")
 
@@ -90,35 +90,39 @@ def faction_report_serpentis():
 #   securityReport
 #
 
-@app.route('/securityReport_highsec.html')
+@app.route('/report/security/highsec')
 def securityreporthighsec():
-    return render_template('pages/securityReports/securityReport_highsec.html', title="Highsec", header="Highsec", nav="Highsec")
+    return render_template('pages/securityReports/highsec.html', title="Highsec", header="Highsec", nav="Highsec")
 
-@app.route('/securityReport_lowsec.html')
+@app.route('/report/security/lowsec')
 def securityreportlowsec():
-    return render_template('pages/securityReports/securityReport_lowsec.html', title="Lowsec", header="Lowsec", nav="Lowsec")
+    return render_template('pages/securityReports/lowsec.html', title="Lowsec", header="Lowsec", nav="Lowsec")
 
-@app.route('/securityReport_nullsec.html')
+@app.route('/report/security/nullsec')
 def securityreportnullsec():
-    return render_template('pages/securityReports/securityReport_nullsec.html', title="Nullsec", header="Nullsec", nav="Nullsec")
+    return render_template('pages/securityReports/nullsec.html', title="Nullsec", header="Nullsec", nav="Nullsec")
 
 
 #
 # indexReports
 #
 
-@app.route('/indexReport_universe.html')
+@app.route('/report/index/universe')
 def indexreport_universe():
     return render_template('pages/indexReports/universe.html', title="Universe", header="Universe", nav="Universe")
+
+@app.route('/report/index/deadend')
+def indexreport_deadend():
+    return render_template('pages/indexReports/deadend.html', title="Dead End Systems", header="Dead End Systems", nav="Dead End Systems")
 
 
 #
 # regionReports
 #
-@app.route('/regionReport.html')
-def regionreport():
+@app.route('/report/region/<regionID>')
+def regionreport(regionID):
     return render_template('pages/regionReports/regionReport.html',
-                           regionID="10000060",
+                           regionID=regionID,
                            title="Region 1",
                            header="Region 1",
                            nav="Region 1")
@@ -127,38 +131,38 @@ def regionreport():
 #
 # jumpReports
 #
-@app.route('/jumpReports_tradehubs.html')
+@app.route('/report/jump/tradehubs')
 def jumpreport_tradehubs():
-    return render_template('pages/jumpReports/jumpReports_tradehubs.html', title="Trade Hubs", header="Trade Hubs", nav="Trade Hubs")
+    return render_template('pages/jumpReports/tradehubs.html', title="Trade Hubs", header="Trade Hubs", nav="Trade Hubs")
 
 
 
 #
 # moonReports
 #
-@app.route('/moonReports_sov.html')
+@app.route('/report/moon/sov')
 def moonreport_sov():
-    return render_template('pages/moonReports/moonReports_sov.html', title="Sovereignty", header="Sovereignty", nav="Sovereignty")
+    return render_template('pages/moonReports/sov.html', title="Sovereignty", header="Sovereignty", nav="Sovereignty")
 
-@app.route('/moonReports_gases.html')
+@app.route('/report/moon/gases')
 def moonreport_gases():
-    return render_template('pages/moonReports/moonReports_gases.html', title="Gasses", header="Gasses", nav="Gasses")
+    return render_template('pages/moonReports/gases.html', title="Gasses", header="Gasses", nav="Gasses")
 
-@app.route('/moonReports_r8.html')
+@app.route('/report/moon/r8')
 def moonreport_r8():
-    return render_template('pages/moonReports/moonReports_r8.html', title="Rarity 8", header="Rarity 8", nav="Rarity 8")
+    return render_template('pages/moonReports/r8.html', title="Rarity 8", header="Rarity 8", nav="Rarity 8")
 
-@app.route('/moonReports_r16.html')
+@app.route('/report/moon/r16')
 def moonreport_r16():
-    return render_template('pages/moonReports/moonReports_r16.html', title="Rarity 16", header="Rarity 16", nav="Rarity 16")
+    return render_template('pages/moonReports/r16.html', title="Rarity 16", header="Rarity 16", nav="Rarity 16")
 
-@app.route('/moonReports_r32.html')
+@app.route('/report/moon/r32')
 def moonreport_r32():
-    return render_template('pages/moonReports/moonReports_r32.html', title="Rarity 32", header="Rarity 32", nav="Rarity 32")
+    return render_template('pages/moonReports/r32.html', title="Rarity 32", header="Rarity 32", nav="Rarity 32")
 
-@app.route('/moonReports_r64.html')
+@app.route('/report/moon/r64')
 def moonreport_r64():
-    return render_template('pages/moonReports/moonReports_r64.html', title="Rarity 64", header="Rarity 64", nav="Rarity 64")
+    return render_template('pages/moonReports/r64.html', title="Rarity 64", header="Rarity 64", nav="Rarity 64")
 
 
 
