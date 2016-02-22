@@ -280,9 +280,9 @@ def api_regionID(regionID):
 def api_typeID(typeID):
     return getmarkethistory_typeid(typeID)
 
-@app.route('/api/d3/<typeID>')
-def api_d3_typeID(typeID):
-    return getmarkethistory_d3_typeid(typeID)
+@app.route('/api/market/avgprice/<typeID>')
+def api_marketavgprice(typeID):
+    return getmarkethistory_avgprice(typeID)
 
 
 # Region
@@ -321,3 +321,15 @@ def api_getdeadendsystems(gateCountLimit):
 @app.route('/api/map/conquerablestations')
 def api_conquerablestations():
     return getconquerablestationslist()
+
+@app.route('/api/map/jumps/<solarSystemID>')
+def api_mapjumps_solarsystemID(solarSystemID):
+    return mapjumps_solarsystemID(solarSystemID)
+
+@app.route('/api/map/jumps/tradehubs')
+def api_mapjumps_tradehubs():
+    return mapjumps_tradehubs()
+
+@app.route('/api/map/kills/region/<regionID>')
+def api_mapkills_rattingbyregion(regionID):
+    return mapkills_rattingbyregion(regionID)

@@ -590,18 +590,6 @@ def getnpckills_bysecurity_bytime():
     cursor.close()
     return df
 
-
-#
-# Input     dataframe.to_html
-# Output    remove border=1
-# pandas has a hard coded border=1
-#
-def cleartableborder(filename):
-    for line in fileinput.FileInput(filename, inplace=1):
-        line = line.replace('<table border="1" class="dataframe table table-striped">', '<table class="dataframe table table-striped">')
-        sys.stdout.write(line)
-    return 0
-
 #
 #
 #
@@ -833,14 +821,11 @@ def getmarkethistory_typeid(typeID):
         return results
 
 
-def getmarkethistory_d3_typeid(typeID):
+def getmarkethistory_avgprice(typeID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      markethistory."typeID",
       to_char(markethistory."timestamp", 'YYYY-MM-dd') AS timestamp,
-      markethistory."lowPrice",
-      markethistory."highPrice",
       markethistory."avgPrice"
     FROM
       data.markethistory
@@ -1314,7 +1299,7 @@ def getwallettransactions():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      wallet."transactionDateTime",
+      to_char(wallet."transactionDateTime", 'YYYY-MM-dd HH:mm:ss') AS transactionDateTime,
       wallet."transactionID",
       wallet."typeID",
       wallet."typeName",
@@ -1413,6 +1398,7 @@ def getsovevents():
     '''
     cursor.execute(sql, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    cursor.close()
     if len(results) < 1:     # Handle a empty table
         return "No Data"
     else:
@@ -1447,6 +1433,7 @@ def getsovbyregion(regionID):
     data = (regionID, )
     cursor.execute(sql, data, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    cursor.close()
     if len(results) < 1:     # Handle a empty table
         return "No Data"
     else:
@@ -1553,6 +1540,7 @@ def getmoonmineralsbyregion(regionID):
     data = (regionID, )
     cursor.execute(sql, data, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    cursor.close()
     if len(results) < 1:     # Handle a empty table
         return "No Data"
     else:
@@ -1593,6 +1581,7 @@ def getmoonmineralsbytypeid(typeID):
     data = (typeID, )
     cursor.execute(sql, data, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    cursor.close()
     if len(results) < 1:     # Handle a empty table
         return "No Data"
     else:
@@ -1627,6 +1616,7 @@ def getmoonmineralsbyalliance(typeID):
       SUM_moonID DESC'''
     data = (typeID, )
     cursor.execute(sql, data, )
+    cursor.close()
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
     if len(results) < 1:     # Handle a empty table
         return "No Data"
@@ -1661,6 +1651,7 @@ def getmoonmineralsbysov():
       SUM_moonID DESC'''
     cursor.execute(sql, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    cursor.close()
     if len(results) < 1:     # Handle a empty table
         return "No Data"
     else:
@@ -1703,6 +1694,7 @@ def getdeadendsystems(gateCountLimit):
     data = (gateCountLimit, )
     cursor.execute(sql, data, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    cursor.close()
     if len(results) < 1:     # Handle a empty table
         return "No Data"
     else:
@@ -1734,7 +1726,82 @@ def getconquerablestationslist():
       "mapRegions"."regionID" = "mapSolarSystems"."regionID"'''
     cursor.execute(sql, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    cursor.close()
     if len(results) < 1:     # Handle a empty table
         return "No Data"
     else:
         return results
+
+
+#############################
+# Map
+#############################
+
+def mapjumps_solarsystemID(solarSystemID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''SELECT
+      timestamp,
+      mapjumps."shipJumps",
+      "mapSolarSystems"."solarSystemName"
+    FROM
+      data.mapjumps,
+      public."mapSolarSystems"
+    WHERE mapjumps."solarSystemID" = %s AND
+      "mapSolarSystems"."solarSystemID" = mapjumps."solarSystemID"
+    ORDER BY mapjumps."timestamp" DESC'''
+    data = (solarSystemID, )
+    cursor.execute(sql, data, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','shipJumps','solarSystemName'])
+    cursor.close()
+    df = pd.pivot_table(df,index='timestamp',columns='solarSystemName',values='shipJumps')
+    return df.reset_index().to_json(orient='records',date_format='iso')
+
+
+def mapjumps_tradehubs():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''SELECT
+      timestamp,
+      mapjumps."shipJumps",
+      "mapSolarSystems"."solarSystemName"
+    FROM
+      data.mapjumps,
+      public."mapSolarSystems"
+    WHERE
+      "mapSolarSystems"."solarSystemID" = mapjumps."solarSystemID" AND
+      mapjumps."solarSystemID" IN (30002187, 30000142, 30002659)
+    ORDER BY mapjumps."timestamp" DESC'''
+    cursor.execute(sql, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','shipJumps','solarSystemName'])
+    cursor.close()
+    df = pd.pivot_table(df,index='timestamp',columns='solarSystemName',values='shipJumps')
+    return df.reset_index().to_json(orient='records',date_format='iso')
+
+
+def mapkills_rattingbyregion(regionID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      mapkills."timestamp",
+      SUM(mapkills."factionKills") as SUM_factionKills,
+      "mapRegions"."regionName"
+    FROM
+      data.mapkills,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
+      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapSolarSystems"."regionID" = %s
+    GROUP BY
+      mapkills."timestamp",
+      "mapRegions"."regionName"
+    ORDER BY mapkills."timestamp" DESC
+      '''
+    data = (regionID, )
+    cursor.execute(sql, data, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','SUM_factionKills','regionName'])
+    cursor.close()
+    df = pd.pivot_table(df,index='timestamp',columns='regionName',values='SUM_factionKills')
+    return df.reset_index().to_json(orient='records',date_format='iso')

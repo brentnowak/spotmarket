@@ -145,7 +145,7 @@ graph({
     height: 340,
     marginright: 25,
     selector: '.d3-graph-universe',
-    csv: 'dist/data/npckills_universe.csv'
+    csv: '/dist/data/npckills_universe.csv'
 });
 
 graph({
@@ -153,77 +153,77 @@ graph({
     height: 340,
     marginright: 105,
     selector: '.d3-graph-universe-factions',
-    csv: 'dist/data/npckills_factions.csv'
+    csv: '/dist/data/npckills_factions.csv'
 });
 
 graph({
     width: 580,
     height: 340,
     selector: '.d3-graph-angel',
-    csv: 'dist/data/npckills_regions_angel_cartel.csv'
+    csv: '/dist/data/npckills_regions_angel_cartel.csv'
 });
 
 graph({
     width: 580,
     height: 340,
     selector: '.d3-graph-angel-sum',
-    csv: 'dist/data/npckills_regions_angel_cartel_sum.csv'
+    csv: '/dist/data/npckills_regions_angel_cartel_sum.csv'
 });
 
 graph({
     width: 580,
     height: 340,
     selector: '.d3-graph-blood',
-    csv: 'dist/data/npckills_regions_blood_raiders.csv'
+    csv: '/dist/data/npckills_regions_blood_raiders.csv'
 });
 
 graph({
     width: 580,
     height: 340,
     selector: '.d3-graph-blood-sum',
-    csv: 'dist/data/npckills_regions_blood_raiders_sum.csv'
+    csv: '/dist/data/npckills_regions_blood_raiders_sum.csv'
 });
 
 graph({
     width: 580,
     height: 340,
     selector: '.d3-graph-guristas',
-    csv: 'dist/data/npckills_regions_guristas_pirate.csv'
+    csv: '/dist/data/npckills_regions_guristas_pirate.csv'
 });
 
 graph({
     width: 580,
     height: 340,
     selector: '.d3-graph-guristas-sum',
-    csv: 'dist/data/npckills_regions_guristas_pirates_sum.csv'
+    csv: '/dist/data/npckills_regions_guristas_pirates_sum.csv'
 });
 
 graph({
     width: 580,
     height: 340,
     selector: '.d3-graph-sansha',
-    csv: 'dist/data/npckills_regions_sanshas_nation.csv'
+    csv: '/dist/data/npckills_regions_sanshas_nation.csv'
 });
 
 graph({
     width: 580,
     height: 340,
     selector: '.d3-graph-sansha-sum',
-    csv: 'dist/data/npckills_regions_sanshas_nation_sum.csv'
+    csv: '/dist/data/npckills_regions_sanshas_nation_sum.csv'
 });
 
 graph({
     width: 580,
     height: 340,
     selector: '.d3-graph-serpentis',
-    csv: 'dist/data/npckills_regions_serpentis_corporation.csv'
+    csv: '/dist/data/npckills_regions_serpentis_corporation.csv'
 });
 
 graph({
     width: 580,
     height: 340,
     selector: '.d3-graph-serpentis-sum',
-    csv: 'dist/data/npckills_regions_serpentis_corporation_sum.csv'
+    csv: '/dist/data/npckills_regions_serpentis_corporation_sum.csv'
 });
 
 graph({
@@ -232,7 +232,7 @@ graph({
     marginright: 35,
     selector: '.d3-graph-mapjumps-tradehubs',
     ylegend: 'jumpCount',
-    csv: 'dist/data/mapjumps_tradehubs.csv'
+    csv: '/dist/data/mapjumps_tradehubs.csv'
 });
 
 graph({
@@ -241,5 +241,5 @@ graph({
     marginright: 55,
     selector: '.d3-graph-mapjumps-tradehubs-jitatoamarr',
     ylegend: 'jumpCount',
-    csv: 'dist/data/mapjumps_tradehubs_jitatoamarr.csv'
+    csv: '/dist/data/mapjumps_tradehubs_jitatoamarr.csv'
 });
