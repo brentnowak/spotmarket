@@ -91,7 +91,7 @@ Output: Populate 'data.wallet' table with a list of transactions per character.
 **consumer_zkillboard.py *work in progress***
 
 
-Input: zKillboard API, Character list from 
+Input: zKillboard API
 
 Output: Populate 'data.killmails' table with CREST killmails.
 
@@ -204,7 +204,7 @@ rm postgres-latest.dmp
 ```shell
 vim config.ini.change
 mv config.ini.change change.ini
-
+```
 
 Web Services
 ==================
