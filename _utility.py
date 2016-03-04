@@ -9,6 +9,7 @@ import arrow
 import pycrest
 import pandas as pd
 import fileinput
+import requests
 import json
 import sys
 
@@ -393,28 +394,36 @@ def getmarkethistory(regionID, typeID):
     eve = pycrest.EVE()
     start_time = time.time()
     url = "https://public-crest.eveonline.com/market/" + str(regionID) + "/types/" + str(typeID) + "/history/"
-    history = eve.get(url)
-    count = insertmarketrecord(regionID, typeID, history)
-    timemark = arrow.utcnow().format('YYYY-MM-DD HH:mm:ss')
-    log = "[typeID:" + str(typeID) + "][regionID:" + str(regionID) + "] insert: " + str(count) + " @ " + str(round(count/(time.time() - start_time), 2)) + " rec/sec"
-    insertlog("consumer_markethistory.py", 0, log, timemark)
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
-    sql = '''UPDATE
-    data.marketitems
-    SET "importResult" = 1
-    WHERE marketitems."typeID" = %s
-    '''
-    data = (typeID, )
-    cursor.execute(sql, data, )
-    conn.close()
-    return 0
+    try:
+        history = eve.get(url)
+    except Exception: # TODO Implement better exception handling for CREST API
+        timemark = arrow.utcnow().format('YYYY-MM-DD HH:mm:ss')
+        log = "[typeID:" + str(typeID) + "][regionID:" + str(regionID) + "] Exception"
+        insertlog("consumer_markethistory.py", 5, log, timemark)
+        return 0
+    else:
+        count = insertmarketrecord(regionID, typeID, history)
+        timemark = arrow.utcnow().format('YYYY-MM-DD HH:mm:ss')
+        log = "[typeID:" + str(typeID) + "][regionID:" + str(regionID) + "] insert: " + str(count) + " @ " + str(round(count/(time.time() - start_time), 2)) + " rec/sec"
+        insertlog("consumer_markethistory.py", 0, log, timemark)
+        conn = psycopg2.connect(conn_string)
+        cursor = conn.cursor()
+        sql = '''UPDATE
+        data.marketitems
+        SET "importResult" = 1
+        WHERE marketitems."typeID" = %s
+        '''
+        data = (typeID, )
+        cursor.execute(sql, data, )
+        conn.close()
+        return 0
 
 
 #
-# Need to parametrize by security class
+# Input     None
+# Output    df
 #
-def gettoprattingsystems_nullsec():
+def gettoprattingsystems_nullsec(): # TODO Need to parametrize by security class
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
@@ -439,9 +448,10 @@ def gettoprattingsystems_nullsec():
     return df
 
 #
-# Need to parametrize by security class
+# Input     None
+# Output    df
 #
-def gettoprattingsystems_lowsec():
+def gettoprattingsystems_lowsec(): # TODO Need to parametrize by security class
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
@@ -467,9 +477,10 @@ def gettoprattingsystems_lowsec():
 
 
 #
-# Need to parametrize by security class
+# Input     None
+# Output    df
 #
-def gettoprattingsystems_highsec():
+def gettoprattingsystems_highsec(): # TODO Need to parametrize by security class
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
@@ -626,7 +637,7 @@ def getdaterange_mapkills():
     cursor.execute(sql, )
     date_end = cursor.fetchone()
 
-    return 18
+    return 49
 
 
 def getsolarsystemmapkills(solarSystemID):
@@ -1770,7 +1781,7 @@ def mapjumps_tradehubs():
       public."mapSolarSystems"
     WHERE
       "mapSolarSystems"."solarSystemID" = mapjumps."solarSystemID" AND
-      mapjumps."solarSystemID" IN (30002187, 30000142, 30002659)
+      mapjumps."solarSystemID" IN (30002187, 30000142, 30002659, 30002510)
     ORDER BY mapjumps."timestamp" DESC'''
     cursor.execute(sql, )
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','shipJumps','solarSystemName'])
@@ -1779,7 +1790,35 @@ def mapjumps_tradehubs():
     return df.reset_index().to_json(orient='records',date_format='iso')
 
 
-def mapkills_rattingbyregion(regionID):
+def mapkills_jumpsbyregion(regionID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      mapjumps."timestamp",
+      SUM(mapjumps."shipJumps") as SUM_shipJumps,
+      "mapRegions"."regionName"
+    FROM
+      data.mapjumps,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
+      "mapSolarSystems"."solarSystemID" = mapjumps."solarSystemID" AND
+      "mapSolarSystems"."regionID" = %s
+    GROUP BY
+      mapjumps."timestamp",
+      "mapRegions"."regionName"
+    ORDER BY mapjumps."timestamp" DESC
+      '''
+    data = (regionID, )
+    cursor.execute(sql, data, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','SUM_shipJumps','regionName'])
+    cursor.close()
+    df = pd.pivot_table(df,index='timestamp',columns='regionName',values='SUM_shipJumps')
+    return df.reset_index().to_json(orient='records',date_format='iso')
+
+
+def mapkills_npckillsbyregion(regionID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
@@ -1805,3 +1844,118 @@ def mapkills_rattingbyregion(regionID):
     cursor.close()
     df = pd.pivot_table(df,index='timestamp',columns='regionName',values='SUM_factionKills')
     return df.reset_index().to_json(orient='records',date_format='iso')
+
+
+def mapkills_shipkillsbyregion(regionID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      mapkills."timestamp",
+      SUM(mapkills."shipKills") as SUM_shipKills,
+      "mapRegions"."regionName"
+    FROM
+      data.mapkills,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
+      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapSolarSystems"."regionID" = %s
+    GROUP BY
+      mapkills."timestamp",
+      "mapRegions"."regionName"
+    ORDER BY mapkills."timestamp" DESC
+      '''
+    data = (regionID, )
+    cursor.execute(sql, data, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','SUM_shipKills','regionName'])
+    cursor.close()
+    df = pd.pivot_table(df,index='timestamp',columns='regionName',values='SUM_shipKills')
+    return df.reset_index().to_json(orient='records',date_format='iso')
+
+
+def mapkills_podkillsbyregion(regionID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      mapkills."timestamp",
+      SUM(mapkills."podKills") as SUM_podKills,
+      "mapRegions"."regionName"
+    FROM
+      data.mapkills,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
+      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapSolarSystems"."regionID" = %s
+    GROUP BY
+      mapkills."timestamp",
+      "mapRegions"."regionName"
+    ORDER BY mapkills."timestamp" DESC
+      '''
+    data = (regionID, )
+    cursor.execute(sql, data, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','SUM_podKills','regionName'])
+    cursor.close()
+    df = pd.pivot_table(df,index='timestamp',columns='regionName',values='SUM_podKills')
+    return df.reset_index().to_json(orient='records',date_format='iso')
+
+
+
+#############################
+# Siphon Verify
+#############################
+
+def getclosestmoon(solarSystemID, x, y, z):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      "mapDenormalize"."solarSystemID",
+      ABS(%s - "mapDenormalize".x) +
+      ABS(%s - "mapDenormalize".y) +
+      ABS(%s - "mapDenormalize".z) as totalDiff,
+      "mapDenormalize"."itemName",
+      "mapDenormalize"."itemID"
+    FROM
+      public."mapDenormalize"
+    WHERE "mapDenormalize"."solarSystemID" = %s AND
+    "mapDenormalize"."typeID" = 14
+    ORDER BY totalDiff ASC
+    LIMIT 1'''
+    data = (x, y, z, solarSystemID, )
+    cursor.execute(sql, data, )
+    results = cursor.fetchone()
+    cursor.close()
+    return results
+
+def insertmoonverifyrecord(moonID, killID, typeID):
+    insertcount = 0
+    try:
+        conn = psycopg2.connect(conn_string)
+        cursor = conn.cursor()
+        sql = 'INSERT INTO data."moonverify" ("moonID", "killID", "typeID") VALUES (%s, %s, %s)'
+        data = (moonID, killID, typeID, )
+        cursor.execute(sql, data, )
+    except psycopg2.IntegrityError:
+        conn.rollback()
+    else:
+        conn.commit()
+        insertcount += 1
+    return insertcount
+
+
+def insertkillmailrecord(killID, killHash, killData):
+    insertcount = 0
+    try:
+        conn = psycopg2.connect(conn_string)
+        cursor = conn.cursor()
+        sql = 'INSERT INTO data."killmails" ("killID", "killHash", "killData") VALUES (%s, %s, %s)'
+        data = (killID, killHash, killData, )
+        cursor.execute(sql, data, )
+    except psycopg2.IntegrityError:
+        conn.rollback()
+    else:
+        conn.commit()
+        insertcount += 1
+    return insertcount

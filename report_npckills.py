@@ -1,7 +1,6 @@
 #-----------------------------------------------------------------------------
 # report_npckills.py - EVE Online Market Evaluator
 # https://github.com/brentnowak/spotmarket
-# Brent Nowak <brent613@gmail.com>
 #-----------------------------------------------------------------------------
 # Version: 0.1
 # - Initial release
@@ -16,9 +15,7 @@ import time
 from _utility import *
 from _globals import *
 
-#
-# Resampling Options
-#
+# Resampling Options from _global.py
 
 def main():
     # Track runtime

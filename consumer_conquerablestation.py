@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------------
-# consumer_conquerablestation.py - EVE Online XML API consumer
-# Brent Nowak <brent613@gmail.com>
+# consumer_conquerablestation.py
+# https://github.com/brentnowak/spotmarket
 #-----------------------------------------------------------------------------
 # Version: 0.1
 # - Initial release

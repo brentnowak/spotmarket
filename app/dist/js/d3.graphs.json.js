@@ -473,12 +473,42 @@ graphPrice({ /* Hek */
     json: '/api/map/jumps/30002053'
 });
 
-graphPrice({ /* Delve */
-    width: 1160,
+graphJumps({ /* Delve shipJumps */
+    width: 580,
     height: 340,
     marginright: 40,
     marginleft: 40,
-    selector: '.d3-graph-ratting-10000060',
-    json: '/api/map/kills/region/10000060'
+    ylegend: 'SUM_shipJumps',
+    selector: '.d3-graph-shipjumps-10000060',
+    json: '/api/map/jumps/region/10000060'
 });
 
+graphJumps({ /* Delve npckills */
+    width: 580,
+    height: 340,
+    marginright: 40,
+    marginleft: 40,
+    ylegend: 'SUM_npcKills',
+    selector: '.d3-graph-npckills-10000060',
+    json: '/api/map/npckills/region/10000060'
+});
+
+graphJumps({ /* Delve shipkills */
+    width: 580,
+    height: 340,
+    marginright: 40,
+    marginleft: 40,
+    ylegend: 'SUM_shipKills',
+    selector: '.d3-graph-shipkills-10000060',
+    json: '/api/map/shipkills/region/10000060'
+});
+
+graphJumps({ /* Delve podkills */
+    width: 580,
+    height: 340,
+    marginright: 40,
+    marginleft: 40,
+    ylegend: 'SUM_podKills',
+    selector: '.d3-graph-shipkills-10000060',
+    json: '/api/map/podkills/region/10000060'
+});

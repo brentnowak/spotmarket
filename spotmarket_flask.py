@@ -1,7 +1,6 @@
 #-----------------------------------------------------------------------------
-# spotmarket_flask.py - EVE Online Market Evaluator
+# spotmarket_flask.py
 # https://github.com/brentnowak/spotmarket
-# Brent Nowak <brent613@gmail.com>
 #-----------------------------------------------------------------------------
 # Version: 0.1
 # - Initial release

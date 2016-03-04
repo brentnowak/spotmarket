@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------------
-# consumer_alliance.py - EVE Online XML API consumer
-# Brent Nowak <brent613@gmail.com>
+# consumer_alliance.py
+# https://github.com/brentnowak/spotmarket
 #-----------------------------------------------------------------------------
 # Version: 0.1
 # - Initial release

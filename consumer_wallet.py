@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------------
-# consumer_wallet.py - EVE Online XML API consumer
-# Brent Nowak <brent613@gmail.com>
+# consumer_wallet.py
+# https://github.com/brentnowak/spotmarket
 #-----------------------------------------------------------------------------
 # Version: 0.1
 # - Initial release
@@ -43,8 +43,8 @@ def main():
             stationID = row['station']['id']
             stationName = row['station']['name']
             transactionType = row['action']
-            personal = 0
-            profit = 0
+            personal = 0 # TODO allow user to true/false switch items for personal use
+            profit = 0 # TODO profit calculations based on a first in/first out movement if items in a inventory table
             insertcount = insertwallettransaction(transactionDateTime, transactionID, quantity, typeName, typeID, price, clientID, clientName, walletID, stationID, stationName, transactionType, personal, profit)
             detail = "[wallet " + str(walletID) + "] insert " + str(insertcount)
             timestamp = arrow.get() # Get arrow object

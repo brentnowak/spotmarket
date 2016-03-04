@@ -1,7 +1,6 @@
 #-----------------------------------------------------------------------------
-# report_market.py - EVE Online Market Evaluator
+# report_market.py
 # https://github.com/brentnowak/spotmarket
-# Brent Nowak <brent613@gmail.com>
 #-----------------------------------------------------------------------------
 # Version: 0.1
 # - Initial release

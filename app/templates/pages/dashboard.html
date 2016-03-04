@@ -23,6 +23,15 @@
                     </div>
                     <div class="panel-body">
                         <div class="d3-graph-universe"></div>
+                        <script>
+                            graph({
+                                width: 580,
+                                height: 340,
+                                marginright: 25,
+                                selector: '.d3-graph-universe',
+                                csv: '/dist/data/npckills_universe.csv'
+                            });
+                        </script>
                     </div>
                 </div>
             </div>
@@ -33,6 +42,15 @@
                     </div>
                         <div class="panel-body">
                             <div class="d3-graph-universe-factions"></div>
+                            <script>
+                                graph({
+                                    width: 580,
+                                    height: 340,
+                                    marginright: 105,
+                                    selector: '.d3-graph-universe-factions',
+                                    csv: '/dist/data/npckills_factions.csv'
+                                });
+                            </script>
                         </div>
                 </div>
             </div>
@@ -47,7 +65,7 @@
                         <span class="glyphicon glyphicon-stats"></span> Jita Jump Traffic
                     </div>
                     <div class="panel-body">
-                        <div class="d3-graph-mapjumps-tradehubs"></div>
+                        Text
                     </div>
                 </div>
             </div>
@@ -57,7 +75,7 @@
                         <span class="glyphicon glyphicon-stats"></span> Golden Route Jump Traffic
                     </div>
                     <div class="panel-body">
-                        <div class="d3-graph-mapjumps-tradehubs-jitatoamarr"></div>
+                        Text
                     </div>
                 </div>
             </div>

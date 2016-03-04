@@ -1,11 +1,13 @@
 #-----------------------------------------------------------------------------
-# consumer_map.py - EVE Online XML API consumer
-# Brent Nowak <brent613@gmail.com>
+# consumer_map.py
+# https://github.com/brentnowak/spotmarket
 #-----------------------------------------------------------------------------
 # Version: 0.1
 # - Initial release
 # Version: 0.11
 # - Move configuration and functions to _utility.py
+# Version: 0.2
+# - Add Sovereignty
 #-----------------------------------------------------------------------------
 
 import evelink.map

@@ -140,21 +140,6 @@ var svg = d3.select(options.selector).append("svg")
 	});
 }
 
-graph({
-    width: 580,
-    height: 340,
-    marginright: 25,
-    selector: '.d3-graph-universe',
-    csv: '/dist/data/npckills_universe.csv'
-});
-
-graph({
-    width: 580,
-    height: 340,
-    marginright: 105,
-    selector: '.d3-graph-universe-factions',
-    csv: '/dist/data/npckills_factions.csv'
-});
 
 graph({
     width: 580,
@@ -224,22 +209,4 @@ graph({
     height: 340,
     selector: '.d3-graph-serpentis-sum',
     csv: '/dist/data/npckills_regions_serpentis_corporation_sum.csv'
-});
-
-graph({
-    width: 580,
-    height: 340,
-    marginright: 35,
-    selector: '.d3-graph-mapjumps-tradehubs',
-    ylegend: 'jumpCount',
-    csv: '/dist/data/mapjumps_tradehubs.csv'
-});
-
-graph({
-    width: 580,
-    height: 340,
-    marginright: 55,
-    selector: '.d3-graph-mapjumps-tradehubs-jitatoamarr',
-    ylegend: 'jumpCount',
-    csv: '/dist/data/mapjumps_tradehubs_jitatoamarr.csv'
 });

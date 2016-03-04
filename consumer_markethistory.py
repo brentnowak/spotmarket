@@ -1,40 +1,42 @@
 #-----------------------------------------------------------------------------
-# consumer_markethistory.py - EVE Online CREST API consumer
-# Brent Nowak <brent613@gmail.com>
+# consumer_markethistory.py -
+# https://github.com/brentnowak/spotmarket
 #-----------------------------------------------------------------------------
 # Version: 0.1
 # - Initial release
 #-----------------------------------------------------------------------------
+#
+# Input: List of typeIDs from 'data.marketitems' table that have 'enabled' set to 1.
+# Output: Populate 'data.markethistory' table. Prices are currenlty only set for the Forge.
+#-----------------------------------------------------------------------------
 
 from _utility import *
 
-def getlatestmarketrecord():
+def getmarketrecords(): # TODO Move function to _utility.py
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
       marketitems."typeID"
     FROM
       data.marketitems
-    WHERE marketitems."importResult" < 1
-    LIMIT 1
+    WHERE marketitems.enabled = 1
     '''
     cursor.execute(sql, )
-    result = cursor.fetchone()
-    if result == None:  # Error checking if table is empty
+    results = cursor.fetchall()
+    if results == None:  # Error checking if table is empty
             return 0
     else:
-        return result[0]
+        return results
 
 def main():
-
+    # TODO Allow user to select regions for price data
     # The Forge
     regionIDs = ['10000002']
-    #1041	Advanced Commodities
-    #getmarkethistory(regionIDs)
 
-    typeID = getlatestmarketrecord()
-    print(typeID)
-    getmarkethistory(10000002, typeID)
+    typeIDs = getmarketrecords()
+    for typeID in typeIDs:
+        print(typeID[0])
+        getmarkethistory(10000002, typeID[0])
 
 
 if __name__ == "__main__":

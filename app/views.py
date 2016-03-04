@@ -330,6 +330,18 @@ def api_mapjumps_solarsystemID(solarSystemID):
 def api_mapjumps_tradehubs():
     return mapjumps_tradehubs()
 
-@app.route('/api/map/kills/region/<regionID>')
-def api_mapkills_rattingbyregion(regionID):
-    return mapkills_rattingbyregion(regionID)
+@app.route('/api/map/npckills/region/<regionID>')
+def api_mapkills_npckillsbyregion(regionID):
+    return mapkills_npckillsbyregion(regionID)
+
+@app.route('/api/map/shipkills/region/<regionID>')
+def api_mapkills_shipkillsbyregion(regionID):
+    return mapkills_shipkillsbyregion(regionID)
+
+@app.route('/api/map/podkills/region/<regionID>')
+def api_mapkills_podkillsbyregion(regionID):
+    return mapkills_podkillsbyregion(regionID)
+
+@app.route('/api/map/jumps/region/<regionID>')
+def api_mapkills_jumpsbyregion(regionID):
+    return mapkills_jumpsbyregion(regionID)
