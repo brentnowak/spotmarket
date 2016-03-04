@@ -98,8 +98,6 @@ Output: pandas .csv reports to */app/dist/data/* folder for graphing.
 Install Notes
 ==================
 
-# Debian
-
 **Dependencies**
 ```shell 
 apt-get install postgresql postgresql-contrib
@@ -116,9 +114,13 @@ pip install arrow
 pip install flask
 ```
 
-**Install**
+**Clone**
 ```shell
 git clone https://github.com/brentnowak/spotmarket
+```
+
+**Make Scripts Executable**
+```shell
 cd spotmarket
 cd /scripts/
 chmod +x *
