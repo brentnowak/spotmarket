@@ -107,41 +107,41 @@ mv config.ini.change change.ini
 ```
 
 **API Services**
-1. consumer_alliance.py
+consumer_alliance.py
 Input: XML API.
 Output: Populate 'data.alliances' table with list of current Alliances.
 
-2. consumer_conquerablestation.py
+consumer_conquerablestation.py
 Input: XML API.
 Output: Populate 'data.conquerablestations' with list of Conquerable Stations.
 
-3. consumer_map.py
+consumer_map.py
 Input: XML API.
 Output: Populate 'data.mapjumps', 'data.mapkills', and 'data.mapsov' with statistics. 
 
-4. consumer_markethistory.py
+consumer_markethistory.py
 Input: CREST API, list of typeIDs from 'data.marketitems' table.
 Output: Populate 'data.markethistory' table with market data.
 
-5. consumer_siphon.py
+consumer_siphon.py
 Input: zKillboard API, CREST API
 Output: Populate 'data.moonverify' table with a list of CREST verified moons.
 Notes: Replace 'user-agent' value with your own custom string.
 
-6. consumer_wallet.py *work in progress*
+consumer_wallet.py *work in progress*
 Input: XML API.
 Output: Populate 'data.wallet' table with a list of transactions per character.
 
-7. consumer_zkillboard.py *work in progress*
+consumer_zkillboard.py *work in progress*
 Input: zKillboard API, Character list from 
 Output: Populate 'data.killmails' table with CREST killmails.
 
 **Report Services**
-1. report_market.py *work in progress*
+report_market.py *work in progress*
 Input: Price data from 'data.markethistory' table.
 Output: /api/market/ REST Endpoint
 
-2. report_npckills.py
+report_npckills.py
 Input: NPC kill data from 'data.mapkills' table.
 Output: pandas .csv reports to */app/dist/data/* folder for graphing.
 
