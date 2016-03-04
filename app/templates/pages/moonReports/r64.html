@@ -19,30 +19,34 @@
                     <span class="glyphicon glyphicon-stats"></span> Promethium
                 </div>
                 <div class="panel-body">
+                    <div class="col-md-6">
+                        <div class="d3-graph-price-16652"></div>
+                    </div>
+                    <div class="col-md-6">
 
-                <div id="pie_promethium"></div>
-                <script>
-                // Initialize empty array
-                var data = [];
+                        <div id="pie_promethium"></div>
+                        <script>
+                        // Initialize empty array
+                        var data = [];
 
-                // Get JSON data and wait for the response
-                d3.json("/api/moonminerals/alliance/16652", function(error, json) {
+                        // Get JSON data and wait for the response
+                        d3.json("/api/moonminerals/alliance/16652", function(error, json) {
 
-                  $.each(json, function(d,i){
-                    data.push({
-                      label: i.name,
-                      value: i.sum_moonid
-                    })
-                  })
+                          $.each(json, function(d,i){
+                            data.push({
+                              label: i.name,
+                              value: i.sum_moonid
+                            })
+                          })
 
-                  var pie = new d3pie("pie_promethium", {
-                    "data": {
-                      "content": data
-                    }
-                  });
-                });
-                </script>
-
+                          var pie = new d3pie("pie_promethium", {
+                            "data": {
+                              "content": data
+                            }
+                          });
+                        });
+                        </script>
+                    </div>
                 <table data-toggle="table"
                        data-sort-name="SUM_factionKills"
                        data-sort-order="desc"
