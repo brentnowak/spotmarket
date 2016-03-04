@@ -34,4 +34,3 @@ CREATE INDEX idx_markethistory_regionID
   ON data.markethistory
   USING btree
   ("regionID" DESC NULLS LAST);
-

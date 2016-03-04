@@ -1,0 +1,93 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{header}}</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> 1 Gate
+                </div>
+                <div class="panel-body">
+                    <table id="table"
+                       data-toggle="table"
+                       data-url="/api/report/index/deadend/1"
+                       data-pagination="true"
+                       data-page-size="50"
+                       data-page-list="[50, 100, 200]"
+                       data-search="true"
+                       data-show-refresh="true"
+                       data-show-toggle="true"
+                       data-striped="true"
+                       data-height="600">
+                        <thead>
+                            <tr>
+                                <th data-field="gatecount" data-sortable="true">gateCount</th>
+                                <th data-field="stationcount" data-sortable="true" data-align="right">stationCount</th>
+                                <th data-field="solarSystemName" data-sortable="true" data-align="right">solarSystemName</th>
+                                <th data-field="regionName" data-sortable="true" data-align="right">regionName</th>
+                                <th data-field="allianceID" data-formatter="allianceIconFormatter" data-width=32px></th>
+                                <th data-field="name" data-sortable="true" data-align="right">alliance</th>
+                                <th data-field="solarSystemID" data-sortable="true" data-align="right">rattingRate</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div><!-- /.col-lg-12 -->
+    </div><!-- /.row -->
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> 2 Gates
+                </div>
+                <div class="panel-body">
+                    <table id="table"
+                       data-toggle="table"
+                       data-url="/api/report/index/deadend/2"
+                       data-pagination="true"
+                       data-page-size="50"
+                       data-page-list="[50, 100, 200]"
+                       data-search="true"
+                       data-show-refresh="true"
+                       data-show-toggle="true"
+                       data-striped="true"
+                       data-height="600">
+                        <thead>
+                            <tr>
+                                <th data-field="gatecount" data-sortable="true">gateCount</th>
+                                <th data-field="stationcount" data-sortable="true" data-align="right">stationCount</th>
+                                <th data-field="solarSystemName" data-sortable="true" data-align="right">solarSystemName</th>
+                                <th data-field="regionName" data-sortable="true" data-align="right">regionName</th>
+                                <th data-field="allianceID" data-formatter="allianceIconFormatter" data-width=32px></th>
+                                <th data-field="name" data-sortable="true" data-align="right">alliance</th>
+                                <th data-field="solarSystemID" data-sortable="true" data-align="right">rattingRate</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div><!-- /.col-lg-12 -->
+    </div><!-- /.row -->
+
+
+    <!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+
+{% endblock %}

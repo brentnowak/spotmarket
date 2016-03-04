@@ -1,0 +1,100 @@
+{% from "nav.html" import nav_bar with context %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>{{ title }}</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- D3.js Charts -->
+    <link href="/dist/css/d3.graphs.css" rel="stylesheet">
+    <script src="/dist/js/underscore-min.js"></script>
+    <script src="/dist/js/d3.js"></script>
+    <script src="/dist/js/d3.legend.js"></script>
+
+    <!-- Custom D3.js Pie Charts -->
+    <script src="/dist/js/d3.pie.js"></script>
+
+    <!-- jQuery -->
+    <script src="/dist/js/jquery-2.2.0.min.js"></script>
+
+    <!-- Custom D3.js Graphs -->
+    <script src="/dist/js/d3.graphs.js"></script>
+
+    <!-- Custom D3.js Graphs -->
+    <script src="/dist/js/d3.graphs.json.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="/dist/css/bootstrap-table.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="/dist/js/bootstrap-table.min.js"></script>
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        {{nav_bar(nav)}}
+
+        <!-- Page Content -->
+        {% block content %}{% endblock %}
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="/bower_components/metisMenu/dist/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="/dist/js/sb-admin-2.js"></script>
+
+
+    {% block pagescript %}{% endblock %}
+
+    <!-- Custom D3.js Graphs -->
+    <script src="/dist/js/d3.graphs.js"></script>
+
+    <!-- Custom D3.js Graphs -->
+    <script src="/dist/js/d3.graphs.json.js"></script>
+
+    <!-- Custom Icon Formatting -->
+    <script src="/dist/js/formatter.js"></script>
+
+</body>
+
+</html>

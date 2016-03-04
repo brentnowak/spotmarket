@@ -10,7 +10,7 @@ CREATE TABLE data.mapkills
   "podKills" integer NOT NULL,
   "shipKills" integer NOT NULL,
   "solarSystemID" integer NOT NULL,
-  CONSTRAINT pk_mapkills PRIMARY KEY ("systemkillID")
+  CONSTRAINT pk_mapkills PRIMARY KEY ("timestamp", "factionKills", "podKills", "shipKills", "solarSystemID")
 )
 WITH (
   OIDS=FALSE
@@ -26,3 +26,8 @@ CREATE INDEX idx_mapkills_timestamp
   ON data.mapkills
   USING btree
   ("timestamp" DESC NULLS LAST);
+
+CREATE INDEX idx_mapkills_solarsystemid
+  ON data.mapkills
+  USING btree
+  ("solarSystemID" DESC NULLS LAST);

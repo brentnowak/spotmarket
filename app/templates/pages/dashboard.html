@@ -1,0 +1,90 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{header}}</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-stats"></span> Universe
+                    </div>
+                    <div class="panel-body">
+                        <div class="d3-graph-universe"></div>
+                        <script>
+                            graph({
+                                width: 580,
+                                height: 340,
+                                marginright: 25,
+                                selector: '.d3-graph-universe',
+                                csv: '/dist/data/npckills_universe.csv'
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-stats"></span> Faction Regions
+                    </div>
+                        <div class="panel-body">
+                            <div class="d3-graph-universe-factions"></div>
+                            <script>
+                                graph({
+                                    width: 580,
+                                    height: 340,
+                                    marginright: 105,
+                                    selector: '.d3-graph-universe-factions',
+                                    csv: '/dist/data/npckills_factions.csv'
+                                });
+                            </script>
+                        </div>
+                </div>
+            </div>
+        </div><!-- /.col-lg-12 -->
+    </div><!-- /.row -->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-stats"></span> Jita Jump Traffic
+                    </div>
+                    <div class="panel-body">
+                        Text
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-stats"></span> Golden Route Jump Traffic
+                    </div>
+                    <div class="panel-body">
+                        Text
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.col-lg-12 -->
+    </div><!-- /.row -->
+
+
+    <!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+
+{% endblock %}
