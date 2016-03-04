@@ -7,19 +7,17 @@ spotmarket - EVE Online Market Evaluator
 Sample Images
 ==================
 
-(https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-02-16_dashboard.png)
+![Dashboard](https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-02-16_dashboard.png)
 
-(https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-02-16_sansha_nation.png)
+![NPC Reports](https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-03-01_npc1.png)
 
-(https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-03-01_npc1.png)
+![Moon Reports](https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-03-01_nullsec_1.png)
 
-(https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-03-01_nullsec_1.png)
+![Jump Reports](https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-03-01_tradehubs_1.png)
 
-(https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-03-01_tradehubs_1.png)
+![Moon Ownership](https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-03-01_moons_1.png)
 
-(https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-03-01_moons_1.png)
-
-(https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-03-01_moons_2.png)
+![Moon Details](https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-03-01_moons_2.png)
 
 
 Platform
