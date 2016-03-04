@@ -28,16 +28,24 @@ Sample Images
 
 ![System Logs](https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-03-03_logs_1.png)
 
-
-Platform
+Tested Platform
 ==================
-* OS ubuntu-14.04.3-server-amd64
-* Database PostgreSQL 9.3
+* OS: ubuntu-14.04.3-server-amd64
+* Database: PostgreSQL 9.3
 
-Packages Used:
+External Packages
+==================
 * evelink 0.7.3 (https://github.com/eve-val/evelink)
 * PyCrest (https://github.com/Dreae/PyCrest)
 ``
+
+Stack
+==================
+* Web Server: Flask [http://flask.pocoo.org/](http://flask.pocoo.org/)
+* Charting: D3.js [https://d3js.org/](https://d3js.org/)
+* Statistics and Resampling: pandas [http://pandas.pydata.org/](http://pandas.pydata.org/)  
+* Python 2.7
+* Database: PostgreSQL
 
 API Services
 ==================
