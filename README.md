@@ -5,6 +5,12 @@ spotmarket - EVE Online Market Evaluator
 
 [http://k162space.com/](http://k162space.com/)
 
+There are many projects out there that record historical data from the API and present it to you. 
+
+We want to go a step further and build an analysis platform that can incorporate data from the API and use it to create relationships to fuel predictions.
+ 
+This project is an attempt to aggregate various data sources and present them in a meaningful way in order to make decision about trading, potential targets, and to verify activity levels of various types of gameplay. 
+
 Sample Images
 ==================
 
