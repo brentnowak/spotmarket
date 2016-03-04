@@ -867,7 +867,7 @@ def getlog():
     FROM
       data.logs
     ORDER BY logs."logID" DESC
-    LIMIT 200
+    LIMIT 2000
     '''
     cursor.execute(sql, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)

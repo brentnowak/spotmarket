@@ -2,6 +2,7 @@ spotmarket - EVE Online Market Evaluator
 ==================
 
 [https://github.com/brentnowak/spotmarket](https://github.com/brentnowak/spotmarket)
+
 [http://k162space.com/](http://k162space.com/)
 
 Sample Images
@@ -18,6 +19,8 @@ Sample Images
 ![Moon Ownership](https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-03-01_moons_1.png)
 
 ![Moon Details](https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-03-01_moons_2.png)
+
+![System Logs](https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-03-03_logs_1.png)
 
 
 Platform
