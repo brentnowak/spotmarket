@@ -2,16 +2,34 @@ spotmarket - EVE Online Market Evaluator
 ==================
 
 [https://github.com/brentnowak/spotmarket](https://github.com/brentnowak/spotmarket)
+[http://k162space.com/](http://k162space.com/)
+
+Sample Images
+==================
+
+(https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-02-16_dashboard.png)
+
+(https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-02-16_sansha_nation.png)
+
+(https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-03-01_npc1.png)
+
+(https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-03-01_nullsec_1.png)
+
+(https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-03-01_tradehubs_1.png)
+
+(https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-03-01_moons_1.png)
+
+(https://github.com/brentnowak/spotmarket/blob/master/sampleImages/2016-03-01_moons_2.png)
+
+
+Platform
+==================
+* OS ubuntu-14.04.3-server-amd64
+* Database PostgreSQL 9.3
 
 Packages Used:
 * evelink 0.7.3 (https://github.com/eve-val/evelink)
 * PyCrest (https://github.com/Dreae/PyCrest)
-
-
-Recommended Platform
-==================
-* OS ubuntu-14.04.3-server-amd64
-* Database PostgreSQL 9.3
 ``
 
 API Services
