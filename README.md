@@ -12,6 +12,71 @@ Recommended Platform
 ==================
 * OS ubuntu-14.04.3-server-amd64
 * Database PostgreSQL 9.3
+``
+
+API Services
+==================
+
+**consumer_alliance.py**
+
+Input: XML API.
+
+Output: Populate 'data.alliances' table with list of current Alliances.
+
+**consumer_conquerablestation.py**
+
+Input: XML API.
+
+Output: Populate 'data.conquerablestations' with list of Conquerable Stations.
+
+**consumer_map.py**
+
+Input: XML API.
+
+Output: Populate 'data.mapjumps', 'data.mapkills', and 'data.mapsov' with statistics. 
+
+**consumer_markethistory.py**
+
+Input: CREST API, list of typeIDs from 'data.marketitems' table.
+
+Output: Populate 'data.markethistory' table with market data.
+
+**consumer_siphon.py**
+
+Input: zKillboard API, CREST API
+
+Output: Populate 'data.moonverify' table with a list of CREST verified moons.
+
+Notes: Replace 'user-agent' value with your own custom string.
+
+**consumer_wallet.py *work in progress***
+
+Input: XML API.
+
+Output: Populate 'data.wallet' table with a list of transactions per character.
+
+**consumer_zkillboard.py *work in progress***
+
+
+Input: zKillboard API, Character list from 
+
+Output: Populate 'data.killmails' table with CREST killmails.
+
+
+Report Services
+==================
+
+**report_market.py *work in progress***
+
+Input: Price data from 'data.markethistory' table.
+
+Output: /api/market/ REST Endpoint
+
+**report_npckills.py**
+
+Input: NPC kill data from 'data.mapkills' table.
+
+Output: pandas .csv reports to */app/dist/data/* folder for graphing.
 
 
 Install Notes
@@ -104,49 +169,13 @@ rm postgres-latest.dmp
 ```shell
 vim config.ini.change
 mv config.ini.change change.ini
-```
 
-**API Services**
-consumer_alliance.py
-Input: XML API.
-Output: Populate 'data.alliances' table with list of current Alliances.
 
-consumer_conquerablestation.py
-Input: XML API.
-Output: Populate 'data.conquerablestations' with list of Conquerable Stations.
+Web Services
+==================
 
-consumer_map.py
-Input: XML API.
-Output: Populate 'data.mapjumps', 'data.mapkills', and 'data.mapsov' with statistics. 
+**spotmarket_flask.py**
 
-consumer_markethistory.py
-Input: CREST API, list of typeIDs from 'data.marketitems' table.
-Output: Populate 'data.markethistory' table with market data.
-
-consumer_siphon.py
-Input: zKillboard API, CREST API
-Output: Populate 'data.moonverify' table with a list of CREST verified moons.
-Notes: Replace 'user-agent' value with your own custom string.
-
-consumer_wallet.py *work in progress*
-Input: XML API.
-Output: Populate 'data.wallet' table with a list of transactions per character.
-
-consumer_zkillboard.py *work in progress*
-Input: zKillboard API, Character list from 
-Output: Populate 'data.killmails' table with CREST killmails.
-
-**Report Services**
-report_market.py *work in progress*
-Input: Price data from 'data.markethistory' table.
-Output: /api/market/ REST Endpoint
-
-report_npckills.py
-Input: NPC kill data from 'data.mapkills' table.
-Output: pandas .csv reports to */app/dist/data/* folder for graphing.
-
-**Web Services**
-spotmarket_flask.py
 Output: HTTP service bound to *localhost:80*.
 
 **Services crontab**
@@ -162,12 +191,14 @@ python spotmarket_flask.py &
 ```
 Browse to localhost:80
 
+
 License Info
 ==================
 
 Leverages public data sources and remains open source to comply with EULAs from [CCP](https://developers.eveonline.com/resource/license-agreement) and [eve-kill/zkillboard](https://beta.eve-kill.net/information/legal/)
 
 EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide. All other trademarks are the property of their respective owners. EVE Online, the EVE logo, EVE and all associated logos and designs are the intellectual property of CCP hf. All artwork, screenshots, characters, vehicles, storylines, world facts or other recognizable features of the intellectual property relating to these trademarks are likewise the intellectual property of CCP hf. CCP hf. has granted permission to EVSCO to use EVE Online and all associated logos and designs for promotional and information purposes on its website but does not endorse, and is not in any way affiliated with, EVSCO. CCP is in no way responsible for the content on or functioning of this website, nor can it be liable for any damage arising from the use of this website.
+
 
 MIT License
 ==================
