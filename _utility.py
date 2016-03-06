@@ -271,7 +271,7 @@ def insertjumpsrecords(jumps_data, jumpstimestamp):
 
 
 #
-# Usage         consumer_alliance.py
+# Usage         consumer_alliance.sh
 # Input         alliance_data
 # Output        'alliances' Database insert
 #
