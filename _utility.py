@@ -1982,3 +1982,32 @@ def insertkillmailrecord(killID, killHash, killData):
         conn.commit()
         insertcount += 1
     return insertcount
+
+
+#############################
+# Process - Update Moons
+#############################
+
+def getverifiedmoons():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT "moonID", "typeID" FROM data."moonverify"s'''
+    cursor.execute(sql, )
+    result = cursor.fetchall()
+    return result
+
+
+def updatemoonmineralstable(moonID, typeID):
+    insertcount = 0
+    try:
+        conn = psycopg2.connect(conn_string)
+        cursor = conn.cursor()
+        sql = 'INSERT INTO data."moonminerals" ("moonID", "typeID") VALUES (%s, %s)'
+        data = (moonID, typeID, )
+        cursor.execute(sql, data, )
+    except psycopg2.IntegrityError:
+        conn.rollback()
+    else:
+        conn.commit()
+        insertcount += 1
+    return insertcount
