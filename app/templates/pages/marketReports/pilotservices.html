@@ -1,0 +1,135 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{header}}</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> PLEX
+                </div>
+                    <div class="panel-body">
+                        <table data-toggle="table"
+                               data-sort-name="timestamp"
+                               data-sort-order="desc"
+                               data-striped="true"
+                               data-url="/api/typeName/29668"
+                               data-height="300">
+                        <thead>
+                            <tr>
+                            <th data-field="timestamp" data-sortable="true">timestamp</th>
+                            <th data-field="volume" data-sortable="true" data-align="right">volume</th>
+                            <th data-field="orderCount" data-sortable="true" data-align="right">orderCount</th>
+                            <th data-field="avgPrice" data-sortable="true" data-formatter="numberDec" data-align="right">avgPrice</th>
+                            </tr>
+                        </thead>
+                        </table>
+                        <div class="d3-graph-price-29668"></div>
+                        <script>
+                            graphPrice({ /* PLEX */
+                                width: 670,
+                                height: 340,
+                                marginright: 50,
+                                marginleft: 80,
+                                selector: '.d3-graph-price-29668',
+                                json: '/api/market/avgprice/29668'
+                            });
+                        </script>
+                    </div>
+            </div>
+        </div><!-- /.col-lg-12 -->
+    </div><!-- /.row -->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Skill Extractor
+                </div>
+                    <div class="panel-body">
+                        <table data-toggle="table"
+                               data-sort-name="timestamp"
+                               data-sort-order="desc"
+                               data-striped="true"
+                               data-url="/api/typeName/40519"
+                               data-height="300">
+                        <thead>
+                            <tr>
+                            <th data-field="timestamp" data-sortable="true">timestamp</th>
+                            <th data-field="volume" data-sortable="true" data-align="right">volume</th>
+                            <th data-field="orderCount" data-sortable="true" data-align="right">orderCount</th>
+                            <th data-field="avgPrice" data-sortable="true" data-formatter="numberDec" data-align="right">avgPrice</th>
+                            </tr>
+                        </thead>
+                        </table>
+                        <div class="d3-graph-price-40519"></div>
+                        <script>
+                            graphPrice({ /* Skill Extractor */
+                                width: 670,
+                                height: 340,
+                                marginright: 50,
+                                marginleft: 80,
+                                selector: '.d3-graph-price-40519',
+                                json: '/api/market/avgprice/40519'
+                            });
+                        </script>
+                    </div>
+            </div>
+        </div><!-- /.col-lg-12 -->
+    </div><!-- /.row -->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Skill Injector
+                </div>
+                    <div class="panel-body">
+                        <table data-toggle="table"
+                               data-sort-name="timestamp"
+                               data-sort-order="desc"
+                               data-striped="true"
+                               data-url="/api/typeName/40520"
+                               data-height="300">
+                        <thead>
+                            <tr>
+                            <th data-field="timestamp" data-sortable="true">timestamp</th>
+                            <th data-field="volume" data-sortable="true" data-align="right">volume</th>
+                            <th data-field="orderCount" data-sortable="true" data-align="right">orderCount</th>
+                            <th data-field="avgPrice" data-sortable="true" data-formatter="numberDec" data-align="right">avgPrice</th>
+                            </tr>
+                        </thead>
+                        </table>
+                        <div class="d3-graph-price-40520"></div>
+                        <script>
+                            graphPrice({ /* Skill Extractor */
+                                width: 670,
+                                height: 340,
+                                marginright: 50,
+                                marginleft: 80,
+                                selector: '.d3-graph-price-40520',
+                                json: '/api/market/avgprice/40520'
+                            });
+                        </script>
+                    </div>
+            </div>
+        </div><!-- /.col-lg-12 -->
+    </div><!-- /.row -->
+
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+
+{% endblock %}

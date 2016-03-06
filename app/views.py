@@ -130,8 +130,20 @@ def regionreport(regionID):
 #
 @app.route('/report/jump/tradehubs')
 def jumpreport_tradehubs():
-    return render_template('pages/jumpReports/tradehubs.html', title="Trade Hubs", header="Trade Hubs", nav="Trade Hubs")
+    return render_template('pages/jumpReports/tradehubs.html',
+                           title="Trade Hubs",
+                           header="Trade Hubs",
+                           nav="Trade Hubs")
 
+#
+# marketReports
+#
+@app.route('/report/market/pilotservices/')
+def marketreport_pilotservices():
+    return render_template('pages/marketReports/pilotservices.html',
+                           title="Pilot Services",
+                           header="Pilot Services",
+                           nav="Pilot Services")
 
 #
 # moonReports
@@ -160,8 +172,9 @@ def moonreport_r32():
 def moonreport_r64():
     return render_template('pages/moonReports/r64.html', title="Rarity 64", header="Rarity 64", nav="Rarity 64")
 
-
+#
 # Map
+#
 @app.route('/map/sovereignty')
 def map_sovereignty():
     return render_template('pages/mapReports/sovereignty.html', title="Sovereignty", header="Sovereignty")

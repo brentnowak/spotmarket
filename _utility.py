@@ -61,7 +61,7 @@ def regionName(regionID):
 
 #
 # Input     typeID
-# Output    typeName
+# Output    typeName as JSON
 #
 def typeName(typeID):
     conn = psycopg2.connect(conn_string)
@@ -78,6 +78,23 @@ def typeName(typeID):
         return "No Data"
     else:
         return results
+
+#
+# Input     typeID
+# Output    typeName
+#
+def typeName2(typeID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      "invTypes"."typeName"
+    FROM
+      public."invTypes"
+      WHERE "invTypes"."typeID" = %s'''
+    data = (typeID, )
+    cursor.execute(sql, data, )
+    results = cursor.fetchone()
+    return results
 
 
 #
@@ -1766,6 +1783,7 @@ def mapjumps_solarsystemID(solarSystemID):
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','shipJumps','solarSystemName'])
     cursor.close()
     df = pd.pivot_table(df,index='timestamp',columns='solarSystemName',values='shipJumps')
+    df = df.resample("4H")
     return df.reset_index().to_json(orient='records',date_format='iso')
 
 
@@ -1787,6 +1805,7 @@ def mapjumps_tradehubs():
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','shipJumps','solarSystemName'])
     cursor.close()
     df = pd.pivot_table(df,index='timestamp',columns='solarSystemName',values='shipJumps')
+    df = df.resample("12H")
     return df.reset_index().to_json(orient='records',date_format='iso')
 
 
@@ -1815,6 +1834,7 @@ def mapkills_jumpsbyregion(regionID):
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','SUM_shipJumps','regionName'])
     cursor.close()
     df = pd.pivot_table(df,index='timestamp',columns='regionName',values='SUM_shipJumps')
+    df = df.resample("12H")
     return df.reset_index().to_json(orient='records',date_format='iso')
 
 
@@ -1843,6 +1863,7 @@ def mapkills_npckillsbyregion(regionID):
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','SUM_factionKills','regionName'])
     cursor.close()
     df = pd.pivot_table(df,index='timestamp',columns='regionName',values='SUM_factionKills')
+    df = df.resample("12H")
     return df.reset_index().to_json(orient='records',date_format='iso')
 
 
@@ -1871,6 +1892,7 @@ def mapkills_shipkillsbyregion(regionID):
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','SUM_shipKills','regionName'])
     cursor.close()
     df = pd.pivot_table(df,index='timestamp',columns='regionName',values='SUM_shipKills')
+    df = df.resample("12H")
     return df.reset_index().to_json(orient='records',date_format='iso')
 
 
@@ -1899,6 +1921,7 @@ def mapkills_podkillsbyregion(regionID):
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','SUM_podKills','regionName'])
     cursor.close()
     df = pd.pivot_table(df,index='timestamp',columns='regionName',values='SUM_podKills')
+    df = df.resample("12H")
     return df.reset_index().to_json(orient='records',date_format='iso')
 
 

@@ -17,9 +17,9 @@ import requests
 start_time = time.time()
 
 pageNum = 1
-while pageNum < 30:
+while pageNum <= 1:
     url = 'https://zkillboard.com/api/losses/shipID/33477/orderDirection/desc/'
-    headers = {'user-agent': 'replaceme'}
+    headers = {'user-agent': 'github.com/brentnowak/spotmarket'}
     r = requests.get(url, headers=headers)
 
     service = "consumer_siphon.py"
