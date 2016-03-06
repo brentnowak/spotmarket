@@ -80,6 +80,14 @@ def faction_report_sansha():
 def faction_report_serpentis():
     return render_template('pages/factionReports/serpentis.html', title="Serpentis", header="Serpentis", nav="Serpentis")
 
+@app.route('/report/faction/mordu')
+def faction_report_mordu():
+    return render_template('pages/factionReports/mordu.html', title="Mordu's Legion Command", header="Mordu's Legion Command", nav="Mordu's Legion Command")
+
+@app.route('/report/faction/sisters')
+def faction_report_sisters():
+    return render_template('pages/factionReports/sisters.html', title="Servant Sisters of EVE", header="Servant Sisters of EVE", nav="Servant Sisters of EVE")
+
 
 #
 #   securityReport

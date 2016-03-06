@@ -141,34 +141,6 @@ var svg = d3.select(options.selector).append("svg")
 	});
 }
 
-graphPrice({ /* Garmur */
-    width: 580,
-    height: 340,
-    marginright: 50,
-    marginleft: 80,
-    selector: '.d3-graph-price-33816',
-    json: '/api/market/avgprice/33816'
-});
-
-graphPrice({ /* Orthrus */
-    width: 580,
-    height: 340,
-    marginright: 50,
-    marginleft: 80,
-    selector: '.d3-graph-price-33818',
-    json: '/api/market/avgprice/33818'
-});
-
-graphPrice({ /* Barghest */
-    width: 580,
-    height: 340,
-    marginright: 50,
-    marginleft: 80,
-    selector: '.d3-graph-price-33820',
-    json: '/api/market/avgprice/33820'
-});
-
-
 function graphJumps(options) {
 
 	options = _.extend({
