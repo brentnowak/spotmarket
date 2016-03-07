@@ -46,17 +46,14 @@ pd.set_option('display.width', desired_width)
 # Input     regionID
 # Output    regionName
 #
-def regionName(regionID):
+def getregionName(regionID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = 'SELECT "mapRegions"."regionName" FROM public."mapRegions" WHERE "mapRegions"."regionID" = %s'
     data = (regionID, )
     cursor.execute(sql, data, )
-    results = json.dumps(cursor.fetchone(), indent=2, default=date_handler)
-    if len(results) < 1:     # Handle a empty table
-        return "No Data"
-    else:
-        return results
+    results = cursor.fetchone()
+    return results[0]
 
 
 #
@@ -1804,7 +1801,7 @@ def mapjumps_solarsystemID(solarSystemID):
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','shipJumps','solarSystemName'])
     cursor.close()
     df = pd.pivot_table(df,index='timestamp',columns='solarSystemName',values='shipJumps')
-    df = df.resample("4H")
+    df = df.resample("12H")
     return df.reset_index().to_json(orient='records',date_format='iso')
 
 
