@@ -3,9 +3,9 @@ from app import app
 from _utility import *
 
 
-#
+#############################
 # Main pages
-#
+#############################
 @app.route('/login.html')
 def login():
     return render_template('pages/login.html', title="Login")
@@ -120,6 +120,10 @@ def indexreport_deadend():
                            nav="Dead End Systems",
                            systemList=json.loads(getdeadendsystems(1)))
 
+@app.route('/report/index/pirateships')
+def indexreport_pirateships():
+    return render_template('pages/indexReports/pirateships.html', title="Pirate Ships", header="Pirate Ships", nav="Pirate Ships")
+
 
 #
 # regionReports
@@ -192,9 +196,9 @@ def map_conquerablestations():
     return render_template('pages/mapReports/conquerablestations.html', title="Conquerable Stations", header="Conquerable Stations")
 
 
-#
+#############################
 # API
-#
+#############################
 @app.route('/api/toprattingevents')
 def api_toprattingevents():
     return toprattingevents()
@@ -250,7 +254,7 @@ def api_gettoprattingsystemss_highsec():
 # System
 @app.route('/api/system/log')
 def api_systemlog():
-    return getlog()
+    return getsystemlogs()
 
 @app.route('/api/system/countmapkills')
 def api_systemcountmapkills():
@@ -341,6 +345,15 @@ def api_getdeadendsystems(gateCountLimit):
 @app.route('/api/report/index/sovchanges')
 def indexreport_sovchanges():
     return getsoveventsumbyday()
+
+@app.route('/api/report/index/pirateships/<shipclass>')
+def indexreport_indexpirateships(shipclass):
+    if shipclass == "battleship":
+        return getindexpirateships(17918, 17740, 17736, 17738, 17920)
+    if shipclass == "cruiser":
+        return getindexpirateships(17720, 17922, 17715, 17718, 17722)
+    if shipclass == "frigate":
+        return getindexpirateships(17932, 17926, 17930, 17924, 17928)
 
 # Map
 @app.route('/api/map/conquerablestations')

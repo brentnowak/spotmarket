@@ -1,0 +1,85 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{header}}</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-bookmark"></span> Index Definition
+                </div>
+            </div>
+            <h4>Formula</h4>
+            <code>(markethistory.volume * markethistory."avgPrice" * markethistory."orderCount") / 30,000,000,000 AS shipIndex</code>
+            <h4>Resample</h4>
+            <code>1 week</code>
+
+            <p></p>
+            <br>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Battleships
+                </div>
+            </div>
+            <div class="d3-graph-index-pirate-battleship"></div>
+            <script>
+                graphJumps({ /* Battleships */
+                    width: 720,
+                    height: 340,
+                    ylegend: 'battleships',
+                    selector: '.d3-graph-index-pirate-battleship',
+                    json: '/api/report/index/pirateships/battleship'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Cruisers
+                </div>
+            </div>
+            <div class="d3-graph-index-pirate-cruiser"></div>
+            <script>
+                graphJumps({ /* Cruisers */
+                    width: 720,
+                    height: 340,
+                    ylegend: 'cruisers',
+                    selector: '.d3-graph-index-pirate-cruiser',
+                    json: '/api/report/index/pirateships/cruiser'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Frigates
+                </div>
+            </div>
+            <div class="d3-graph-index-pirate-frigate"></div>
+            <script>
+                graphJumps({ /* Frigates */
+                    width: 720,
+                    height: 340,
+                    ylegend: 'frigates',
+                    selector: '.d3-graph-index-pirate-frigate',
+                    json: '/api/report/index/pirateships/frigate'
+                });
+            </script>
+
+        </div><!-- /.col-lg-12 -->
+    </div><!-- /.row -->
+
+</div>
+<!-- /#page-wrapper -->
+
+{% endblock %}

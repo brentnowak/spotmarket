@@ -876,11 +876,15 @@ def date_handler(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
 
 
-def getlog():
+def getsystemlogs():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      *
+      to_char(logs."timestamp", 'YYYY-MM-dd HH:mm:ss') AS timestamp,
+      logs."logID",
+      logs.service,
+      logs.severity,
+      logs.detail
     FROM
       data.logs
     ORDER BY logs."logID" DESC
@@ -2028,3 +2032,27 @@ def updatemoonmineralstable(moonID, typeID):
         conn.commit()
         insertcount += 1
     return insertcount
+
+#############################
+# indexReports
+#############################
+
+def getindexpirateships(ship1, ship2, ship3, ship4, ship5):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+          (markethistory.volume * markethistory."avgPrice" * markethistory."orderCount") / 30000000000 AS shipIndex,
+          markethistory."timestamp"
+        FROM
+          data.markethistory
+        WHERE
+          markethistory."typeID" IN (%s, %s, %s, %s, %s)
+        GROUP BY shipIndex, markethistory."timestamp"
+        ORDER BY markethistory."timestamp" ASC'''
+    data = (ship1, ship2, ship3, ship4, ship5, )
+    cursor.execute(sql, data, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['shipindex','timestamp'])
+    cursor.close()
+    df = df.groupby(['timestamp']).mean()
+    df = df.resample("1W")
+    return df.reset_index().to_json(orient='records',date_format='iso')
