@@ -338,6 +338,10 @@ def api_moonmineralsbyallalliance():
 def api_getdeadendsystems(gateCountLimit):
     return getdeadendsystems(gateCountLimit)
 
+@app.route('/api/report/index/sovchanges')
+def indexreport_sovchanges():
+    return getsoveventsumbyday()
+
 # Map
 @app.route('/api/map/conquerablestations')
 def api_conquerablestations():

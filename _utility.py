@@ -1433,6 +1433,23 @@ def getsovevents():
         return results
 
 
+def getsoveventsumbyday():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''
+    SELECT date_trunc('day', timestamp) AS timestamp,
+        COUNT(*) AS sovCount
+        FROM data.mapsov
+        WHERE timestamp >= DATE('2016-02-03')
+        GROUP BY date_trunc('day', timestamp)
+        ORDER BY timestamp DESC'''
+    cursor.execute(sql, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','sovcount'])
+    cursor.close()
+    df = df.set_index(['timestamp'])
+    return df.reset_index().to_json(orient='records',date_format='iso')
+
+
 #############################
 # regionReport
 #############################
