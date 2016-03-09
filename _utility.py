@@ -95,6 +95,24 @@ def typeName2(typeID):
 
 
 #
+# Input     moonName
+# Output    moonID
+#
+def getmoonIDfromName(typeID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      "mapDenormalize"."itemID"
+    FROM
+      public."mapDenormalize"
+    WHERE "mapDenormalize"."itemName" = %s'''
+    data = (typeID, )
+    cursor.execute(sql, data, )
+    results = cursor.fetchone()
+    return results[0]
+
+
+#
 # Input     regionID
 # Output    dataframe of SUM_factionKills grouped by timestamp
 #
