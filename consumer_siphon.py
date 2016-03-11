@@ -64,7 +64,8 @@ while pageNum <= 1:
                 moonID = result[3]
                 print(str(solarSystemID) + " : " + typeName + " - " + str(moonID))
                 print("Kill location: " + str(killx), str(killy), str(killz))
-                moonInsertCount += insertmoonverifyrecord(moonID, killID, typeID)
+                if insertmoonrecordverifygroup(typeID) == 501: #  Only moon minerals
+                    moonInsertCount += insertmoonverifyrecord(moonID, killID, typeID)
 
     timestamp = arrow.get() # Get arrow object
     timestamp = timestamp.timestamp # Get timestamp of arrow object

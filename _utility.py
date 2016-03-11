@@ -2004,6 +2004,20 @@ def insertmoonverifyrecord(moonID, killID, typeID):
     return insertcount
 
 
+def insertmoonrecordverifygroup(typeID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      "invTypes"."marketGroupID"
+    FROM
+      public."invTypes"
+    WHERE "invTypes"."typeID" = %s'''
+    data = (typeID, )
+    cursor.execute(sql, data, )
+    result = cursor.fetchone()
+    return result[0]
+
+
 def insertkillmailrecord(killID, killHash, killData):
     insertcount = 0
     conn = psycopg2.connect(conn_string)
@@ -2059,10 +2073,19 @@ def insertkillmailrecord(killID, killHash, killData):
 # Process - Update Moons
 #############################
 
-def getverifiedmoons():
+def getverifiedmoonscrest():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT "moonID", "typeID" FROM data."moonverify"'''
+    cursor.execute(sql, )
+    result = cursor.fetchall()
+    return result
+
+
+def getverifiedmoonsevemoons():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT "moonID", "typeID" FROM data."moonevemoons"'''
     cursor.execute(sql, )
     result = cursor.fetchall()
     return result
