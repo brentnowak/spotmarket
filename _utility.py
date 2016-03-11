@@ -2106,3 +2106,20 @@ def getindexpirateships(ship1, ship2, ship3, ship4, ship5):
     df = df.groupby(['timestamp']).mean()
     df = df.resample("1W")
     return df.reset_index().to_json(orient='records',date_format='iso')
+
+
+#############################
+# consumer_zkillboard.py
+#############################
+
+def getzkbships():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      killmailsitems."typeID"
+    FROM
+      data.killmailsitems
+     WHERE killmailsitems.enabled = 1'''
+    cursor.execute(sql, )
+    result = cursor.fetchall()
+    return result
