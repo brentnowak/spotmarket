@@ -2006,18 +2006,53 @@ def insertmoonverifyrecord(moonID, killID, typeID):
 
 def insertkillmailrecord(killID, killHash, killData):
     insertcount = 0
-    try:
-        conn = psycopg2.connect(conn_string)
-        cursor = conn.cursor()
-        sql = 'INSERT INTO data."killmails" ("killID", "killHash", "killData") VALUES (%s, %s, %s)'
-        data = (killID, killHash, killData, )
-        cursor.execute(sql, data, )
-    except psycopg2.IntegrityError:
-        conn.rollback()
-    else:
-        conn.commit()
-        insertcount += 1
-    return insertcount
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+          killmails."killID",
+          killmails."killHash",
+          killmails."killData"
+        FROM
+          data.killmails
+        WHERE killmails."killID" = %s AND
+        killmails."killHash" = %s'''
+    data = (killID, killHash, )
+    cursor.execute(sql, data, )
+    results = cursor.fetchone()
+
+    if results == None:  # No killmail, insert all records
+        try:
+            conn = psycopg2.connect(conn_string)
+            cursor = conn.cursor()
+            sql = '''INSERT INTO data."killmails"
+                ("killID", "killHash", "killData")
+                VALUES (%s, %s, %s)'''
+            data = (killID, killHash, killData, )
+            cursor.execute(sql, data, )
+        except psycopg2.IntegrityError:
+            conn.rollback()
+        else:
+            conn.commit()
+            insertcount += 1
+        return insertcount
+
+    if results[2] == None:  # killmail without json record, insert json
+        try:
+            conn = psycopg2.connect(conn_string)
+            cursor = conn.cursor()
+            sql = '''UPDATE
+                data."killmails"
+                SET "killData" = %s
+                WHERE killmails."killID" = %s AND
+                killmails."killHash" = %s'''
+            data = (killData, killID, killHash)
+            cursor.execute(sql, data, )
+        except psycopg2.IntegrityError:
+            conn.rollback()
+        else:
+            conn.commit()
+    conn.close()
+    return 0  # killmail exists, return insertCount 0
 
 
 #############################
@@ -2027,7 +2062,7 @@ def insertkillmailrecord(killID, killHash, killData):
 def getverifiedmoons():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    sql = '''SELECT "moonID", "typeID" FROM data."moonverify"s'''
+    sql = '''SELECT "moonID", "typeID" FROM data."moonverify"'''
     cursor.execute(sql, )
     result = cursor.fetchall()
     return result

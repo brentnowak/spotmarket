@@ -123,7 +123,7 @@ apt-get install python-pip
 apt-get install git
 pip install ConfigParser
 pip install psycopg2
-pip install requests (2.9.1+)
+pip install requests --upgrade (2.9.1+)
 pip install evelink (XML API)
 pip install pycrest (CREST API)
 pip install pandas (1GB RAM+)
