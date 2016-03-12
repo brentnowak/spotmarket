@@ -13,6 +13,10 @@
 
 from _utility import *
 import requests
+import requests.packages.urllib3
+
+requests.packages.urllib3.disable_warnings()
+#  Suppress InsecurePlatformWarning messages
 
 start_time = time.time()
 
