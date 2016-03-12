@@ -20,7 +20,8 @@ from psycopg2.extras import RealDictCursor
 #############################
 
 config = ConfigParser.ConfigParser()
-config.read(["/home/ubuntu/spotmarket/config.ini"])
+config.read(["config.ini"])
+#config.read(["/home/ubuntu/spotmarket/config.ini"])
 password = config.get("DATABASE", "password")
 user = config.get("DATABASE", "user")
 host = config.get("DATABASE", "host")
@@ -1311,7 +1312,7 @@ def rattinghistorybysystem(solarSystemID):
 # Settings
 #############################
 
-def databasemarketitems():
+def getmarketitems():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
@@ -1336,6 +1337,31 @@ def databasemarketitems():
     else:
         return results
 
+
+def getzkillboarditems():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''SELECT
+      killmailsitems."typeID",
+      "invTypes"."typeName",
+      "invMarketGroups"."marketGroupName",
+      killmailsitems.enabled,
+      killmailsitems."importResult",
+      killmailsitems."importTimestamp"
+    FROM
+      data.killmailsitems,
+      public."invTypes",
+      public."invMarketGroups"
+    WHERE
+      killmailsitems."typeID" = "invTypes"."typeID" AND
+      "invTypes"."marketGroupID" = "invMarketGroups"."marketGroupID"
+    '''
+    cursor.execute(sql, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
 
 
 #############################

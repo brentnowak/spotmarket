@@ -277,12 +277,16 @@ def api_systemcountmarkethistory():
 
 # Settings
 @app.route('/api/marketitems')
-def api_marketitems():
-    return databasemarketitems()
+def api_getmarketitems():
+    return getmarketitems()
 
 @app.route('/api/characters')
-def api_characters():
+def api_getcharacters():
     return getcharacters()
+
+@app.route('/api/zkillboarditems')
+def api_getzkillboarditems():
+    return getzkillboarditems()
 
 
 # Wallet

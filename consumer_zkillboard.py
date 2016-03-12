@@ -1,5 +1,5 @@
 from _utility import *
-from requests.exceptions import ConnectionError
+from requests.exceptions import ConnectionError, ChunkedEncodingError
 import requests.packages.urllib3
 
 requests.packages.urllib3.disable_warnings()
@@ -29,7 +29,7 @@ for ship in ships:
         print("[" + str(gettypeName(ship[0])) + "][count:" + str(killmailInsertCount) + "] " + crestURL) #  Feedback
         try:
             crestKill = requests.get(crestURL)
-        except ConnectionError as e:
+        except (ConnectionError, ChunkedEncodingError) as e:
             print(e)
         else:
             data = json.loads(crestKill.text)

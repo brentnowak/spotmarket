@@ -11,13 +11,24 @@
             </div>
             <!-- /.col-lg-12 -->
         </div>
+        <!-- /.row -->
 
-        <div class="col-md-12">
-            <div class="panel panel-yellow">
-                <div class="panel-heading">
-                    <span class="glyphicon glyphicon-file"></span> Characters
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-file"></span> Characters
+                    </div>
                 </div>
-                <table data-toggle="table" data-sort-name="walletID" data-sort-order="asc" data-show-refresh="true" data-show-toggle="true" data-striped="true" data-search="true" data-url="/api/characters" data-height="400">
+                <table data-toggle="table"
+                       data-sort-name="walletID"
+                       data-sort-order="asc"
+                       data-show-refresh="true"
+                       data-show-toggle="true"
+                       data-striped="true"
+                       data-search="true"
+                       data-url="/api/characters"
+                       data-height="400">
                 <thead>
                     <tr>
                         <th data-field="characterID" data-formatter="characterIconFormatter" data-width=32px></th>
@@ -37,12 +48,59 @@
             </div>
         </div>
 
-        <div class="col-md-12">
-            <div class="panel panel-yellow">
-                <div class="panel-heading">
-                    <span class="glyphicon glyphicon-file"></span> Market Watch
+        <p></p>
+        <br>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-file"></span> zKillboard Watch
+                    </div>
                 </div>
-                <table data-toggle="table" data-sort-name="logID" data-sort-order="desc" data-show-refresh="true" data-show-toggle="true" data-striped="true" data-search="true" data-url="/api/marketitems" data-height="600">
+                <table data-toggle="table"
+                       data-sort-name="logID"
+                       data-sort-order="desc"
+                       data-show-refresh="true"
+                       data-show-toggle="true"
+                       data-striped="true"
+                       data-search="true"
+                       data-url="/api/zkillboarditems"
+                       data-height="600">
+                <thead>
+                    <tr>
+                        <th data-field="typeID" data-formatter="invTypeIconFormatter" data-width=32px></th>
+                        <th data-field="typeID" data-sortable="true" data-align="right">typeID</th>
+                        <th data-field="typeName" data-sortable="true" data-align="right">typeName</th>
+                        <th data-field="marketGroupName" data-sortable="true" data-align="right">marketGroupName</th>
+                        <th data-field="enabled" data-sortable="true" data-align="right">enabled</th>
+                        <th data-field="importResult" data-sortable="true" data-align="right">importResult</th>
+                        <th data-field="importTimestamp" data-sortable="true" data-align="right">importTimestamp</th>
+                    </tr>
+                </thead>
+                </table>
+            </div>
+        </div>
+
+        <p></p>
+        <br>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-file"></span> Market Watch
+                    </div>
+                </div>
+                <table data-toggle="table"
+                       data-sort-name="logID"
+                       data-sort-order="desc"
+                       data-show-refresh="true"
+                       data-show-toggle="true"
+                       data-striped="true"
+                       data-search="true"
+                       data-url="/api/marketitems"
+                       data-height="600">
                 <thead>
                     <tr>
                         <th data-field="typeID" data-formatter="invTypeIconFormatter" data-width=32px></th>
