@@ -2172,3 +2172,14 @@ def getzkbships():
     cursor.execute(sql, )
     result = cursor.fetchall()
     return result
+
+def setzkbshipenable(typeID, enabled):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''UPDATE data.killmailsitems
+        SET enabled = %s
+        WHERE killmailsitems."typeID" = %s'''
+    data = (enabled, typeID, )
+    cursor.execute(sql, data, )
+    conn.close()
+    return 0

@@ -36,8 +36,10 @@ for ship in ships:
 
             killmailInsertCount += insertkillmailrecord(killID, killHash, crestKill.text)
 
-    timestamp = arrow.get() # Get arrow object
-    timestamp = timestamp.timestamp # Get timestamp of arrow object
+    timestamp = arrow.get()  # Get arrow object
+    timestamp = timestamp.timestamp  # Get timestamp of arrow object
 
     detail = "[zkb][typeID:" + str(ship[0]) + "] insert " + str(killmailInsertCount) + " @ " + str(round(killmailInsertCount/(time.time() - start_time), 3)) + " rec/sec"
     insertlog_timestamp(service, 0, detail, timestamp)
+
+    setzkbshipenable(ship[0], 0)  # Successful API sets enabled to false
