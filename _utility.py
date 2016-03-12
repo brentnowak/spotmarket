@@ -20,7 +20,7 @@ from psycopg2.extras import RealDictCursor
 #############################
 
 config = ConfigParser.ConfigParser()
-config.read(["config.ini"])
+config.read(["/home/ubuntu/spotmarket/config.ini"])
 password = config.get("DATABASE", "password")
 user = config.get("DATABASE", "user")
 host = config.get("DATABASE", "host")
