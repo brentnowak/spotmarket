@@ -1,5 +1,9 @@
 from _utility import *
 from requests.exceptions import ConnectionError
+import requests.packages.urllib3
+
+requests.packages.urllib3.disable_warnings()
+#  Suppress InsecurePlatformWarning messages
 
 #############################
 #
