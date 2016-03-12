@@ -39,7 +39,7 @@ def main():
 
     typeIDs = getmarketrecords()
     for typeID in typeIDs:
-        print(str(typeID[0]) + " " + str(gettypeName(typeID[0])))
+        print("[regionID:10000002][typeID:" + str(typeID[0]) + "]" + str(gettypeName(typeID[0])) + "]") # TODO cleanup on output
         getmarkethistory(10000002, typeID[0])
 
 
