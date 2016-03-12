@@ -355,11 +355,15 @@ def indexreport_sovchanges():
 @app.route('/api/report/index/pirateships/<shipclass>')
 def indexreport_indexpirateships(shipclass):
     if shipclass == "battleship":
-        return getindexpirateships(17918, 17740, 17736, 17738, 17920)
+        return getindextypeids((17918, 17740, 17736, 17738, 17920))
     if shipclass == "cruiser":
-        return getindexpirateships(17720, 17922, 17715, 17718, 17722)
+        return getindextypeids((17720, 17922, 17715, 17718, 17722))
     if shipclass == "frigate":
-        return getindexpirateships(17932, 17926, 17930, 17924, 17928)
+        return getindextypeids((17932, 17926, 17930, 17924, 17928))
+    if shipclass == "sisters":
+        return getindextypeids((33468, 33470, 33472))
+    if shipclass == "mordu":
+        return getindextypeids((33816, 33818, 33820))
 
 # Map
 @app.route('/api/map/conquerablestations')

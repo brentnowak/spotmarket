@@ -77,6 +77,7 @@ def typeName(typeID):
     else:
         return results
 
+
 #
 # Input     typeID
 # Output    typeName
@@ -923,6 +924,7 @@ def insertlog(service, severity, detail, timestamp):
     conn.commit()
     return 0
 
+
 def insertlog_timestamp(service, severity, detail, timestamp):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
@@ -1478,7 +1480,7 @@ def getsovevents():
         return results
 
 
-def getsoveventsumbyday():
+def getsoveventsumbyday():  # TODO remove hard coded date start, scrape Dotlan for sov history
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''
@@ -1596,7 +1598,7 @@ def gettoprattingbyregion(regionID):
 # moonReport
 #############################
 
-def getmoonmineralsbyregion(regionID):
+def getmoonmineralsbyregion(regionID):  # TODO change join to return results when no sov exists
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
@@ -2136,21 +2138,21 @@ def updatemoonmineralstable(moonID, typeID):
 # indexReports
 #############################
 
-def getindexpirateships(ship1, ship2, ship3, ship4, ship5):
+def getindextypeids(typeIDlist):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-          (markethistory.volume * markethistory."avgPrice" * markethistory."orderCount") / 30000000000 AS shipIndex,
+          (markethistory.volume * markethistory."avgPrice" * markethistory."orderCount") / 30000000000 AS indexValue,
           markethistory."timestamp"
         FROM
           data.markethistory
         WHERE
-          markethistory."typeID" IN (%s, %s, %s, %s, %s)
-        GROUP BY shipIndex, markethistory."timestamp"
+          markethistory."typeID" IN %s
+        GROUP BY indexValue, markethistory."timestamp"
         ORDER BY markethistory."timestamp" ASC'''
-    data = (ship1, ship2, ship3, ship4, ship5, )
+    data = (typeIDlist, )
     cursor.execute(sql, data, )
-    df = pd.DataFrame(cursor.fetchall(),columns=['shipindex','timestamp'])
+    df = pd.DataFrame(cursor.fetchall(),columns=['indexValue','timestamp'])
     cursor.close()
     df = df.groupby(['timestamp']).mean()
     df = df.resample("1W")

@@ -97,6 +97,49 @@
                 });
             </script>
 
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Sisters of Eve
+                </div>
+            </div>
+            <div class="row show-grid">
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/33468_64.png"><code>Astero</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/33470_64.png"><code>Stratios</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/33472_64.png"><code>Nestor</code></div>
+            </div>
+            <div class="d3-graph-index-sisters"></div>
+            <script>
+                graphJumps({ /* Sisters of Eve */
+                    width: 720,
+                    height: 340,
+                    ylegend: 'sisters of eve',
+                    selector: '.d3-graph-index-sisters',
+                    json: '/api/report/index/pirateships/sisters'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Mordu's Legion
+                </div>
+            </div>
+            <div class="row show-grid">
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/33816_64.png"><code>Garmur</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/33818_64.png"><code>Orthrus</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/33820_64.png"><code>Barghest</code></div>
+            </div>
+            <div class="d3-graph-index-mordu"></div>
+            <script>
+                graphJumps({ /* Mordu's Legion */
+                    width: 720,
+                    height: 340,
+                    ylegend: 'mordus legion',
+                    selector: '.d3-graph-index-mordu',
+                    json: '/api/report/index/pirateships/mordu'
+                });
+            </script>
+
+
         </div><!-- /.col-lg-12 -->
     </div><!-- /.row -->
 
