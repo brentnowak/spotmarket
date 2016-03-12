@@ -11,6 +11,10 @@
 #-----------------------------------------------------------------------------
 
 from _utility import *
+import requests.packages.urllib3
+
+requests.packages.urllib3.disable_warnings()
+#  Suppress InsecurePlatformWarning messages
 
 def getmarketrecords(): # TODO Move function to _utility.py
     conn = psycopg2.connect(conn_string)
