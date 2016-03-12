@@ -130,8 +130,10 @@ def indexreport_pirateships():
 #
 @app.route('/report/region/<regionID>')
 def regionreport(regionID):
+    regionName = getregionName(regionID)
     return render_template('pages/regionReports/regionReport.html',
                            regionID=regionID,
+                           regionName=regionName,
                            title="Region 1",
                            header="Region 1",
                            nav="Region 1")

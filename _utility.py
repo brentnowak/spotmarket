@@ -80,7 +80,7 @@ def typeName(typeID):
 # Input     typeID
 # Output    typeName
 #
-def typeName2(typeID):
+def gettypeName(typeID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
@@ -91,7 +91,7 @@ def typeName2(typeID):
     data = (typeID, )
     cursor.execute(sql, data, )
     results = cursor.fetchone()
-    return results
+    return results[0]
 
 
 #

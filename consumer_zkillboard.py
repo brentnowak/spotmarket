@@ -7,11 +7,6 @@ from requests.exceptions import ConnectionError
 #
 #############################
 
-# 20183  Providence
-# 20185  Charon
-# 20187  Obelisk
-# 20189  Fenrir
-
 ships = getzkbships()
 
 for ship in ships:
@@ -27,7 +22,7 @@ for ship in ships:
         killID = kill['killID']
         killHash = kill['zkb']['hash']
         crestURL = 'https://public-crest.eveonline.com/killmails/' + str(killID) + '/' + str(killHash) + '/'
-        print(crestURL)
+        print("[" + str(gettypeName(ship[0])) + "][count:" + str(killmailInsertCount) + "] " + crestURL) #  Feedback
         try:
             crestKill = requests.get(crestURL)
         except ConnectionError as e:
