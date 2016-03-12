@@ -43,3 +43,4 @@ for ship in ships:
     insertlog_timestamp(service, 0, detail, timestamp)
 
     setzkbshipenable(ship[0], 0)  # Successful API sets enabled to false
+    setzkbshipresult(ship[0], 1)  # Successful API sets importResult to true

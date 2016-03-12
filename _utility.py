@@ -2183,3 +2183,15 @@ def setzkbshipenable(typeID, enabled):
     cursor.execute(sql, data, )
     conn.close()
     return 0
+
+def setzkbshipresult(typeID, importResult):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''UPDATE data.killmailsitems
+        SET importResult = %s
+        WHERE killmailsitems."typeID" = %s'''
+    data = (importResult, typeID, )
+    cursor.execute(sql, data, )
+    conn.close()
+    return 0
+
