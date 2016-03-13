@@ -96,6 +96,21 @@ def gettypeName(typeID):
     return results[0]
 
 
+# Input
+# Output    Tuple of typeIDs
+def gettypeIDsfromGroupID(groupID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      "invTypes"."typeID"
+    FROM
+      public."invTypes"
+    WHERE "invTypes"."groupID" = %s'''
+    data = (groupID, )
+    cursor.execute(sql, data, )
+    results = cursor.fetchall()
+    return tuple(results)
+
 #
 # Input     moonName
 # Output    moonID
@@ -2138,21 +2153,21 @@ def updatemoonmineralstable(moonID, typeID):
 # indexReports
 #############################
 
-def getindextypeids(typeIDlist):
+def getindextypeids(typeIDlist, divisor):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-          (markethistory.volume * markethistory."avgPrice" * markethistory."orderCount") / 30000000000 AS indexValue,
+          (markethistory.volume * markethistory."avgPrice" * markethistory."orderCount") / %s AS index,
           markethistory."timestamp"
         FROM
           data.markethistory
         WHERE
           markethistory."typeID" IN %s
-        GROUP BY indexValue, markethistory."timestamp"
+        GROUP BY index, markethistory."timestamp"
         ORDER BY markethistory."timestamp" ASC'''
-    data = (typeIDlist, )
+    data = (divisor, typeIDlist, )
     cursor.execute(sql, data, )
-    df = pd.DataFrame(cursor.fetchall(),columns=['indexValue','timestamp'])
+    df = pd.DataFrame(cursor.fetchall(),columns=['index','timestamp'])
     cursor.close()
     df = df.groupby(['timestamp']).mean()
     df = df.resample("1W")

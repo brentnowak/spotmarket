@@ -122,8 +122,31 @@ def indexreport_deadend():
 
 @app.route('/report/index/pirateships')
 def indexreport_pirateships():
-    return render_template('pages/indexReports/pirateships.html', title="Pirate Ships", header="Pirate Ships", nav="Pirate Ships")
+    return render_template('pages/indexReports/pirateships.html',
+                           title="Pirate Ships",
+                           header="Pirate Ships",
+                           nav="Pirate Ships")
 
+@app.route('/report/index/boosters')
+def indexreport_boosters():
+    return render_template('pages/indexReports/boosters.html',
+                           title="Boosters",
+                           header="Boosters",
+                           nav="Boosters")
+
+@app.route('/report/index/pilotservices')
+def indexreport_pilotservices():
+    return render_template('pages/indexReports/pilotservices.html',
+                           title="Pilot Services",
+                           header="Pilot Services",
+                           nav="Pilot Services")
+
+@app.route('/report/index/capitalships')
+def indexreport_capitalships():
+    return render_template('pages/indexReports/capitalships.html',
+                           title="Capital Ships",
+                           header="Capital Ships",
+                           nav="Capital Ships")
 
 #
 # regionReports
@@ -304,7 +327,7 @@ def api_getsovevents():
 # Simple Lookups
 @app.route('/api/regionName/<regionID>')
 def api_regionID(regionID):
-    return regionName(regionID)
+    return getregionName(regionID)
 
 # Market
 @app.route('/api/typeName/<typeID>')
@@ -352,18 +375,38 @@ def api_getdeadendsystems(gateCountLimit):
 def indexreport_sovchanges():
     return getsoveventsumbyday()
 
-@app.route('/api/report/index/pirateships/<shipclass>')
-def indexreport_indexpirateships(shipclass):
-    if shipclass == "battleship":
-        return getindextypeids((17918, 17740, 17736, 17738, 17920))
-    if shipclass == "cruiser":
-        return getindextypeids((17720, 17922, 17715, 17718, 17722))
-    if shipclass == "frigate":
-        return getindextypeids((17932, 17926, 17930, 17924, 17928))
-    if shipclass == "sisters":
-        return getindextypeids((33468, 33470, 33472))
-    if shipclass == "mordu":
-        return getindextypeids((33816, 33818, 33820))
+@app.route('/api/report/index/typeids/<typenames>')
+def indexreport_indexitems(typenames):
+    if typenames == "battleship":
+        return getindextypeids((17918, 17740, 17736, 17738, 17920), 30000000000)
+    if typenames == "cruiser":
+        return getindextypeids((17720, 17922, 17715, 17718, 17722), 30000000000)
+    if typenames == "frigate":
+        return getindextypeids((17932, 17926, 17930, 17924, 17928), 30000000000)
+    if typenames == "sisters":
+        return getindextypeids((33468, 33470, 33472), 30000000000)
+    if typenames == "mordu":
+        return getindextypeids((33816, 33818, 33820), 30000000000)
+    if typenames == "antipharmakon":
+        return getindextypeids((36908, 36909, 36910, 36911, 36912), 30000)
+    if typenames == "quafezero":
+        return getindextypeids((3898,), 100000000000)
+    if typenames == "plex":
+        return getindextypeids((29668,), 50000000000000)
+    if typenames == "carriers":
+        return getindextypeids((23757, 23915, 23911, 22852), 100000000)
+    if typenames == "faux":
+        return getindextypeids((23757, 23915, 23911, 22852), 100000000)
+        #return getindextypeids((37604, 37605, 37606, 37607), 30000000000)  # Placeholder
+    if typenames == "dreadnoughts":
+        return getindextypeids((19720, 19726, 19724, 19722), 300000000)
+    if typenames == "freighters":
+        return getindextypeids((20183, 20189, 20187, 20183, ), 5000000000)
+    if typenames == "jumpfreighters":
+        return getindextypeids((gettypeIDsfromGroupID(902)), 5000000000)
+    if typenames == "ore":
+        return getindextypeids((34328, 28606), 300000000)
+
 
 # Map
 @app.route('/api/map/conquerablestations')

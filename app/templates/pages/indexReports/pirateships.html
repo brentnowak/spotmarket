@@ -21,7 +21,7 @@
                 </div>
             </div>
             <h4>Formula</h4>
-            <code>(volume * avgPrice * orderCount) / 30,000,000,000 AS shipIndex</code>
+            <code>(volume * avgPrice * orderCount) / 30,000,000,000 AS index</code>
             <h4>Resample</h4>
             <code>1 week</code>
 
@@ -45,9 +45,9 @@
                 graphJumps({ /* Battleships */
                     width: 720,
                     height: 340,
-                    ylegend: 'battleships',
+                    ylegend: 'pirate battleships',
                     selector: '.d3-graph-index-pirate-battleship',
-                    json: '/api/report/index/pirateships/battleship'
+                    json: '/api/report/index/typeids/battleship'
                 });
             </script>
 
@@ -68,9 +68,9 @@
                 graphJumps({ /* Cruisers */
                     width: 720,
                     height: 340,
-                    ylegend: 'cruisers',
+                    ylegend: 'pirate cruisers',
                     selector: '.d3-graph-index-pirate-cruiser',
-                    json: '/api/report/index/pirateships/cruiser'
+                    json: '/api/report/index/typeids/cruiser'
                 });
             </script>
 
@@ -91,9 +91,9 @@
                 graphJumps({ /* Frigates */
                     width: 720,
                     height: 340,
-                    ylegend: 'frigates',
+                    ylegend: 'pirate frigates',
                     selector: '.d3-graph-index-pirate-frigate',
-                    json: '/api/report/index/pirateships/frigate'
+                    json: '/api/report/index/typeids/frigate'
                 });
             </script>
 
@@ -114,7 +114,7 @@
                     height: 340,
                     ylegend: 'sisters of eve',
                     selector: '.d3-graph-index-sisters',
-                    json: '/api/report/index/pirateships/sisters'
+                    json: '/api/report/index/typeids/sisters'
                 });
             </script>
 
@@ -135,7 +135,7 @@
                     height: 340,
                     ylegend: 'mordus legion',
                     selector: '.d3-graph-index-mordu',
-                    json: '/api/report/index/pirateships/mordu'
+                    json: '/api/report/index/typeids/mordu'
                 });
             </script>
 
