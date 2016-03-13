@@ -8,6 +8,7 @@ CREATE TABLE data.killmails
   "killID" integer NOT NULL,
   "killHash" text NOT NULL,
   "killData" json,
+  "totalValue" real,
   CONSTRAINT pk_killmails PRIMARY KEY ("killID", "killHash")
 )
 WITH (

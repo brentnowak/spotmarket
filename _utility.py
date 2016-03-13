@@ -2061,7 +2061,7 @@ def insertmoonrecordverifygroup(typeID):
     return result[0]
 
 
-def insertkillmailrecord(killID, killHash, killData):
+def insertkillmailrecord(killID, killHash, killData, totalValue):
     insertcount = 0
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
@@ -2082,9 +2082,9 @@ def insertkillmailrecord(killID, killHash, killData):
             conn = psycopg2.connect(conn_string)
             cursor = conn.cursor()
             sql = '''INSERT INTO data."killmails"
-                ("killID", "killHash", "killData")
-                VALUES (%s, %s, %s)'''
-            data = (killID, killHash, killData, )
+                ("killID", "killHash", "killData", "totalValue")
+                VALUES (%s, %s, %s, %s)'''
+            data = (killID, killHash, killData, totalValue, )
             cursor.execute(sql, data, )
         except psycopg2.IntegrityError:
             conn.rollback()
@@ -2214,3 +2214,23 @@ def setzkbshipresult(typeID, importResult):
     conn.close()
     return 0
 
+
+# Input
+# Output    1 for existing killmail
+#           0 for no killmail
+def checkforkillmail(killID, killHash):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      COUNT(killmails."killData")
+    FROM
+      data.killmails
+    WHERE killmails."killID" = %s AND
+      killmails."killHash" = %s'''
+    data = (killID, killHash, )
+    cursor.execute(sql, data, )
+    result = cursor.fetchone()
+    if result[0] == 1:
+        return True
+    else:
+       return False
