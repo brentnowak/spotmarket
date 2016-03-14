@@ -203,7 +203,7 @@ You can connect to the database using the command listed above and create the ta
 ```shell
 wget https://www.fuzzwork.co.uk/dump/postgres-latest.dmp.bz2
 bzip2 -d postgres-latest.dmp.bz2
-pg_restore -i -h localhost -p 5432 -U spotmarketadmin -d spotmarket -v "postgres-latest.dmp"
+pg_restore -h localhost -p 5432 -U spotmarketadmin -d spotmarket -v "postgres-latest.dmp"
 rm postgres-latest.dmp
 ```
 
@@ -223,7 +223,7 @@ Output: HTTP service bound to *localhost:80*.
 **Services crontab**
 ```shell 
 crontab -e
-0,30 * * * * /home/ubuntu/spotmarket/scripts/consumer_map.sh > /dev/null 2>&1
+10,40 * * * * /home/ubuntu/spotmarket/scripts/consumer_map.sh > /dev/null 2>&1
 15 1,13 * * * /home/ubuntu/spotmarket/scripts/consumer_markethistory.sh > /dev/null 2>&1
 ```
 
