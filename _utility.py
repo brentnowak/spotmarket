@@ -2234,3 +2234,16 @@ def checkforkillmail(killID, killHash):
         return True
     else:
        return False
+
+
+#############################
+# process_updatekillmails.py
+#############################
+
+def getemptyjsonkm():
+
+
+    return 0
+
+
+

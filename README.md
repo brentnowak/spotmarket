@@ -31,7 +31,7 @@ Sample Images
 Tested Platform
 ==================
 * OS: ubuntu-14.04.3-server-amd64
-* Database: PostgreSQL 9.3
+* Database: PostgreSQL 9.5
 
 External Packages
 ==================
@@ -115,9 +115,16 @@ Output: pandas .csv reports to */app/dist/data/* folder for graphing.
 Install Notes
 ==================
 
+**PostgreSQL 9.5**
+```shell
+sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
+wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
+apt-get update
+apt-get install postgresql postgresql-contrib
+```
+
 **Dependencies**
 ```shell 
-apt-get install postgresql postgresql-contrib
 apt-get build-dep python-psycopg2
 apt-get install python-pip
 apt-get install git
@@ -131,7 +138,7 @@ pip install arrow
 pip install flask
 ```
 
-**Clone**
+**Clone GitHub Project**
 ```shell
 git clone https://github.com/brentnowak/spotmarket
 ```
@@ -139,7 +146,7 @@ git clone https://github.com/brentnowak/spotmarket
 **Make Scripts Executable**
 ```shell
 cd spotmarket
-cd /scripts/
+cd scripts/
 chmod +x *
 ```
 
@@ -157,14 +164,14 @@ GRANT ALL PRIVILEGES ON DATABASE spotmarket TO spotmarketadmin;
 
 As root
 ```shell
-vim /etc/postgresql/9.3/main/pg_hba.conf
+vim /etc/postgresql/9.5/main/pg_hba.conf
 ```
 Change line 85 and 90 from 'peer' to 'md5'.
 Under 'IPv4 local connections' add a line for your local network if you wish to connect to your database instance over your network.
 
 As root
 ```shell
-vim /etc/postgresql/9.3/main/postgresql.conf
+vim /etc/postgresql/9.5/main/postgresql.conf
 ```
 Uncomment line 59 and change the 'listen_address' value to '*'
 
@@ -183,7 +190,7 @@ psql -d spotmarket -U spotmarketadmin -W
 **Database Creation**
 If you have setup the server instance correctly, you should be presented with a prompt that indicates you are connected.
 ```shell
-psql (9.3.11)
+psql (9.5.1)
 Type "help" for help.
 
 spotmarket=>
@@ -203,7 +210,7 @@ rm postgres-latest.dmp
 **Modify config.ini with Database Details**
 ```shell
 vim config.ini.change
-mv config.ini.change change.ini
+mv config.ini.change config.ini
 ```
 
 Web Services
@@ -216,8 +223,8 @@ Output: HTTP service bound to *localhost:80*.
 **Services crontab**
 ```shell 
 crontab -e
-0,30 * * * * ubuntu /home/ubuntu/spotmarket/scripts/consumer_map.sh > /dev/null 2>&1
-15 1,13 * * * ubuntu /home/ubuntu/spotmarket/scripts/consumer_markethistory.sh > /dev/null 2>&1
+0,30 * * * * /home/ubuntu/spotmarket/scripts/consumer_map.sh > /dev/null 2>&1
+15 1,13 * * * /home/ubuntu/spotmarket/scripts/consumer_markethistory.sh > /dev/null 2>&1
 ```
 
 **Starting Flask Web Service**

@@ -50,7 +50,7 @@ for ship in ships:
     timestamp = arrow.utcnow()  # Get arrow object
     timestamp = timestamp.timestamp  # Get timestamp of arrow object
 
-    detail = "[zkb][typeID:" + str(ship[0]) + "] insert " + str(killmailInsertCount) + " @ " + str(round(killmailInsertCount/(time.time() - start_time), 3)) + " rec/sec"
+    detail = "[zkb][typeID:" + str(ship[0]) + "] insert " + str(killmailInsertCount-1) + " @ " + str(round((killmailInsertCount-1)/(time.time() - start_time), 3)) + " rec/sec"
     insertlog_timestamp(service, 0, detail, timestamp)
 
     setzkbshipenable(ship[0], 0)  # Successful API sets enabled to false
