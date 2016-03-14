@@ -195,7 +195,7 @@ Type "help" for help.
 
 spotmarket=>
 ```
-Create the schema and tables by pasting in the scripts located under *\sql* directory.  
+Create the schema by running schema.sql located under *\sql* directory.  
 You can connect to the database using the command listed above and create the tables or use a GUI tool such as pgAdmin.  
 
 **Import Eve Static Data**
