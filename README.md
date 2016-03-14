@@ -90,7 +90,6 @@ Output: Populate 'data.wallet' table with a list of transactions per character.
 
 **consumer_zkillboard.py *work in progress***
 
-
 Input: zKillboard API
 
 Output: Populate 'data.killmails' table with CREST killmails.
@@ -116,6 +115,8 @@ Install Notes
 ==================
 
 **PostgreSQL 9.5**
+
+As root
 ```shell
 sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
 wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
@@ -124,9 +125,12 @@ apt-get install postgresql postgresql-contrib
 ```
 
 **Dependencies**
+
+As root
 ```shell 
 apt-get build-dep python-psycopg2
 apt-get install python-pip
+apt-get install supervisor
 apt-get install git
 pip install ConfigParser
 pip install psycopg2
@@ -213,25 +217,49 @@ vim config.ini.change
 mv config.ini.change config.ini
 ```
 
-Web Services
+**Supervisor**
+
+As root
+```shell
+mv spotmarket.conf /etc/supervisor/conf.d/
+service supervisor restart
+```
+
+Confirming supervisor and database settings are correct.
+```shell
+tail -f /var/log/spotmarket.error.log
+```
+
+If you see the following text displayed, then it is working.
+```shell
+ * Running on http://0.0.0.0:80/ (Press CTRL+C to quit)
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger pin code: 319-334-386
+```
+
+
+Scheduled Jobs
 ==================
 
-**spotmarket_flask.py**
-
-Output: HTTP service bound to *localhost:80*.
-
-**Services crontab**
+**crontab**
 ```shell 
 crontab -e
 10,40 * * * * /home/ubuntu/spotmarket/scripts/consumer_map.sh > /dev/null 2>&1
 15 1,13 * * * /home/ubuntu/spotmarket/scripts/consumer_markethistory.sh > /dev/null 2>&1
 ```
 
-**Starting Flask Web Service**
-```
-python spotmarket_flask.py &
-```
-Browse to localhost:80
+
+Web Front End
+==================
+Browse to http://hostname
+
+
+Tracking Tables - Work in Progress
+==================
+Currently the following tables have to be manually populated:
+* killmailsitems - typeIDs that are used for zKillboard imports.
+* marketitems - typeIDs that are used for market prices.
 
 
 License Info
