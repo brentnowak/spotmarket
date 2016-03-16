@@ -19,10 +19,11 @@ requests.packages.urllib3.disable_warnings()
 #  Suppress InsecurePlatformWarning messages
 
 start_time = time.time()
-
 pageNum = 1
-while pageNum <= 5:
-    url = 'https://zkillboard.com/api/losses/shipID/33477/orderDirection/desc/page/' + pageNum + "/"
+r = requests.Response()
+
+while r.text != "[]":
+    url = 'https://zkillboard.com/api/losses/shipID/33477/orderDirection/desc/page/' + str(pageNum) + "/"
     headers = {'user-agent': 'github.com/brentnowak/spotmarket'}
     r = requests.get(url, headers=headers)
 
