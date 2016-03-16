@@ -34,43 +34,47 @@ while pageNum <= 1:
         killID = kill['killID']
         killHash = kill['zkb']['hash']
         totalValue = kill['zkb']['totalValue']
-        crestURL = 'https://public-crest.eveonline.com/killmails/' + str(killID) + '/' + str(killHash) + '/'
-        print(crestURL)
-        crestKill = requests.get(crestURL)
-        data = json.loads(crestKill.text)
 
-        solarSystemID = data.get('solarSystem', {'id': 'NA'})['id']
-        try:
-            typeID = data['victim']['items'][0]['itemType']['id']
-        except IndexError: # Handle if no items are dropped
-            typeID = None
-        try:
-            typeName = data['victim']['items'][0]['itemType']['name']
-        except IndexError:
-            typeName = None
-        try:
-            killx = data['victim']['position']['x']
-        except KeyError: # Handle if killmail is pre-parallax (2015-11-03) and does not include x,y,z
-            killx = None
-        try:
-            killy = data['victim']['position']['y']
-        except KeyError:
-            killy = None
-        try:
-            killz = data['victim']['position']['z']
-        except KeyError:
-            killz = None
+        if checkforkillmail(killID, killHash) == False:  # Check if killmail exists, if not, fetch from CREST
+            crestURL = 'https://public-crest.eveonline.com/killmails/' + str(killID) + '/' + str(killHash) + '/'
+            print(crestURL)
+            crestKill = requests.get(crestURL)
+            data = json.loads(crestKill.text)
 
-        killmailInsertCount += insertkillmailrecord(killID, killHash, crestKill.text, totalValue)
+            solarSystemID = data.get('solarSystem', {'id': 'NA'})['id']
+            try:
+                typeID = data['victim']['items'][0]['itemType']['id']
+            except IndexError: # Handle if no items are dropped
+                typeID = None
+            try:
+                typeName = data['victim']['items'][0]['itemType']['name']
+            except IndexError:
+                typeName = None
+            try:
+                killx = data['victim']['position']['x']
+            except KeyError: # Handle if killmail is pre-parallax (2015-11-03) and does not include x,y,z
+                killx = None
+            try:
+                killy = data['victim']['position']['y']
+            except KeyError:
+                killy = None
+            try:
+                killz = data['victim']['position']['z']
+            except KeyError:
+                killz = None
 
-        if killx != None:
-            if typeID != None:
-                result = getclosestmoon(solarSystemID, killx, killy, killz)
-                moonID = result[3]
-                print(str(solarSystemID) + " : " + typeName + " - " + str(moonID))
-                print("Kill location: " + str(killx), str(killy), str(killz))
-                if insertmoonrecordverifygroup(typeID) == 501: #  Only moon minerals
-                    moonInsertCount += insertmoonverifyrecord(moonID, killID, typeID)
+            killmailInsertCount += insertkillmailrecord(killID, killHash, crestKill.text, totalValue)
+
+            if killx != None:
+                if typeID != None:
+                    result = getclosestmoon(solarSystemID, killx, killy, killz)
+                    moonID = result[3]
+                    print(str(solarSystemID) + " : " + typeName + " - " + str(moonID))
+                    print("Kill location: " + str(killx), str(killy), str(killz))
+                    if insertmoonrecordverifygroup(typeID) == 501: #  Only moon minerals
+                        moonInsertCount += insertmoonverifyrecord(moonID, killID, typeID)
+        else:
+            print("[skip][killID:" + str(killID) + "]")
 
     timestamp = arrow.get() # Get arrow object
     timestamp = timestamp.timestamp # Get timestamp of arrow object
