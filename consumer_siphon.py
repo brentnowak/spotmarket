@@ -18,11 +18,11 @@ import requests.packages.urllib3
 requests.packages.urllib3.disable_warnings()
 #  Suppress InsecurePlatformWarning messages
 
-start_time = time.time()
 pageNum = 1
 r = requests.Response()
 
 while r.text != "[]":
+    start_time = time.time()
     url = 'https://zkillboard.com/api/losses/shipID/33477/orderDirection/desc/page/' + str(pageNum) + "/"
     headers = {'user-agent': 'github.com/brentnowak/spotmarket'}
     r = requests.get(url, headers=headers)
@@ -77,7 +77,7 @@ while r.text != "[]":
         else:
             print("[skip][killID:" + str(killID) + "]")
 
-    timestamp = arrow.get() # Get arrow object
+    timestamp = arrow.utcnow() # Get arrow object
     timestamp = timestamp.timestamp # Get timestamp of arrow object
 
     detail = "[killmail] insert " + str(killmailInsertCount) + " @ " + str(round(killmailInsertCount/(time.time() - start_time), 3)) + " rec/sec"
