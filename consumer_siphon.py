@@ -33,6 +33,7 @@ while pageNum <= 1:
     for kill in json.loads(r.text):
         killID = kill['killID']
         killHash = kill['zkb']['hash']
+        totalValue = kill['zkb']['totalValue']
         crestURL = 'https://public-crest.eveonline.com/killmails/' + str(killID) + '/' + str(killHash) + '/'
         print(crestURL)
         crestKill = requests.get(crestURL)
@@ -60,7 +61,7 @@ while pageNum <= 1:
         except KeyError:
             killz = None
 
-        killmailInsertCount += insertkillmailrecord(killID, killHash, crestKill.text)
+        killmailInsertCount += insertkillmailrecord(killID, killHash, crestKill.text, totalValue)
 
         if killx != None:
             if typeID != None:
