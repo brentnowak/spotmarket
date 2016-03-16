@@ -21,8 +21,8 @@ requests.packages.urllib3.disable_warnings()
 start_time = time.time()
 
 pageNum = 1
-while pageNum <= 1:
-    url = 'https://zkillboard.com/api/losses/shipID/33477/orderDirection/desc/'
+while pageNum <= 5:
+    url = 'https://zkillboard.com/api/losses/shipID/33477/orderDirection/desc/page/' + pageNum + "/"
     headers = {'user-agent': 'github.com/brentnowak/spotmarket'}
     r = requests.get(url, headers=headers)
 
