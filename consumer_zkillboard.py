@@ -47,11 +47,12 @@ for typeID in ships:
             for kill in json.loads(r.text):
                 killID = kill['killID']
                 killHash = kill['zkb']['hash']
+                killTime = kill['zkb']['killTime']
                 totalValue = kill['zkb']['totalValue']
 
                 if checkforkillmail(killID, killHash) == False:  # Check if killmail exists, if not, fetch from CREST
                     crestURL = 'https://public-crest.eveonline.com/killmails/' + str(killID) + '/' + str(killHash) + '/'
-                    print("[" + str(gettypeName(typeID[0])) + "][page:" + str(pageNum) + "][count:" + str(killmailInsertCount) + "] " + crestURL) #  Feedback
+                    print("[" + str(gettypeName(typeID[0])) + "][page:" + str(pageNum) + "][count:" + str(killmailInsertCount) + "][killTime:" + killTime + "][killID:" + killID + "][killHash:" + killHash + "]")  # Feedback
                     try:
                         crestKill = requests.get(crestURL)
                     except (ConnectionError, ChunkedEncodingError) as e:
