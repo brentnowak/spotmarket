@@ -20,8 +20,8 @@ from psycopg2.extras import RealDictCursor
 #############################
 
 config = ConfigParser.ConfigParser()
-#config.read(["config.ini"]) #  For running on Windows
-config.read(["/home/ubuntu/spotmarket/config.ini"]) #  Full path needed for supervisor
+config.read(["config.ini"]) #  For running on Windows
+#config.read(["/home/ubuntu/spotmarket/config.ini"]) #  Full path needed for supervisor
 password = config.get("DATABASE", "password")
 user = config.get("DATABASE", "user")
 host = config.get("DATABASE", "host")

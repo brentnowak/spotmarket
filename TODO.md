@@ -18,15 +18,17 @@
 ==================
 
 **To Do**  
-[bug] bootstrap-table table headers that contain icons do not align correctly with rows 
+[bug] bootstrap-table table headers that contain icons do not align correctly with rows  
+[bug] Security reports have hardcoded time range for data that calculates ratting rate  
 [new] Create freighter security index  
 [new] Work on indexes, add item destruction based on killmails  
 [new] Create process to fill in killmails that lack JSON data or zKb values  
-[enhancement] Add second axis to d3js charts to denote expansions  
+[enhancement] Add second axis to d3js charts to denote Eve expansions  
 [enhancement] Personalize 404 error page  
 [enhancement] Add functional buttons on Settings page to control import status  
 [enhancement] Change factionReports to be driven by JSON  
 [enhancement] Learn how to use Classes and clean up utility scripts 
+[enhancement] Add favicon
 
 0.6 Release
 ==================

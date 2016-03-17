@@ -20,10 +20,11 @@ requests.packages.urllib3.disable_warnings()
 #  Suppress InsecurePlatformWarning messages
 
 ships = getzkbships()
-r = requests.Response()
 
 for ship in ships:
     pageNum = 1
+    r = requests.Response() # Init requests for new ship
+
     while r.text != "[]":
         start_time = time.time()
         url = 'https://zkillboard.com/api/losses/shipID/' + str(ship[0]) + '/orderDirection/desc/page/' + str(pageNum) + "/"
@@ -59,5 +60,6 @@ for ship in ships:
         pageNum += 1
         print("Completed Page: " + str(pageNum))
 
-    setzkbshipenable(ship[0], 0)  # Successful API sets enabled to false
-    setzkbshipresult(ship[0], 1)  # Successful API sets importResult to true
+    # Record state to data.killmailsitems
+    setzkbshipenable(ship[0], 0)  # Successful run sets enabled to false
+    setzkbshipresult(ship[0], 1)  # Successful run sets importResult to true
