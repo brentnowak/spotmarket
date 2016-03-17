@@ -128,7 +128,7 @@ def getzkbpagenumber(typeID):
     data = (typeID, )
     cursor.execute(sql, data, )
     result = cursor.fetchone()
-    if result[0] == None:
+    if result[0] == None: #  If no entry for lastPage in table, return 1
         return 1
     else:
         return result[0]

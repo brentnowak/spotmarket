@@ -41,7 +41,7 @@ for typeID in ships:
 
         try:
             r = requests.get(url, headers=headers)
-        except () as e:
+        except (ConnectionError, ChunkedEncodingError) as e:
             print(e)
         else:
             for kill in json.loads(r.text):
