@@ -57,8 +57,8 @@ for ship in ships:
         insertlog_timestamp(service, 0, detail, timestamp)
 
         setzkblastpage(ship[0], pageNum)  # Keep track of paging
-        pageNum += 1
         print("Completed Page: " + str(pageNum))
+        pageNum += 1
 
     # Record state to data.killmailsitems
     setzkbshipenable(ship[0], 0)  # Successful run sets enabled to false
