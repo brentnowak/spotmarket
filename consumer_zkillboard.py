@@ -47,12 +47,13 @@ for typeID in ships:
             for kill in json.loads(r.text):
                 killID = kill['killID']
                 killHash = kill['zkb']['hash']
-                killTime = kill['zkb']['killTime']
+                killTime = kill['killTime']
+                solarSystemID = kill['solarSystemID']
                 totalValue = kill['zkb']['totalValue']
 
                 if checkforkillmail(killID, killHash) == False:  # Check if killmail exists, if not, fetch from CREST
                     crestURL = 'https://public-crest.eveonline.com/killmails/' + str(killID) + '/' + str(killHash) + '/'
-                    print("[" + str(gettypeName(typeID[0])) + "][page:" + str(pageNum) + "][count:" + str(killmailInsertCount) + "][killTime:" + killTime + "][killID:" + killID + "][killHash:" + killHash + "]")  # Feedback
+                    print("[" + str(gettypeName(typeID[0])) + "][page:" + str(pageNum) + "][count:" + str(killmailInsertCount) + "][killTime:" + str(killTime) + "][killID:" + str(killID) + "][solarSystemName:" + str(getSolarSystemName(solarSystemID)) + "]")  # Feedback
                     try:
                         crestKill = requests.get(crestURL)
                     except (ConnectionError, ChunkedEncodingError) as e:
@@ -66,7 +67,9 @@ for typeID in ships:
             detail = "[zkb][typeID:" + str(typeID[0]) + "] insert " + str(killmailInsertCount - 1) + " @ " + str(round((killmailInsertCount - 1) / (time.time() - start_time), 3)) + " rec/sec"
             insertlog_timestamp(service, 0, detail, timestamp)
             setzkblastpage(typeID[0], pageNum)  # Keep track of paging
-            print("Completed Page: " + str(pageNum))
+            print("----------------------")
+            print("[Completed Page:" + str(pageNum) + "]")
+            print("----------------------")
             pageNum += 1
 
     # Record state to data.killmailsitems because we're done with a specific typeID

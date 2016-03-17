@@ -96,6 +96,24 @@ def gettypeName(typeID):
     return results[0]
 
 
+#
+# Input     solarSystemID
+# Output    solarSystemName
+#
+def getSolarSystemName(solarSystemID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      "mapSolarSystems"."solarSystemName"
+    FROM
+      public."mapSolarSystems"
+      WHERE "mapSolarSystems"."solarSystemID" = %s'''
+    data = (solarSystemID, )
+    cursor.execute(sql, data, )
+    results = cursor.fetchone()
+    return results[0]
+
+
 # Input
 # Output    Tuple of typeIDs
 def gettypeIDsfromGroupID(groupID):
