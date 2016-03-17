@@ -28,7 +28,7 @@ ships = getzkbships()
 for typeID in ships:
     pageNum = 1
     if getzkbpagenumber(typeID[0]) != pageNum:  #  Pick up state and start at last page-1
-        pageNum = getzkbpagenumber([typeID[0]]-1)
+        pageNum = getzkbpagenumber(typeID[0])-1
     r = requests.Response() #  Init requests for new ship after we have finished a specific typeID
 
     while r.text != "[]":
