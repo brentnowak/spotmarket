@@ -128,7 +128,7 @@ def getzkbpagenumber(typeID):
     data = (typeID, )
     cursor.execute(sql, data, )
     result = cursor.fetchone()
-    return result
+    return result[0]
 
 
 def setzkbshipenable(typeID, enabled):
