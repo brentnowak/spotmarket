@@ -55,6 +55,18 @@ def icons():
 def grid():
     return render_template('pages/grid.html', title="Grid", header="Grid", nav="Grid Page")
 
+@app.route('/forms.html')
+def forms():
+    return render_template('pages/forms.html', title="Forms", header="Forms", nav="Forms Page")
+
+
+#############################
+# Error Handling
+#############################
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('pages/404.html'), 404
+
 
 #
 #   factionReport
