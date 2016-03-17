@@ -124,7 +124,7 @@ def getzkbpagenumber(typeID):
       killmailsitems."lastPage"
     FROM
       data.killmailsitems
-     WHERE killmailsitems.typeID = %s'''
+     WHERE killmailsitems."typeID" = %s'''
     data = (typeID, )
     cursor.execute(sql, data, )
     result = cursor.fetchone()
