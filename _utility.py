@@ -943,7 +943,7 @@ def insertlog(service, severity, detail, timestamp):
 def insertlog_timestamp(service, severity, detail, timestamp):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    sql = 'INSERT INTO data."logs" (timestamp, "service", "severity", "detail") VALUES (to_timestamp(%s), %s, %s, %s)'
+    sql = 'INSERT INTO data."logs" (timestamp, "service", "severity", "detail") VALUES (%s, %s, %s, %s)'
     data = (timestamp, service, severity, detail, )
     cursor.execute(sql, data)
     conn.commit()
