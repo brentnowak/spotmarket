@@ -56,7 +56,7 @@ for ship in ships:
         detail = "[zkb][typeID:" + str(ship[0]) + "] insert " + str(killmailInsertCount-1) + " @ " + str(round((killmailInsertCount-1)/(time.time() - start_time), 3)) + " rec/sec"
         insertlog_timestamp(service, 0, detail, timestamp)
 
-        setzkblastpage(killID, pageNum)  # Keep track of paging
+        setzkblastpage(ship[0], pageNum)  # Keep track of paging
         pageNum += 1
         print("Completed Page: " + str(pageNum))
 

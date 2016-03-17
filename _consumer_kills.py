@@ -159,13 +159,13 @@ def checkforkillmail(killID, killHash):
     else:
        return False
 
-def setzkblastpage(killID, lastPage):
+def setzkblastpage(killID, typeID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''UPDATE data.killmailsitems
         SET "lastPage" = %s
         WHERE killmails."killID" = %s'''
-    data = (killID, lastPage, )
+    data = (typeID, killID)
     cursor.execute(sql, data, )
     conn.commit()
     conn.close()

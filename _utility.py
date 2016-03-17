@@ -2064,20 +2064,3 @@ def getindextypeids(typeIDlist, divisor):
     df = df.groupby(['timestamp']).mean()
     df = df.resample("1W")
     return df.reset_index().to_json(orient='records',date_format='iso')
-
-
-#############################
-# consumer_zkillboard.py
-#############################
-
-
-
-#############################
-# process_updatekillmails.py
-#############################
-
-def getemptyjsonkm():
-    return 0
-
-
-
