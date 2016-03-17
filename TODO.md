@@ -8,13 +8,11 @@
 [enhancement] Change date format in graphs to ISO for mental sanity  
 [enhancement] Standardize table formatting  
 [enhancement] Supervisor to make Flask web service persistent  
+[enhancement] Add jsonb index on data.killmails for typeID and solarSystemID
 [new] Creation of ship index report  
 
 **To Do**  
-[enhancement] Add paging to zKillboard consumer   
-[enhancement] Add jsonb index on data.killmails for:  
-    killmails."killData"->'victim'->'shipType'->'id'  
-    solarSystemID  
+[enhancement] Add paging to zKillboard consumer  
 
 0.5 Release
 ==================

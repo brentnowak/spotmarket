@@ -47,52 +47,52 @@ Stack
 * Python 2.7
 * Database: PostgreSQL
 
-API Services
+Services
 ==================
 
 **consumer_alliance.py**
 
-Input: XML API.
-
-Output: Populate 'data.alliances' table with list of current Alliances.
+Input: XML API.  
+Output: Populate 'data.alliances' table with list of current Alliances.  
 
 **consumer_conquerablestation.py**
 
-Input: XML API.
-
-Output: Populate 'data.conquerablestations' with list of Conquerable Stations.
+Input: XML API.  
+Output: Populate 'data.conquerablestations' with list of Conquerable Stations.    
 
 **consumer_map.py**
 
-Input: XML API.
-
-Output: Populate 'data.mapjumps', 'data.mapkills', and 'data.mapsov' with statistics. 
+Input: XML API.  
+Output: Populate 'data.mapjumps', 'data.mapkills', and 'data.mapsov' with statistics.     
 
 **consumer_markethistory.py**
 
-Input: CREST API, list of typeIDs from 'data.marketitems' table.
-
-Output: Populate 'data.markethistory' table with market data.
+Input: CREST API, list of typeIDs from 'data.marketitems' table.  
+Output: Populate 'data.markethistory' table with market data.  
 
 **consumer_siphon.py**
 
-Input: zKillboard API, CREST API
-
-Output: Populate 'data.moonverify' table with a list of CREST verified moons.
-
-Notes: Replace 'user-agent' value with your own custom string.
+Input: zKillboard API, CREST API  
+Output: Populate 'data.moonverify' table with a list of CREST verified moons.    
+Notes: Replace 'user-agent' value with your own custom string.  
 
 **consumer_wallet.py *work in progress***
 
-Input: XML API.
+Input: XML API.  
+Output: Populate 'data.wallet' table with a list of transactions per character.    
 
-Output: Populate 'data.wallet' table with a list of transactions per character.
+**consumer_zkillboard.py
 
-**consumer_zkillboard.py *work in progress***
+Input: zKillboard API, CREST API  
+Output: Populate 'data.killmails' table with CREST killmails and value from zKillboard.    
 
-Input: zKillboard API
 
-Output: Populate 'data.killmails' table with CREST killmails.
+Processes
+==================
+
+**process_updatemoons.py**
+
+Output: Populate 'data.moonminerals' with CREST verified moons from 'data.moonverify' table.  
 
 
 Report Services
@@ -246,7 +246,6 @@ Scheduled Jobs
 ```shell 
 crontab -e
 10,40 * * * * /home/ubuntu/spotmarket/scripts/consumer_map.sh > /dev/null 2>&1
-15 1,13 * * * /home/ubuntu/spotmarket/scripts/consumer_markethistory.sh > /dev/null 2>&1
 ```
 
 

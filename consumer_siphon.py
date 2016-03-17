@@ -78,8 +78,7 @@ while r.text != "[]":
         else:
             print("[skip][killID:" + str(killID) + "]")
 
-    timestamp = arrow.utcnow() # Get arrow object
-    timestamp = timestamp.timestamp # Get timestamp of arrow object
+    timestamp = arrow.utcnow().format('YYYY-MM-DD HH:mm:ss')  # Get UTC arrow object
 
     detail = "[killmail] insert " + str(killmailInsertCount) + " @ " + str(round(killmailInsertCount/(time.time() - start_time), 3)) + " rec/sec"
     insertlog_timestamp(service, 0, detail, timestamp)

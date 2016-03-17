@@ -20,8 +20,8 @@ from psycopg2.extras import RealDictCursor
 #############################
 
 config = ConfigParser.ConfigParser()
-config.read(["config.ini"])
-#config.read(["/home/ubuntu/spotmarket/config.ini"])
+#config.read(["config.ini"]) #  For running on Windows
+config.read(["/home/ubuntu/spotmarket/config.ini"]) #  Full path needed for supervisor
 password = config.get("DATABASE", "password")
 user = config.get("DATABASE", "user")
 host = config.get("DATABASE", "host")
@@ -1363,6 +1363,7 @@ def getzkillboarditems():
       "invTypes"."typeName",
       "invMarketGroups"."marketGroupName",
       killmailsitems.enabled,
+      killmailsitems."lastPage",
       killmailsitems."importResult",
       killmailsitems."importTimestamp"
     FROM
