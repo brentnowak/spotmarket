@@ -22,6 +22,7 @@ def getclosestmoon(solarSystemID, x, y, z):
     cursor.close()
     return results
 
+
 def insertmoonverifyrecord(moonID, killID, typeID):
     insertcount = 0
     try:
@@ -102,6 +103,7 @@ def insertkillmailrecord(killID, killHash, killData, totalValue):
     conn.close()
     return 0  # killmail exists, return insertCount 0
 
+
 def getzkbships():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
@@ -114,6 +116,21 @@ def getzkbships():
     result = cursor.fetchall()
     return result
 
+
+def getzkbpagenumber(typeID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      killmailsitems."lastPage"
+    FROM
+      data.killmailsitems
+     WHERE killmailsitems.typeID = %s'''
+    data = (typeID, )
+    cursor.execute(sql, data, )
+    result = cursor.fetchone()
+    return result
+
+
 def setzkbshipenable(typeID, enabled):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
@@ -125,6 +142,7 @@ def setzkbshipenable(typeID, enabled):
     conn.commit()
     conn.close()
     return 0
+
 
 def setzkbshipresult(typeID, importResult):
     conn = psycopg2.connect(conn_string)
@@ -158,6 +176,7 @@ def checkforkillmail(killID, killHash):
         return True
     else:
        return False
+
 
 def setzkblastpage(typeID, lastPage):
     conn = psycopg2.connect(conn_string)

@@ -3,12 +3,15 @@
 # https://github.com/brentnowak/spotmarket
 #-----------------------------------------------------------------------------
 # Version: 0.1
-# - Initial release
+# - Initial release.
+# Version: 0.2
+# - Loop over ships from data.killmailsitems table, zkillboard paging, basic requests exception handling.
 #-----------------------------------------------------------------------------
 #
-# Input: None
+# Input: List of ships from data.killmailsitems table.
 # Output: Populate 'data.killmails' table with a list of CREST verified killmails.
-# Right now it is using zKillboard as filter to find killmails and then uses the killID+Hash to look up the CREST killmail.
+# Use zKillboard as filter to find killmails and then use killID+Hash to look up the CREST killmail.
+# Store CREST JSON to table along with zKillboard value.
 #-----------------------------------------------------------------------------
 
 from _utility import *
@@ -20,46 +23,51 @@ requests.packages.urllib3.disable_warnings()
 #  Suppress InsecurePlatformWarning messages
 
 ships = getzkbships()
+#  Get list of typeIDs that have 'enabled' set to 1
 
-for ship in ships:
+for typeID in ships:
     pageNum = 1
-    r = requests.Response() # Init requests for new ship
+    if getzkbpagenumber(typeID[0]) != pageNum:  #  Pick up state and start at last page-1
+        pageNum = getzkbpagenumber([typeID[0]]-1)
+    r = requests.Response() #  Init requests for new ship after we have finished a specific typeID
 
     while r.text != "[]":
         start_time = time.time()
-        url = 'https://zkillboard.com/api/losses/shipID/' + str(ship[0]) + '/orderDirection/desc/page/' + str(pageNum) + "/"
-        headers = {'user-agent': 'github.com/brentnowak/spotmarket'}
-        r = requests.get(url, headers=headers)
-
         service = "consumer_zkillboard.py"
         killmailInsertCount = 1
 
-        for kill in json.loads(r.text):
-            killID = kill['killID']
-            killHash = kill['zkb']['hash']
-            totalValue = kill['zkb']['totalValue']
+        url = 'https://zkillboard.com/api/losses/shipID/' + str(typeID[0]) + '/orderDirection/desc/page/' + str(pageNum) + "/"
+        headers = {'user-agent': 'github.com/brentnowak/spotmarket'}
 
-            if checkforkillmail(killID, killHash) == False:  # Check if killmail exists, if not, fetch from CREST
-                crestURL = 'https://public-crest.eveonline.com/killmails/' + str(killID) + '/' + str(killHash) + '/'
-                print("[" + str(gettypeName(ship[0])) + "][count:" + str(killmailInsertCount) + "] " + crestURL) #  Feedback
-                try:
-                    crestKill = requests.get(crestURL)
-                except (ConnectionError, ChunkedEncodingError) as e:
-                    print(e)
+        try:
+            r = requests.get(url, headers=headers)
+        except () as e:
+            print(e)
+        else:
+            for kill in json.loads(r.text):
+                killID = kill['killID']
+                killHash = kill['zkb']['hash']
+                totalValue = kill['zkb']['totalValue']
+
+                if checkforkillmail(killID, killHash) == False:  # Check if killmail exists, if not, fetch from CREST
+                    crestURL = 'https://public-crest.eveonline.com/killmails/' + str(killID) + '/' + str(killHash) + '/'
+                    print("[" + str(gettypeName(typeID[0])) + "][page:" + str(pageNum) + "][count:" + str(killmailInsertCount) + "] " + crestURL) #  Feedback
+                    try:
+                        crestKill = requests.get(crestURL)
+                    except (ConnectionError, ChunkedEncodingError) as e:
+                        print(e)
+                    else:
+                        killmailInsertCount += insertkillmailrecord(killID, killHash, crestKill.text, totalValue)
                 else:
-                    killmailInsertCount += insertkillmailrecord(killID, killHash, crestKill.text, totalValue)
-            else:
-                print("[" + str(gettypeName(ship[0])) + "][skip][killID:" + str(killID) + "]")
+                    print("[" + str(gettypeName(typeID[0])) + "][skip][killID:" + str(killID) + "]")
 
-        timestamp = arrow.utcnow().format('YYYY-MM-DD HH:mm:ss')  # Get UTC arrow object
+            timestamp = arrow.utcnow().format('YYYY-MM-DD HH:mm:ss')  # Get UTC arrow object
+            detail = "[zkb][typeID:" + str(typeID[0]) + "] insert " + str(killmailInsertCount - 1) + " @ " + str(round((killmailInsertCount - 1) / (time.time() - start_time), 3)) + " rec/sec"
+            insertlog_timestamp(service, 0, detail, timestamp)
+            setzkblastpage(typeID[0], pageNum)  # Keep track of paging
+            print("Completed Page: " + str(pageNum))
+            pageNum += 1
 
-        detail = "[zkb][typeID:" + str(ship[0]) + "] insert " + str(killmailInsertCount-1) + " @ " + str(round((killmailInsertCount-1)/(time.time() - start_time), 3)) + " rec/sec"
-        insertlog_timestamp(service, 0, detail, timestamp)
-
-        setzkblastpage(ship[0], pageNum)  # Keep track of paging
-        print("Completed Page: " + str(pageNum))
-        pageNum += 1
-
-    # Record state to data.killmailsitems
-    setzkbshipenable(ship[0], 0)  # Successful run sets enabled to false
-    setzkbshipresult(ship[0], 1)  # Successful run sets importResult to true
+    # Record state to data.killmailsitems because we're done with a specific typeID
+    setzkbshipenable(typeID[0], 0)  # Successful run sets enabled to 0
+    setzkbshipresult(typeID[0], 1)  # Successful run sets importResult to 1
