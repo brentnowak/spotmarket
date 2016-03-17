@@ -164,7 +164,7 @@ def setzkblastpage(killID, typeID):
     cursor = conn.cursor()
     sql = '''UPDATE data.killmailsitems
         SET "lastPage" = %s
-        WHERE killmails."killID" = %s'''
+        WHERE killmails."typeID" = %s'''
     data = (typeID, killID)
     cursor.execute(sql, data, )
     conn.commit()
