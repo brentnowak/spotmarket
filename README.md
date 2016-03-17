@@ -31,7 +31,7 @@ Sample Images
 Tested Platform
 ==================
 * OS: ubuntu-14.04.3-server-amd64
-* Database: PostgreSQL 9.3
+* Database: PostgreSQL 9.5
 
 External Packages
 ==================
@@ -47,53 +47,52 @@ Stack
 * Python 2.7
 * Database: PostgreSQL
 
-API Services
+Services
 ==================
 
 **consumer_alliance.py**
 
-Input: XML API.
-
-Output: Populate 'data.alliances' table with list of current Alliances.
+Input: XML API.  
+Output: Populate 'data.alliances' table with list of current Alliances.  
 
 **consumer_conquerablestation.py**
 
-Input: XML API.
-
-Output: Populate 'data.conquerablestations' with list of Conquerable Stations.
+Input: XML API.  
+Output: Populate 'data.conquerablestations' with list of Conquerable Stations.    
 
 **consumer_map.py**
 
-Input: XML API.
-
-Output: Populate 'data.mapjumps', 'data.mapkills', and 'data.mapsov' with statistics. 
+Input: XML API.  
+Output: Populate 'data.mapjumps', 'data.mapkills', and 'data.mapsov' with statistics.     
 
 **consumer_markethistory.py**
 
-Input: CREST API, list of typeIDs from 'data.marketitems' table.
-
-Output: Populate 'data.markethistory' table with market data.
+Input: CREST API, list of typeIDs from 'data.marketitems' table.  
+Output: Populate 'data.markethistory' table with market data.  
 
 **consumer_siphon.py**
 
-Input: zKillboard API, CREST API
-
-Output: Populate 'data.moonverify' table with a list of CREST verified moons.
-
-Notes: Replace 'user-agent' value with your own custom string.
+Input: zKillboard API, CREST API  
+Output: Populate 'data.moonverify' table with a list of CREST verified moons.    
+Notes: Replace 'user-agent' value with your own custom string.  
 
 **consumer_wallet.py *work in progress***
 
-Input: XML API.
+Input: XML API.  
+Output: Populate 'data.wallet' table with a list of transactions per character.    
 
-Output: Populate 'data.wallet' table with a list of transactions per character.
+**consumer_zkillboard.py
 
-**consumer_zkillboard.py *work in progress***
+Input: zKillboard API, CREST API  
+Output: Populate 'data.killmails' table with CREST killmails and value from zKillboard.    
 
 
-Input: zKillboard API
+Processes
+==================
 
-Output: Populate 'data.killmails' table with CREST killmails.
+**process_updatemoons.py**
+
+Output: Populate 'data.moonminerals' with CREST verified moons from 'data.moonverify' table.  
 
 
 Report Services
@@ -115,15 +114,27 @@ Output: pandas .csv reports to */app/dist/data/* folder for graphing.
 Install Notes
 ==================
 
-**Dependencies**
-```shell 
+**PostgreSQL 9.5**
+
+As root
+```shell
+sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
+wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
+apt-get update
 apt-get install postgresql postgresql-contrib
+```
+
+**Dependencies**
+
+As root
+```shell 
 apt-get build-dep python-psycopg2
 apt-get install python-pip
+apt-get install supervisor
 apt-get install git
 pip install ConfigParser
 pip install psycopg2
-pip install requests (2.9.1+)
+pip install requests --upgrade (2.9.1+)
 pip install evelink (XML API)
 pip install pycrest (CREST API)
 pip install pandas (1GB RAM+)
@@ -131,7 +142,7 @@ pip install arrow
 pip install flask
 ```
 
-**Clone**
+**Clone GitHub Project**
 ```shell
 git clone https://github.com/brentnowak/spotmarket
 ```
@@ -139,7 +150,7 @@ git clone https://github.com/brentnowak/spotmarket
 **Make Scripts Executable**
 ```shell
 cd spotmarket
-cd /scripts/
+cd scripts/
 chmod +x *
 ```
 
@@ -157,14 +168,14 @@ GRANT ALL PRIVILEGES ON DATABASE spotmarket TO spotmarketadmin;
 
 As root
 ```shell
-vim /etc/postgresql/9.3/main/pg_hba.conf
+vim /etc/postgresql/9.5/main/pg_hba.conf
 ```
 Change line 85 and 90 from 'peer' to 'md5'.
 Under 'IPv4 local connections' add a line for your local network if you wish to connect to your database instance over your network.
 
 As root
 ```shell
-vim /etc/postgresql/9.3/main/postgresql.conf
+vim /etc/postgresql/9.5/main/postgresql.conf
 ```
 Uncomment line 59 and change the 'listen_address' value to '*'
 
@@ -183,12 +194,12 @@ psql -d spotmarket -U spotmarketadmin -W
 **Database Creation**
 If you have setup the server instance correctly, you should be presented with a prompt that indicates you are connected.
 ```shell
-psql (9.3.11)
+psql (9.5.1)
 Type "help" for help.
 
 spotmarket=>
 ```
-Create the schema and tables by pasting in the scripts located under *\sql* directory.  
+Create the schema by running schema.sql located under *\sql* directory.  
 You can connect to the database using the command listed above and create the tables or use a GUI tool such as pgAdmin.  
 
 **Import Eve Static Data**
@@ -196,35 +207,58 @@ You can connect to the database using the command listed above and create the ta
 ```shell
 wget https://www.fuzzwork.co.uk/dump/postgres-latest.dmp.bz2
 bzip2 -d postgres-latest.dmp.bz2
-pg_restore -i -h localhost -p 5432 -U spotmarketadmin -d spotmarket -v "postgres-latest.dmp"
+pg_restore -h localhost -p 5432 -U spotmarketadmin -d spotmarket -v "postgres-latest.dmp"
 rm postgres-latest.dmp
 ```
 
 **Modify config.ini with Database Details**
 ```shell
 vim config.ini.change
-mv config.ini.change change.ini
+mv config.ini.change config.ini
 ```
 
-Web Services
+**Supervisor**
+
+As root
+```shell
+mv spotmarket.conf /etc/supervisor/conf.d/
+service supervisor restart
+```
+
+Confirming supervisor and database settings are correct.
+```shell
+tail -f /var/log/spotmarket.error.log
+```
+
+If you see the following text displayed, then it is working.
+```shell
+ * Running on http://0.0.0.0:80/ (Press CTRL+C to quit)
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger pin code: 319-334-386
+```
+
+
+Scheduled Jobs
 ==================
 
-**spotmarket_flask.py**
-
-Output: HTTP service bound to *localhost:80*.
-
-**Services crontab**
+**crontab**
 ```shell 
 crontab -e
-0,30 * * * * ubuntu /home/ubuntu/spotmarket/scripts/consumer_map.sh > /dev/null 2>&1
-15 1,13 * * * ubuntu /home/ubuntu/spotmarket/scripts/consumer_markethistory.sh > /dev/null 2>&1
+10,40 * * * * /home/ubuntu/spotmarket/scripts/consumer_map.sh > /dev/null 2>&1
 ```
 
-**Starting Flask Web Service**
-```
-python spotmarket_flask.py &
-```
-Browse to localhost:80
+
+Web Front End
+==================
+Browse to http://hostname
+
+
+Tracking Tables - Work in Progress
+==================
+Currently the following tables have to be manually populated:
+* killmailsitems - typeIDs that are used for zKillboard imports.
+* marketitems - typeIDs that are used for market prices.
 
 
 License Info

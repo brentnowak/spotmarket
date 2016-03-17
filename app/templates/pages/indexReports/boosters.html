@@ -1,0 +1,82 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{header}}</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-bookmark"></span> Index Definition
+                </div>
+            </div>
+            <h4>Formula</h4>
+            <code>(volume * avgPrice * orderCount) / divisor AS index</code>
+            <h4>Resample</h4>
+            <code>1 week</code>
+
+            <p></p>
+            <br>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Quafe Zero
+                </div>
+            </div>
+            <h4>Divisor</h4>
+            <code>100,000,000,000</code>
+            <div class="row show-grid">
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/3898_64.png"><code>Quafe Zero</code></div>
+            </div>
+            <div class="d3-graph-index-quafezero"></div>
+            <script>
+                graphJumps({ /* Quafe Zero */
+                    width: 720,
+                    height: 340,
+                    ylegend: 'quafezero',
+                    selector: '.d3-graph-index-quafezero',
+                    json: '/api/report/index/typeids/quafezero'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Antipharmakon
+                </div>
+            </div>
+            <div class="row show-grid">
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/36908_64.png"><code>Thureo</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/36909_64.png"><code>Kosybo</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/36910_64.png"><code>Iokira</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/36911_64.png"><code>Toxot</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/36912_64.png"><code>Aeolis</code></div>
+            </div>
+            <div class="d3-graph-index-antipharmakon"></div>
+            <script>
+                graphJumps({ /* Antipharmakon */
+                    width: 720,
+                    height: 340,
+                    ylegend: 'antipharmakon',
+                    selector: '.d3-graph-index-antipharmakon',
+                    json: '/api/report/index/typeids/antipharmakon'
+                });
+            </script>
+
+
+        </div><!-- /.col-lg-12 -->
+    </div><!-- /.row -->
+
+</div>
+<!-- /#page-wrapper -->
+
+{% endblock %}

@@ -1,0 +1,149 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{header}}</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-bookmark"></span> Index Definition
+                </div>
+            </div>
+            <h4>Formula</h4>
+            <code>(volume * avgPrice * orderCount) / 30,000,000,000 AS index</code>
+            <h4>Resample</h4>
+            <code>1 week</code>
+
+            <p></p>
+            <br>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Battleships
+                </div>
+            </div>
+            <div class="row show-grid">
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/17738_64.png"><code>Machariel</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/17920_64.png"><code>Bhaalgorn</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/17918_64.png"><code>Rattlesnake</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/17736_64.png"><code>Nightmare</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/17740_64.png"><code>Vindicator</code></div>
+            </div>
+            <div class="d3-graph-index-pirate-battleship"></div>
+            <script>
+                graphJumps({ /* Battleships */
+                    width: 720,
+                    height: 340,
+                    ylegend: 'pirate battleships',
+                    selector: '.d3-graph-index-pirate-battleship',
+                    json: '/api/report/index/typeids/battleship'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Cruisers
+                </div>
+            </div>
+            <div class="row show-grid">
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/17720_64.png"><code>Cynabal</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/17922_64.png"><code>Ashimmu</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/17715_64.png"><code>Gila</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/17718_64.png"><code>Phantasm</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/17722_64.png"><code>Vigilant</code></div>
+            </div>
+            <div class="d3-graph-index-pirate-cruiser"></div>
+            <script>
+                graphJumps({ /* Cruisers */
+                    width: 720,
+                    height: 340,
+                    ylegend: 'pirate cruisers',
+                    selector: '.d3-graph-index-pirate-cruiser',
+                    json: '/api/report/index/typeids/cruiser'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Frigates
+                </div>
+            </div>
+            <div class="row show-grid">
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/17932_64.png"><code>Dramiel</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/17926_64.png"><code>Cruor</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/17930_64.png"><code>Worm</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/17924_64.png"><code>Succubus</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/17928_64.png"><code>Daredevil</code></div>
+            </div>
+            <div class="d3-graph-index-pirate-frigate"></div>
+            <script>
+                graphJumps({ /* Frigates */
+                    width: 720,
+                    height: 340,
+                    ylegend: 'pirate frigates',
+                    selector: '.d3-graph-index-pirate-frigate',
+                    json: '/api/report/index/typeids/frigate'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Sisters of Eve
+                </div>
+            </div>
+            <div class="row show-grid">
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/33468_64.png"><code>Astero</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/33470_64.png"><code>Stratios</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/33472_64.png"><code>Nestor</code></div>
+            </div>
+            <div class="d3-graph-index-sisters"></div>
+            <script>
+                graphJumps({ /* Sisters of Eve */
+                    width: 720,
+                    height: 340,
+                    ylegend: 'sisters of eve',
+                    selector: '.d3-graph-index-sisters',
+                    json: '/api/report/index/typeids/sisters'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Mordu's Legion
+                </div>
+            </div>
+            <div class="row show-grid">
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/33816_64.png"><code>Garmur</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/33818_64.png"><code>Orthrus</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/33820_64.png"><code>Barghest</code></div>
+            </div>
+            <div class="d3-graph-index-mordu"></div>
+            <script>
+                graphJumps({ /* Mordu's Legion */
+                    width: 720,
+                    height: 340,
+                    ylegend: 'mordus legion',
+                    selector: '.d3-graph-index-mordu',
+                    json: '/api/report/index/typeids/mordu'
+                });
+            </script>
+
+
+        </div><!-- /.col-lg-12 -->
+    </div><!-- /.row -->
+
+</div>
+<!-- /#page-wrapper -->
+
+{% endblock %}

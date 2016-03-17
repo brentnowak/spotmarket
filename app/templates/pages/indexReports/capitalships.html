@@ -1,0 +1,179 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{header}}</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-bookmark"></span> Index Definition
+                </div>
+            </div>
+            <h4>Formula</h4>
+            <code>(volume * avgPrice * orderCount) / divisor AS index</code>
+            <h4>Resample</h4>
+            <code>1 week</code>
+
+            <p></p>
+            <br>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Carriers
+                </div>
+            </div>
+            <h4>Divisor</h4>
+            <code>100,000,000</code>
+            <div class="row show-grid">
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/23757_64.png"><code>Archon</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/23915_64.png"><code>Chimera</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/23911_64.png"><code>Thanatos</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/22852_64.png"><code>Hel</code></div>
+            </div>
+            <div class="d3-graph-index-carriers"></div>
+            <script>
+                graphJumps({ /* Carriers */
+                    width: 720,
+                    height: 340,
+                    ylegend: 'carriers',
+                    selector: '.d3-graph-index-carriers',
+                    json: '/api/report/index/typeids/carriers'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Force Auxiliaries
+                </div>
+            </div>
+            <h4>Divisor</h4>
+            <code>100,000,000</code>
+            <div class="row show-grid">
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/37604_64.png"><code>Apostle</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/37605_64.png"><code>Minokawa</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/37607_64.png"><code>Ninazu</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/37606_64.png"><code>Lif</code></div>
+            </div>
+            <div class="d3-graph-index-faux"></div>
+            <script>
+                graphJumps({ /* Force Auxiliaries */
+                    width: 720,
+                    height: 340,
+                    ylegend: 'force auxiliaries',
+                    selector: '.d3-graph-index-faux',
+                    json: '/api/report/index/typeids/faux'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Dreadnoughts
+                </div>
+            </div>
+            <h4>Divisor</h4>
+            <code>200,000,000</code>
+            <div class="row show-grid">
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/19720_64.png"><code>Revelation</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/19726_64.png"><code>Phoenix</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/19724_64.png"><code>Moros</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/19722_64.png"><code>Naglfar</code></div>
+            </div>
+            <div class="d3-graph-index-dreadnoughts"></div>
+            <script>
+                graphJumps({ /* Dreadnoughts */
+                    width: 720,
+                    height: 340,
+                    ylegend: 'dreadnoughts',
+                    selector: '.d3-graph-index-dreadnoughts',
+                    json: '/api/report/index/typeids/dreadnoughts'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Freighters
+                </div>
+            </div>
+            <h4>Divisor</h4>
+            <code>5,000,000,000</code>
+            <div class="row show-grid">
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/20183_64.png"><code>Charon</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/20189_64.png"><code>Fenrir</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/20187_64.png"><code>Obelisk</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/20183_64.png"><code>Providence</code></div>
+            </div>
+            <div class="d3-graph-index-freighters "></div>
+            <script>
+                graphJumps({ /* Freighters */
+                    width: 720,
+                    height: 340,
+                    ylegend: 'freighters',
+                    selector: '.d3-graph-index-freighters',
+                    json: '/api/report/index/typeids/freighters'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Jump Freighters
+                </div>
+            </div>
+            <h4>Divisor</h4>
+            <code>200,000,000</code>
+            <div class="row show-grid">
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/28848_64.png"><code>Anshar</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/28850_64.png"><code>Ark</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/28846_64.png"><code>Nomad</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/28844_64.png"><code>Rhea</code></div>
+            </div>
+            <div class="d3-graph-index-jumpfreighters"></div>
+            <script>
+                graphJumps({ /* jumpfreighters */
+                    width: 720,
+                    height: 340,
+                    ylegend: 'jump freighters',
+                    selector: '.d3-graph-index-jumpfreighters',
+                    json: '/api/report/index/typeids/jumpfreighters'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> ORE
+                </div>
+            </div>
+            <h4>Divisor</h4>
+            <code>300,000,000</code>
+            <div class="row show-grid">
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/34328_64.png"><code>Bowhead</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/28606_64.png"><code>Orca</code></div>
+            </div>
+            <div class="d3-graph-index-ore"></div>
+            <script>
+                graphJumps({ /* ORE */
+                    width: 720,
+                    height: 340,
+                    ylegend: 'ore',
+                    selector: '.d3-graph-index-ore',
+                    json: '/api/report/index/typeids/ore'
+                });
+            </script>
+
+        </div><!-- /.col-lg-12 -->
+    </div><!-- /.row -->
+
+</div>
+<!-- /#page-wrapper -->
+
+{% endblock %}

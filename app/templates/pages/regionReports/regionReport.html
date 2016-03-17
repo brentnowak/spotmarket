@@ -7,17 +7,77 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">regionID - {{ regionID }}</h1>
+                <h1 class="page-header">{{ regionName }}</h1>
             </div>
             <!-- /.col-lg-12 -->
         </div>
 
     <div class="row">
         <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Ship Jumps
+                </div>
+            </div>
             <div class="d3-graph-shipjumps-{{ regionID }}"></div>
+            <script>
+                graphJumps({
+                    width: 720,
+                    height: 340,
+                    ylegend: 'SUM_shipJumps',
+                    selector: '.d3-graph-shipjumps-{{ regionID }}',
+                    json: '/api/map/jumps/region/{{ regionID }}'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> NPC Kills
+                </div>
+            </div>
             <div class="d3-graph-npckills-{{ regionID }}"></div>
+            <script>
+                graphJumps({
+                    width: 720,
+                    height: 340,
+                    ylegend: 'SUM_npcKills',
+                    selector: '.d3-graph-npckills-{{ regionID }}',
+                    json: '/api/map/npckills/region/{{ regionID }}'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Ship Kills
+                </div>
+            </div>
             <div class="d3-graph-shipkills-{{ regionID }}"></div>
+            <script>
+                graphJumps({
+                    width: 720,
+                    height: 340,
+                    ylegend: 'SUM_shipKills',
+                    selector: '.d3-graph-shipkills-{{ regionID }}',
+                    json: '/api/map/shipkills/region/{{ regionID }}'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Pod Kills
+                </div>
+            </div>
             <div class="d3-graph-podkills-{{ regionID }}"></div>
+            <script>
+                graphJumps({
+                    width: 720,
+                    height: 340,
+                    ylegend: 'SUM_podKills',
+                    selector: '.d3-graph-podkills-{{ regionID }}',
+                    json: '/api/map/podkills/region/{{ regionID }}'
+                });
+            </script>
+
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <span class="glyphicon glyphicon-stats"></span> Top Ratting Systems

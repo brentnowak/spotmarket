@@ -15,11 +15,101 @@
 
     <div class="row">
         <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-bookmark"></span> Details
+                </div>
+            </div>
+            <h4>Resample</h4>
+            <code>12 hours</code>
+
+            <p></p>
+            <br>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Major Trade Hubs
+                </div>
+            </div>
             <div class="d3-graph-jumps-tradehubs"></div>
+            <script>
+                graphJumps({ /* Trade Hubs */
+                    width: 720,
+                    height: 340,
+                    marginright: 40,
+                    marginleft: 40,
+                    selector: '.d3-graph-jumps-tradehubs',
+                    json: '/api/map/jumps/tradehubs'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Jita
+                </div>
+            </div>
             <div class="d3-graph-jumps-30000142"></div>
+            <script>
+                graphJumps({ /* Jita */
+                    width: 720,
+                    height: 340,
+                    marginright: 40,
+                    marginleft: 40,
+                    selector: '.d3-graph-jumps-30000142',
+                    json: '/api/map/jumps/30000142'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Amarr
+                </div>
+            </div>
             <div class="d3-graph-jumps-30002187"></div>
+            <script>
+                graphJumps({ /* Amarr */
+                    width: 720,
+                    height: 340,
+                    marginright: 40,
+                    marginleft: 40,
+                    selector: '.d3-graph-jumps-30002187',
+                    json: '/api/map/jumps/30002187'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Dodixie
+                </div>
+            </div>
             <div class="d3-graph-jumps-30002659"></div>
+            <script>
+                graphJumps({ /* Dodixie */
+                    width: 720,
+                    height: 340,
+                    marginright: 40,
+                    marginleft: 40,
+                    selector: '.d3-graph-jumps-30002659',
+                    json: '/api/map/jumps/30002659'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Rens
+                </div>
+            </div>
             <div class="d3-graph-jumps-30002510"></div>
+            <script>
+                graphJumps({ /* Rens */
+                    width: 720,
+                    height: 340,
+                    marginright: 40,
+                    marginleft: 40,
+                    selector: '.d3-graph-jumps-30002510',
+                    json: '/api/map/jumps/30002510'
+                });
+            </script>
         </div><!-- /.col-lg-12 -->
     </div><!-- /.row -->
 

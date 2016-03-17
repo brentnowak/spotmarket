@@ -1,29 +1,77 @@
+#-----------------------------------------------------------------------------
+# consumer_zkillboard.py -
+# https://github.com/brentnowak/spotmarket
+#-----------------------------------------------------------------------------
+# Version: 0.1
+# - Initial release.
+# Version: 0.2
+# - Loop over ships from data.killmailsitems table, zkillboard paging, basic requests exception handling.
+#-----------------------------------------------------------------------------
+#
+# Input: List of ships from data.killmailsitems table.
+# Output: Populate 'data.killmails' table with a list of CREST verified killmails.
+# Use zKillboard as filter to find killmails and then use killID+Hash to look up the CREST killmail.
+# Store CREST JSON to table along with zKillboard value.
+#-----------------------------------------------------------------------------
+
 from _utility import *
+from _consumer_kills import *
+from requests.exceptions import ConnectionError, ChunkedEncodingError
+import requests.packages.urllib3
 
-#############################
-#
-# Work in progress
-#
-#############################
+requests.packages.urllib3.disable_warnings()
+#  Suppress InsecurePlatformWarning messages
 
-response = '{"solarSystem": {"id_str": "30001982", "href": "https://public-crest.eveonline.com/solarsystems/30001982/", "id": 30001982, "name": "G95-VZ"}, "killID": 52250409, "killTime": "2016.02.25 17:38:02", "attackers": [{"alliance": {"id_str": "1354830081", "href": "https://public-crest.eveonline.com/alliances/1354830081/", "id": 1354830081, "name": "Goonswarm Federation", "icon": {"href": "http://imageserver.eveonline.com/Alliance/1354830081_128.png"}}, "shipType": {"id_str": "17713", "href": "https://public-crest.eveonline.com/types/17713/", "id": 17713, "name": "Stabber Fleet Issue", "icon": {"href": "http://imageserver.eveonline.com/Type/17713_128.png"}}, "corporation": {"id_str": "2052404106", "href": "https://public-crest.eveonline.com/corporations/2052404106/", "id": 2052404106, "name": "Valar Morghulis.", "icon": {"href": "http://imageserver.eveonline.com/Corporation/2052404106_128.png"}}, "character": {"id_str": "90170963", "href": "https://public-crest.eveonline.com/characters/90170963/", "id": 90170963, "name": "LordShazbot", "icon": {"href": "http://imageserver.eveonline.com/Character/90170963_128.jpg"}}, "damageDone_str": "79895", "weaponType": {"id_str": "2488", "href": "https://public-crest.eveonline.com/types/2488/", "id": 2488, "name": "Warrior II", "icon": {"href": "http://imageserver.eveonline.com/Type/2488_128.png"}}, "finalBlow": true, "securityStatus": -3.3, "damageDone": 79895}], "attackerCount": 1, "victim": {"damageTaken": 79895, "items": [{"singleton": 0, "itemType": {"id_str": "16641", "href": "https://public-crest.eveonline.com/types/16641/", "id": 16641, "name": "Chromium", "icon": {"href": "http://imageserver.eveonline.com/Type/16641_128.png"}}, "quantityDestroyed_str": "324", "flag": 5, "flag_str": "5", "singleton_str": "0", "quantityDestroyed": 324}], "damageTaken_str": "79895", "character": {"id_str": "1072804170", "href": "https://public-crest.eveonline.com/characters/1072804170/", "id": 1072804170, "name": "StFlyer", "icon": {"href": "http://imageserver.eveonline.com/Character/1072804170_128.jpg"}}, "shipType": {"id_str": "33477", "href": "https://public-crest.eveonline.com/types/33477/", "id": 33477, "name": "Small Mobile Siphon Unit", "icon": {"href": "http://imageserver.eveonline.com/Type/33477_128.png"}}, "corporation": {"id_str": "98322687", "href": "https://public-crest.eveonline.com/corporations/98322687/", "id": 98322687, "name": "RESET.", "icon": {"href": "http://imageserver.eveonline.com/Corporation/98322687_128.png"}}, "position": {"y": 867902945.0184605, "x": 1743710307568.5635, "z": -5246218890326.316}}, "killID_str": "52250409", "attackerCount_str": "1", "war": {"href": "https://public-crest.eveonline.com/wars/0/", "id": 0, "id_str": "0"}}'
-response = json.loads(response)
-solarSystemID = response['solarSystem']['id']
-killID = response['killID']
-killTime = response['killTime']
-typeID = response['victim']['items'][0]['itemType']['id']
-typeName = response['victim']['items'][0]['itemType']['name']
-#shipType = ['victim']['shipType']
-x = response['victim']['position']['x']
-y = response['victim']['position']['y']
-z = response['victim']['position']['z']
+ships = getzkbships()
+#  Get list of typeIDs that have 'enabled' set to 1
 
-print(solarSystemID)
-print(killID)
-print(killTime)
-#print(shipType)
-print(typeID)
-print(typeName)
-print(x, y, z)
+for typeID in ships:
+    pageNum = 1
+    if getzkbpagenumber(typeID[0]) != pageNum:  #  Pick up state and start at last page-1
+        pageNum = getzkbpagenumber(typeID[0])-1
+    r = requests.Response() #  Init requests for new ship after we have finished a specific typeID
 
+    while r.text != "[]":
+        start_time = time.time()
+        service = "consumer_zkillboard.py"
+        killmailInsertCount = 1
 
+        url = 'https://zkillboard.com/api/losses/shipID/' + str(typeID[0]) + '/orderDirection/desc/page/' + str(pageNum) + "/"
+        headers = {'user-agent': 'github.com/brentnowak/spotmarket'}
+
+        try:
+            r = requests.get(url, headers=headers)
+        except (ConnectionError, ChunkedEncodingError) as e:
+            print(e)
+        else:
+            for kill in json.loads(r.text):
+                killID = kill['killID']
+                killHash = kill['zkb']['hash']
+                killTime = kill['killTime']
+                solarSystemID = kill['solarSystemID']
+                totalValue = kill['zkb']['totalValue']
+
+                if checkforkillmail(killID, killHash) == False:  # Check if killmail exists, if not, fetch from CREST
+                    crestURL = 'https://public-crest.eveonline.com/killmails/' + str(killID) + '/' + str(killHash) + '/'
+                    print("[" + str(gettypeName(typeID[0])) + "][page:" + str(pageNum) + "][count:" + str(killmailInsertCount) + "][killTime:" + str(killTime) + "][killID:" + str(killID) + "][solarSystemName:" + str(getSolarSystemName(solarSystemID)) + "]")  # Feedback
+                    try:
+                        crestKill = requests.get(crestURL)
+                    except (ConnectionError, ChunkedEncodingError) as e:
+                        print(e)
+                    else:
+                        killmailInsertCount += insertkillmailrecord(killID, killHash, crestKill.text, totalValue)
+                else:
+                    print("[" + str(gettypeName(typeID[0])) + "][skip][killID:" + str(killID) + "]")
+
+            timestamp = arrow.utcnow().format('YYYY-MM-DD HH:mm:ss')  # Get UTC arrow object
+            detail = "[zkb][typeID:" + str(typeID[0]) + "] insert " + str(killmailInsertCount - 1) + " @ " + str(round((killmailInsertCount - 1) / (time.time() - start_time), 3)) + " rec/sec"
+            insertlog_timestamp(service, 0, detail, timestamp)
+            setzkblastpage(typeID[0], pageNum)  # Keep track of paging
+            print("----------------------")
+            print("[Completed Page:" + str(pageNum) + "]")
+            print("----------------------")
+            pageNum += 1
+
+    # Record state to data.killmailsitems because we're done with a specific typeID
+    setzkbshipenable(typeID[0], 0)  # Successful run sets enabled to 0
+    setzkbshipresult(typeID[0], 1)  # Successful run sets importResult to 1

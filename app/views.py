@@ -3,9 +3,9 @@ from app import app
 from _utility import *
 
 
-#
+#############################
 # Main pages
-#
+#############################
 @app.route('/login.html')
 def login():
     return render_template('pages/login.html', title="Login")
@@ -55,6 +55,18 @@ def icons():
 def grid():
     return render_template('pages/grid.html', title="Grid", header="Grid", nav="Grid Page")
 
+@app.route('/forms.html')
+def forms():
+    return render_template('pages/forms.html', title="Forms", header="Forms", nav="Forms Page")
+
+
+#############################
+# Error Handling
+#############################
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('pages/404.html'), 404
+
 
 #
 #   factionReport
@@ -79,6 +91,14 @@ def faction_report_sansha():
 @app.route('/report/faction/serpentis')
 def faction_report_serpentis():
     return render_template('pages/factionReports/serpentis.html', title="Serpentis", header="Serpentis", nav="Serpentis")
+
+@app.route('/report/faction/mordu')
+def faction_report_mordu():
+    return render_template('pages/factionReports/mordu.html', title="Mordu's Legion Command", header="Mordu's Legion Command", nav="Mordu's Legion Command")
+
+@app.route('/report/faction/sisters')
+def faction_report_sisters():
+    return render_template('pages/factionReports/sisters.html', title="Servant Sisters of EVE", header="Servant Sisters of EVE", nav="Servant Sisters of EVE")
 
 
 #
@@ -112,14 +132,43 @@ def indexreport_deadend():
                            nav="Dead End Systems",
                            systemList=json.loads(getdeadendsystems(1)))
 
+@app.route('/report/index/pirateships')
+def indexreport_pirateships():
+    return render_template('pages/indexReports/pirateships.html',
+                           title="Pirate Ships",
+                           header="Pirate Ships",
+                           nav="Pirate Ships")
+
+@app.route('/report/index/boosters')
+def indexreport_boosters():
+    return render_template('pages/indexReports/boosters.html',
+                           title="Boosters",
+                           header="Boosters",
+                           nav="Boosters")
+
+@app.route('/report/index/pilotservices')
+def indexreport_pilotservices():
+    return render_template('pages/indexReports/pilotservices.html',
+                           title="Pilot Services",
+                           header="Pilot Services",
+                           nav="Pilot Services")
+
+@app.route('/report/index/capitalships')
+def indexreport_capitalships():
+    return render_template('pages/indexReports/capitalships.html',
+                           title="Capital Ships",
+                           header="Capital Ships",
+                           nav="Capital Ships")
 
 #
 # regionReports
 #
 @app.route('/report/region/<regionID>')
 def regionreport(regionID):
+    regionName = getregionName(regionID)
     return render_template('pages/regionReports/regionReport.html',
                            regionID=regionID,
+                           regionName=regionName,
                            title="Region 1",
                            header="Region 1",
                            nav="Region 1")
@@ -130,8 +179,20 @@ def regionreport(regionID):
 #
 @app.route('/report/jump/tradehubs')
 def jumpreport_tradehubs():
-    return render_template('pages/jumpReports/tradehubs.html', title="Trade Hubs", header="Trade Hubs", nav="Trade Hubs")
+    return render_template('pages/jumpReports/tradehubs.html',
+                           title="Trade Hubs",
+                           header="Trade Hubs",
+                           nav="Trade Hubs")
 
+#
+# marketReports
+#
+@app.route('/report/market/pilotservices/')
+def marketreport_pilotservices():
+    return render_template('pages/marketReports/pilotservices.html',
+                           title="Pilot Services",
+                           header="Pilot Services",
+                           nav="Pilot Services")
 
 #
 # moonReports
@@ -160,8 +221,9 @@ def moonreport_r32():
 def moonreport_r64():
     return render_template('pages/moonReports/r64.html', title="Rarity 64", header="Rarity 64", nav="Rarity 64")
 
-
+#
 # Map
+#
 @app.route('/map/sovereignty')
 def map_sovereignty():
     return render_template('pages/mapReports/sovereignty.html', title="Sovereignty", header="Sovereignty")
@@ -171,9 +233,9 @@ def map_conquerablestations():
     return render_template('pages/mapReports/conquerablestations.html', title="Conquerable Stations", header="Conquerable Stations")
 
 
-#
+#############################
 # API
-#
+#############################
 @app.route('/api/toprattingevents')
 def api_toprattingevents():
     return toprattingevents()
@@ -229,7 +291,7 @@ def api_gettoprattingsystemss_highsec():
 # System
 @app.route('/api/system/log')
 def api_systemlog():
-    return getlog()
+    return getsystemlogs()
 
 @app.route('/api/system/countmapkills')
 def api_systemcountmapkills():
@@ -250,12 +312,16 @@ def api_systemcountmarkethistory():
 
 # Settings
 @app.route('/api/marketitems')
-def api_marketitems():
-    return databasemarketitems()
+def api_getmarketitems():
+    return getmarketitems()
 
 @app.route('/api/characters')
-def api_characters():
+def api_getcharacters():
     return getcharacters()
+
+@app.route('/api/zkillboarditems')
+def api_getzkillboarditems():
+    return getzkillboarditems()
 
 
 # Wallet
@@ -273,7 +339,7 @@ def api_getsovevents():
 # Simple Lookups
 @app.route('/api/regionName/<regionID>')
 def api_regionID(regionID):
-    return regionName(regionID)
+    return getregionName(regionID)
 
 # Market
 @app.route('/api/typeName/<typeID>')
@@ -316,6 +382,43 @@ def api_moonmineralsbyallalliance():
 @app.route('/api/report/index/deadend/<gateCountLimit>')
 def api_getdeadendsystems(gateCountLimit):
     return getdeadendsystems(gateCountLimit)
+
+@app.route('/api/report/index/sovchanges')
+def indexreport_sovchanges():
+    return getsoveventsumbyday()
+
+@app.route('/api/report/index/typeids/<typenames>')
+def indexreport_indexitems(typenames):
+    if typenames == "battleship":
+        return getindextypeids((17918, 17740, 17736, 17738, 17920), 30000000000)
+    if typenames == "cruiser":
+        return getindextypeids((17720, 17922, 17715, 17718, 17722), 30000000000)
+    if typenames == "frigate":
+        return getindextypeids((17932, 17926, 17930, 17924, 17928), 30000000000)
+    if typenames == "sisters":
+        return getindextypeids((33468, 33470, 33472), 30000000000)
+    if typenames == "mordu":
+        return getindextypeids((33816, 33818, 33820), 30000000000)
+    if typenames == "antipharmakon":
+        return getindextypeids((36908, 36909, 36910, 36911, 36912), 30000)
+    if typenames == "quafezero":
+        return getindextypeids((3898,), 100000000000)
+    if typenames == "plex":
+        return getindextypeids((29668,), 50000000000000)
+    if typenames == "carriers":
+        return getindextypeids((23757, 23915, 23911, 22852), 100000000)
+    if typenames == "faux":
+        return getindextypeids((23757, 23915, 23911, 22852), 100000000)
+        #return getindextypeids((37604, 37605, 37606, 37607), 30000000000)  # Placeholder
+    if typenames == "dreadnoughts":
+        return getindextypeids((19720, 19726, 19724, 19722), 300000000)
+    if typenames == "freighters":
+        return getindextypeids((20183, 20189, 20187, 20183, ), 5000000000)
+    if typenames == "jumpfreighters":
+        return getindextypeids((gettypeIDsfromGroupID(902)), 5000000000)
+    if typenames == "ore":
+        return getindextypeids((34328, 28606), 300000000)
+
 
 # Map
 @app.route('/api/map/conquerablestations')

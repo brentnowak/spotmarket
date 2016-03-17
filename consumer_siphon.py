@@ -12,14 +12,20 @@
 #-----------------------------------------------------------------------------
 
 from _utility import *
+from _consumer_kills import *
 import requests
+import requests.packages.urllib3
 
-start_time = time.time()
+requests.packages.urllib3.disable_warnings()
+#  Suppress InsecurePlatformWarning messages
 
 pageNum = 1
-while pageNum < 30:
-    url = 'https://zkillboard.com/api/losses/shipID/33477/orderDirection/desc/'
-    headers = {'user-agent': 'replaceme'}
+r = requests.Response()
+
+while r.text != "[]":
+    start_time = time.time()
+    url = 'https://zkillboard.com/api/losses/shipID/33477/orderDirection/desc/page/' + str(pageNum) + "/"
+    headers = {'user-agent': 'github.com/brentnowak/spotmarket'}
     r = requests.get(url, headers=headers)
 
     service = "consumer_siphon.py"
@@ -29,45 +35,50 @@ while pageNum < 30:
     for kill in json.loads(r.text):
         killID = kill['killID']
         killHash = kill['zkb']['hash']
-        crestURL = 'https://public-crest.eveonline.com/killmails/' + str(killID) + '/' + str(killHash) + '/'
-        print(crestURL)
-        crestKill = requests.get(crestURL)
-        data = json.loads(crestKill.text)
+        totalValue = kill['zkb']['totalValue']
 
-        solarSystemID = data.get('solarSystem', {'id': 'NA'})['id']
-        try:
-            typeID = data['victim']['items'][0]['itemType']['id']
-        except IndexError: # Handle if no items are dropped
-            typeID = None
-        try:
-            typeName = data['victim']['items'][0]['itemType']['name']
-        except IndexError:
-            typeName = None
-        try:
-            killx = data['victim']['position']['x']
-        except KeyError: # Handle if killmail is pre-parallax (2015-11-03) and does not include x,y,z
-            killx = None
-        try:
-            killy = data['victim']['position']['y']
-        except KeyError:
-            killy = None
-        try:
-            killz = data['victim']['position']['z']
-        except KeyError:
-            killz = None
+        if checkforkillmail(killID, killHash) == False:  # Check if killmail exists, if not, fetch from CREST
+            crestURL = 'https://public-crest.eveonline.com/killmails/' + str(killID) + '/' + str(killHash) + '/'
+            print(crestURL)
+            crestKill = requests.get(crestURL)
+            data = json.loads(crestKill.text)
 
-        killmailInsertCount += insertkillmailrecord(killID, killHash, crestKill.text)
+            solarSystemID = data.get('solarSystem', {'id': 'NA'})['id']
+            try:
+                typeID = data['victim']['items'][0]['itemType']['id']
+            except IndexError: # Handle if no items are dropped
+                typeID = None
+            try:
+                typeName = data['victim']['items'][0]['itemType']['name']
+            except IndexError:
+                typeName = None
+            try:
+                killx = data['victim']['position']['x']
+            except KeyError: # Handle if killmail is pre-parallax (2015-11-03) and does not include x,y,z
+                killx = None
+            try:
+                killy = data['victim']['position']['y']
+            except KeyError:
+                killy = None
+            try:
+                killz = data['victim']['position']['z']
+            except KeyError:
+                killz = None
 
-        if killx != None:
-            if typeID != None:
-                result = getclosestmoon(solarSystemID, killx, killy, killz)
-                moonID = result[3]
-                print(str(solarSystemID) + " : " + typeName + " - " + str(moonID))
-                print("Kill location: " + str(killx), str(killy), str(killz))
-                moonInsertCount += insertmoonverifyrecord(moonID, killID, typeID)
+            killmailInsertCount += insertkillmailrecord(killID, killHash, crestKill.text, totalValue)
 
-    timestamp = arrow.get() # Get arrow object
-    timestamp = timestamp.timestamp # Get timestamp of arrow object
+            if killx != None:
+                if typeID != None:
+                    result = getclosestmoon(solarSystemID, killx, killy, killz)
+                    moonID = result[3]
+                    print(str(solarSystemID) + " : " + typeName + " - " + str(moonID))
+                    print("Kill location: " + str(killx), str(killy), str(killz))
+                    if insertmoonrecordverifygroup(typeID) == 501: #  Only moon minerals
+                        moonInsertCount += insertmoonverifyrecord(moonID, killID, typeID)
+        else:
+            print("[skip][killID:" + str(killID) + "]")
+
+    timestamp = arrow.utcnow().format('YYYY-MM-DD HH:mm:ss')  # Get UTC arrow object
 
     detail = "[killmail] insert " + str(killmailInsertCount) + " @ " + str(round(killmailInsertCount/(time.time() - start_time), 3)) + " rec/sec"
     insertlog_timestamp(service, 0, detail, timestamp)

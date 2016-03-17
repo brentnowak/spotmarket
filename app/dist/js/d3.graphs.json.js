@@ -18,11 +18,11 @@ function graphPrice(options) {
 		json: '',
 		label: '',
 		selector: 'body',
-		width: 960,
-		height: 500,
+		width: 580,
+		height: 340,
 		legend: 480,
-		marginright: 80,
-		marginleft: 50,
+		marginright: 50,
+		marginleft: 80,
 		ylegend: 'price (ISK)',
 		dateformat: '%Y-%m-%d'
 	}, options);
@@ -141,164 +141,16 @@ var svg = d3.select(options.selector).append("svg")
 	});
 }
 
-graphPrice({ /* Dramiel */
-    width: 580,
-    height: 340,
-    marginright: 50,
-    marginleft: 80,
-    selector: '.d3-graph-price-17932',
-    json: '/api/market/avgprice/17932'
-});
-
-graphPrice({ /* Cynabal */
-    width: 580,
-    height: 340,
-    marginright: 50,
-    marginleft: 80,
-    selector: '.d3-graph-price-17720',
-    json: '/api/market/avgprice/17720'
-});
-
-graphPrice({ /* Machariel */
-    width: 580,
-    height: 340,
-    marginright: 50,
-    marginleft: 80,
-    selector: '.d3-graph-price-17738',
-    json: '/api/market/avgprice/17738'
-});
-
-graphPrice({ /* Cruor */
-    width: 580,
-    height: 340,
-    marginright: 50,
-    marginleft: 80,
-    selector: '.d3-graph-price-17926',
-    json: '/api/market/avgprice/17926'
-});
-
-graphPrice({ /* Ashimmu */
-    width: 580,
-    height: 340,
-    marginright: 50,
-    marginleft: 80,
-    selector: '.d3-graph-price-17922',
-    json: '/api/market/avgprice/17922'
-});
-
-graphPrice({ /* Bhaalgorn */
-    width: 580,
-    height: 340,
-    marginright: 50,
-    marginleft: 80,
-    selector: '.d3-graph-price-17920',
-    json: '/api/market/avgprice/17920'
-});
-
-graphPrice({ /* Worm */
-    width: 580,
-    height: 340,
-    marginright: 50,
-    marginleft: 80,
-    selector: '.d3-graph-price-17930',
-    json: '/api/market/avgprice/17930'
-});
-
-graphPrice({ /* Gila */
-    width: 580,
-    height: 340,
-    marginright: 50,
-    marginleft: 80,
-    selector: '.d3-graph-price-17715',
-    json: '/api/market/avgprice/17715'
-});
-
-graphPrice({ /* Rattlesnake */
-    width: 580,
-    height: 340,
-    marginright: 50,
-    marginleft: 80,
-    selector: '.d3-graph-price-17918',
-    json: '/api/market/avgprice/17918'
-});
-
-graphPrice({ /* Garmur */
-    width: 580,
-    height: 340,
-    marginright: 50,
-    marginleft: 80,
-    selector: '.d3-graph-price-33816',
-    json: '/api/market/avgprice/33816'
-});
-
-graphPrice({ /* Orthrus */
-    width: 580,
-    height: 340,
-    marginright: 50,
-    marginleft: 80,
-    selector: '.d3-graph-price-33818',
-    json: '/api/market/avgprice/33818'
-});
-
-graphPrice({ /* Barghest */
-    width: 580,
-    height: 340,
-    marginright: 50,
-    marginleft: 80,
-    selector: '.d3-graph-price-33820',
-    json: '/api/market/avgprice/33820'
-});
-
-graphPrice({ /* Succubus */
-    width: 580,
-    height: 340,
-    marginright: 50,
-    marginleft: 80,
-    selector: '.d3-graph-price-17924',
-    json: '/api/market/avgprice/17924'
-});
-
-graphPrice({ /* Phantasm */
-    width: 580,
-    height: 340,
-    marginright: 50,
-    marginleft: 80,
-    selector: '.d3-graph-price-17718',
-    json: '/api/market/avgprice/17718'
-});
-
-graphPrice({ /* Nightmare */
-    width: 580,
-    height: 340,
-    marginright: 50,
-    marginleft: 80,
-    selector: '.d3-graph-price-17736',
-    json: '/api/market/avgprice/17736'
-});
-
-graphPrice({ /* Promethium */
-    width: 580,
-    height: 340,
-    marginright: 50,
-    marginleft: 80,
-    selector: '.d3-graph-price-16652',
-    json: '/api/market/avgprice/16652'
-});
-
-
-
-
-
 function graphJumps(options) {
 
 	options = _.extend({
 		json: '',
 		label: '',
 		selector: 'body',
-		width: 960,
-		height: 500,
+		width: 580,
+		height: 340,
 		legend: 480,
-		marginright: 80,
+		marginright: 50,
 		marginleft: 50,
 		ylegend: 'jumpCount',
 		dateformat: '%Y-%m-%dT%H:%M:%S.%LZ'
@@ -418,97 +270,3 @@ var svg = d3.select(options.selector).append("svg")
 	        .text(options.label);
 	});
 }
-
-graphJumps({ /* Trade Hubs */
-    width: 1160,
-    height: 340,
-    marginright: 40,
-    marginleft: 40,
-    selector: '.d3-graph-jumps-tradehubs',
-    json: '/api/map/jumps/tradehubs'
-});
-
-graphJumps({ /* Jita */
-    width: 1160,
-    height: 340,
-    marginright: 40,
-    marginleft: 40,
-    selector: '.d3-graph-jumps-30000142',
-    json: '/api/map/jumps/30000142'
-});
-
-graphJumps({ /* Amarr */
-    width: 1160,
-    height: 340,
-    marginright: 40,
-    marginleft: 40,
-    selector: '.d3-graph-jumps-30002187',
-    json: '/api/map/jumps/30002187'
-});
-
-graphJumps({ /* Dodixie */
-    width: 1160,
-    height: 340,
-    marginright: 40,
-    marginleft: 40,
-    selector: '.d3-graph-jumps-30002659',
-    json: '/api/map/jumps/30002659'
-});
-
-graphJumps({ /* Rens */
-    width: 1160,
-    height: 340,
-    marginright: 40,
-    marginleft: 40,
-    selector: '.d3-graph-jumps-30002510',
-    json: '/api/map/jumps/30002510'
-});
-
-graphPrice({ /* Hek */
-    width: 1160,
-    height: 340,
-    marginright: 40,
-    marginleft: 40,
-    selector: '.d3-graph-jumps-30002053',
-    json: '/api/map/jumps/30002053'
-});
-
-graphJumps({ /* Delve shipJumps */
-    width: 580,
-    height: 340,
-    marginright: 40,
-    marginleft: 40,
-    ylegend: 'SUM_shipJumps',
-    selector: '.d3-graph-shipjumps-10000060',
-    json: '/api/map/jumps/region/10000060'
-});
-
-graphJumps({ /* Delve npckills */
-    width: 580,
-    height: 340,
-    marginright: 40,
-    marginleft: 40,
-    ylegend: 'SUM_npcKills',
-    selector: '.d3-graph-npckills-10000060',
-    json: '/api/map/npckills/region/10000060'
-});
-
-graphJumps({ /* Delve shipkills */
-    width: 580,
-    height: 340,
-    marginright: 40,
-    marginleft: 40,
-    ylegend: 'SUM_shipKills',
-    selector: '.d3-graph-shipkills-10000060',
-    json: '/api/map/shipkills/region/10000060'
-});
-
-graphJumps({ /* Delve podkills */
-    width: 580,
-    height: 340,
-    marginright: 40,
-    marginleft: 40,
-    ylegend: 'SUM_podKills',
-    selector: '.d3-graph-shipkills-10000060',
-    json: '/api/map/podkills/region/10000060'
-});

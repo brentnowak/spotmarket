@@ -20,7 +20,8 @@ from psycopg2.extras import RealDictCursor
 #############################
 
 config = ConfigParser.ConfigParser()
-config.read(["config.ini"])
+config.read(["config.ini"]) #  For running on Windows
+#config.read(["/home/ubuntu/spotmarket/config.ini"]) #  Full path needed for supervisor
 password = config.get("DATABASE", "password")
 user = config.get("DATABASE", "user")
 host = config.get("DATABASE", "host")
@@ -46,22 +47,19 @@ pd.set_option('display.width', desired_width)
 # Input     regionID
 # Output    regionName
 #
-def regionName(regionID):
+def getregionName(regionID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = 'SELECT "mapRegions"."regionName" FROM public."mapRegions" WHERE "mapRegions"."regionID" = %s'
     data = (regionID, )
     cursor.execute(sql, data, )
-    results = json.dumps(cursor.fetchone(), indent=2, default=date_handler)
-    if len(results) < 1:     # Handle a empty table
-        return "No Data"
-    else:
-        return results
+    results = cursor.fetchone()
+    return results[0]
 
 
 #
 # Input     typeID
-# Output    typeName
+# Output    typeName as JSON
 #
 def typeName(typeID):
     conn = psycopg2.connect(conn_string)
@@ -78,6 +76,75 @@ def typeName(typeID):
         return "No Data"
     else:
         return results
+
+
+#
+# Input     typeID
+# Output    typeName
+#
+def gettypeName(typeID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      "invTypes"."typeName"
+    FROM
+      public."invTypes"
+      WHERE "invTypes"."typeID" = %s'''
+    data = (typeID, )
+    cursor.execute(sql, data, )
+    results = cursor.fetchone()
+    return results[0]
+
+
+#
+# Input     solarSystemID
+# Output    solarSystemName
+#
+def getSolarSystemName(solarSystemID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      "mapSolarSystems"."solarSystemName"
+    FROM
+      public."mapSolarSystems"
+      WHERE "mapSolarSystems"."solarSystemID" = %s'''
+    data = (solarSystemID, )
+    cursor.execute(sql, data, )
+    results = cursor.fetchone()
+    return results[0]
+
+
+# Input
+# Output    Tuple of typeIDs
+def gettypeIDsfromGroupID(groupID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      "invTypes"."typeID"
+    FROM
+      public."invTypes"
+    WHERE "invTypes"."groupID" = %s'''
+    data = (groupID, )
+    cursor.execute(sql, data, )
+    results = cursor.fetchall()
+    return tuple(results)
+
+#
+# Input     moonName
+# Output    moonID
+#
+def getmoonIDfromName(typeID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      "mapDenormalize"."itemID"
+    FROM
+      public."mapDenormalize"
+    WHERE "mapDenormalize"."itemName" = %s'''
+    data = (typeID, )
+    cursor.execute(sql, data, )
+    results = cursor.fetchone()
+    return results[0]
 
 
 #
@@ -254,7 +321,7 @@ def insertjumpsrecords(jumps_data, jumpstimestamp):
 
 
 #
-# Usage         consumer_alliance.py
+# Usage         consumer_alliance.sh
 # Input         alliance_data
 # Output        'alliances' Database insert
 #
@@ -859,11 +926,15 @@ def date_handler(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
 
 
-def getlog():
+def getsystemlogs():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      *
+      to_char(logs."timestamp", 'YYYY-MM-dd HH:mm:ss') AS timestamp,
+      logs."logID",
+      logs.service,
+      logs.severity,
+      logs.detail
     FROM
       data.logs
     ORDER BY logs."logID" DESC
@@ -886,10 +957,11 @@ def insertlog(service, severity, detail, timestamp):
     conn.commit()
     return 0
 
+
 def insertlog_timestamp(service, severity, detail, timestamp):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    sql = 'INSERT INTO data."logs" (timestamp, "service", "severity", "detail") VALUES (to_timestamp(%s), %s, %s, %s)'
+    sql = 'INSERT INTO data."logs" (timestamp, "service", "severity", "detail") VALUES (%s, %s, %s, %s)'
     data = (timestamp, service, severity, detail, )
     cursor.execute(sql, data)
     conn.commit()
@@ -1275,7 +1347,7 @@ def rattinghistorybysystem(solarSystemID):
 # Settings
 #############################
 
-def databasemarketitems():
+def getmarketitems():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
@@ -1300,6 +1372,32 @@ def databasemarketitems():
     else:
         return results
 
+
+def getzkillboarditems():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''SELECT
+      killmailsitems."typeID",
+      "invTypes"."typeName",
+      "invMarketGroups"."marketGroupName",
+      killmailsitems.enabled,
+      killmailsitems."lastPage",
+      killmailsitems."importResult",
+      killmailsitems."importTimestamp"
+    FROM
+      data.killmailsitems,
+      public."invTypes",
+      public."invMarketGroups"
+    WHERE
+      killmailsitems."typeID" = "invTypes"."typeID" AND
+      "invTypes"."marketGroupID" = "invMarketGroups"."marketGroupID"
+    '''
+    cursor.execute(sql, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
 
 
 #############################
@@ -1416,6 +1514,23 @@ def getsovevents():
         return results
 
 
+def getsoveventsumbyday():  # TODO remove hard coded date start, scrape Dotlan for sov history
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''
+    SELECT date_trunc('day', timestamp) AS timestamp,
+        COUNT(*) AS sovCount
+        FROM data.mapsov
+        WHERE timestamp >= DATE('2016-02-03')
+        GROUP BY date_trunc('day', timestamp)
+        ORDER BY timestamp DESC'''
+    cursor.execute(sql, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','sovcount'])
+    cursor.close()
+    df = df.set_index(['timestamp'])
+    return df.reset_index().to_json(orient='records',date_format='iso')
+
+
 #############################
 # regionReport
 #############################
@@ -1517,7 +1632,7 @@ def gettoprattingbyregion(regionID):
 # moonReport
 #############################
 
-def getmoonmineralsbyregion(regionID):
+def getmoonmineralsbyregion(regionID):  # TODO change join to return results when no sov exists
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
@@ -1766,6 +1881,7 @@ def mapjumps_solarsystemID(solarSystemID):
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','shipJumps','solarSystemName'])
     cursor.close()
     df = pd.pivot_table(df,index='timestamp',columns='solarSystemName',values='shipJumps')
+    df = df.resample("12H")
     return df.reset_index().to_json(orient='records',date_format='iso')
 
 
@@ -1787,6 +1903,7 @@ def mapjumps_tradehubs():
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','shipJumps','solarSystemName'])
     cursor.close()
     df = pd.pivot_table(df,index='timestamp',columns='solarSystemName',values='shipJumps')
+    df = df.resample("12H")
     return df.reset_index().to_json(orient='records',date_format='iso')
 
 
@@ -1815,6 +1932,7 @@ def mapkills_jumpsbyregion(regionID):
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','SUM_shipJumps','regionName'])
     cursor.close()
     df = pd.pivot_table(df,index='timestamp',columns='regionName',values='SUM_shipJumps')
+    df = df.resample("12H")
     return df.reset_index().to_json(orient='records',date_format='iso')
 
 
@@ -1843,6 +1961,7 @@ def mapkills_npckillsbyregion(regionID):
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','SUM_factionKills','regionName'])
     cursor.close()
     df = pd.pivot_table(df,index='timestamp',columns='regionName',values='SUM_factionKills')
+    df = df.resample("12H")
     return df.reset_index().to_json(orient='records',date_format='iso')
 
 
@@ -1871,6 +1990,7 @@ def mapkills_shipkillsbyregion(regionID):
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','SUM_shipKills','regionName'])
     cursor.close()
     df = pd.pivot_table(df,index='timestamp',columns='regionName',values='SUM_shipKills')
+    df = df.resample("12H")
     return df.reset_index().to_json(orient='records',date_format='iso')
 
 
@@ -1899,63 +2019,67 @@ def mapkills_podkillsbyregion(regionID):
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','SUM_podKills','regionName'])
     cursor.close()
     df = pd.pivot_table(df,index='timestamp',columns='regionName',values='SUM_podKills')
+    df = df.resample("12H")
     return df.reset_index().to_json(orient='records',date_format='iso')
 
 
+#############################
+# Process - Update Moons
+#############################
+
+def getverifiedmoonscrest():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT "moonID", "typeID" FROM data."moonverify"'''
+    cursor.execute(sql, )
+    result = cursor.fetchall()
+    return result
+
+
+def getverifiedmoonsevemoons():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT "moonID", "typeID" FROM data."moonevemoons"'''
+    cursor.execute(sql, )
+    result = cursor.fetchall()
+    return result
+
+
+def updatemoonmineralstable(moonID, typeID):
+    insertcount = 0
+    try:
+        conn = psycopg2.connect(conn_string)
+        cursor = conn.cursor()
+        sql = 'INSERT INTO data."moonminerals" ("moonID", "typeID") VALUES (%s, %s)'
+        data = (moonID, typeID, )
+        cursor.execute(sql, data, )
+    except psycopg2.IntegrityError:
+        conn.rollback()
+    else:
+        conn.commit()
+        insertcount += 1
+    return insertcount
 
 #############################
-# Siphon Verify
+# indexReports
 #############################
 
-def getclosestmoon(solarSystemID, x, y, z):
+def getindextypeids(typeIDlist, divisor):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      "mapDenormalize"."solarSystemID",
-      ABS(%s - "mapDenormalize".x) +
-      ABS(%s - "mapDenormalize".y) +
-      ABS(%s - "mapDenormalize".z) as totalDiff,
-      "mapDenormalize"."itemName",
-      "mapDenormalize"."itemID"
-    FROM
-      public."mapDenormalize"
-    WHERE "mapDenormalize"."solarSystemID" = %s AND
-    "mapDenormalize"."typeID" = 14
-    ORDER BY totalDiff ASC
-    LIMIT 1'''
-    data = (x, y, z, solarSystemID, )
+          (markethistory.volume * markethistory."avgPrice" * markethistory."orderCount") / %s AS index,
+          markethistory."timestamp"
+        FROM
+          data.markethistory
+        WHERE
+          markethistory."typeID" IN %s
+        GROUP BY index, markethistory."timestamp"
+        ORDER BY markethistory."timestamp" ASC'''
+    data = (divisor, typeIDlist, )
     cursor.execute(sql, data, )
-    results = cursor.fetchone()
+    df = pd.DataFrame(cursor.fetchall(),columns=['index','timestamp'])
     cursor.close()
-    return results
-
-def insertmoonverifyrecord(moonID, killID, typeID):
-    insertcount = 0
-    try:
-        conn = psycopg2.connect(conn_string)
-        cursor = conn.cursor()
-        sql = 'INSERT INTO data."moonverify" ("moonID", "killID", "typeID") VALUES (%s, %s, %s)'
-        data = (moonID, killID, typeID, )
-        cursor.execute(sql, data, )
-    except psycopg2.IntegrityError:
-        conn.rollback()
-    else:
-        conn.commit()
-        insertcount += 1
-    return insertcount
-
-
-def insertkillmailrecord(killID, killHash, killData):
-    insertcount = 0
-    try:
-        conn = psycopg2.connect(conn_string)
-        cursor = conn.cursor()
-        sql = 'INSERT INTO data."killmails" ("killID", "killHash", "killData") VALUES (%s, %s, %s)'
-        data = (killID, killHash, killData, )
-        cursor.execute(sql, data, )
-    except psycopg2.IntegrityError:
-        conn.rollback()
-    else:
-        conn.commit()
-        insertcount += 1
-    return insertcount
+    df = df.groupby(['timestamp']).mean()
+    df = df.resample("1W")
+    return df.reset_index().to_json(orient='records',date_format='iso')

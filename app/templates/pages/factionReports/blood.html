@@ -15,26 +15,22 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="col-md-6">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <span class="glyphicon glyphicon-stats"></span> Region - 12H Resample - 1.5D Window
-                    </div>
-                        <div class="panel-body">
-                            <div class="d3-graph-blood"></div>
-                        </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Region - 12H Resample - 1.5D Window
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <span class="glyphicon glyphicon-stats"></span> Region Totals - 12H Resample - 1.5D Window
-                    </div>
-                        <div class="panel-body">
-                            <div class="d3-graph-blood-sum"></div>
-                        </div>
+            <div class="d3-graph-blood"></div>
+
+            <p></p>
+            <br>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Region Totals - 12H Resample - 1.5D Window
                 </div>
             </div>
+            <div class="d3-graph-blood-sum"></div>
         </div><!-- /.col-lg-12 -->
     </div><!-- /.row -->
 
@@ -72,6 +68,12 @@
                     </div>
                     <div class="panel-body">
                         <div class="d3-graph-price-17926"></div>
+                        <script>
+                            graphPrice({ /* Cruor */
+                                selector: '.d3-graph-price-17926',
+                                json: '/api/market/avgprice/17926'
+                            });
+                        </script>
                     </div>
                 </div>
             </div>
@@ -112,6 +114,12 @@
                     </div>
                     <div class="panel-body">
                         <div class="d3-graph-price-17922"></div>
+                        <script>
+                            graphPrice({ /* Ashimmu */
+                                selector: '.d3-graph-price-17922',
+                                json: '/api/market/avgprice/17922'
+                            });
+                        </script>
                     </div>
                 </div>
             </div>
@@ -152,6 +160,12 @@
                     </div>
                     <div class="panel-body">
                         <div class="d3-graph-price-17920"></div>
+                        <script>
+                            graphPrice({ /* Bhaalgorn */
+                                selector: '.d3-graph-price-17920',
+                                json: '/api/market/avgprice/17920'
+                            });
+                        </script>
                     </div>
                 </div>
             </div>
