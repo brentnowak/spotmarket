@@ -81,7 +81,7 @@ Notes: Replace 'user-agent' value with your own custom string.
 Input: XML API.  
 Output: Populate 'data.wallet' table with a list of transactions per character.    
 
-**consumer_zkillboard.py
+**consumer_zkillboard.py**
 
 Input: zKillboard API, CREST API  
 Output: Populate 'data.killmails' table with CREST killmails and value from zKillboard.    
