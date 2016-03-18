@@ -14,6 +14,7 @@
 # Store CREST JSON to table along with zKillboard value.
 #-----------------------------------------------------------------------------
 
+import sys
 from _utility import *
 from _consumer_kills import *
 from requests.exceptions import ConnectionError, ChunkedEncodingError
@@ -62,6 +63,7 @@ for typeID in ships:
                         killmailInsertCount += insertkillmailrecord(killID, killHash, crestKill.text, totalValue)
                 else:
                     print("[" + str(gettypeName(typeID[0])) + "][skip][killID:" + str(killID) + "]")
+                    sys.stdout.flush()
 
             timestamp = arrow.utcnow().format('YYYY-MM-DD HH:mm:ss')  # Get UTC arrow object
             detail = "[zkb][typeID:" + str(typeID[0]) + "] insert " + str(killmailInsertCount - 1) + " @ " + str(round((killmailInsertCount - 1) / (time.time() - start_time), 3)) + " rec/sec"
@@ -70,6 +72,7 @@ for typeID in ships:
             print("----------------------")
             print("[Completed Page:" + str(pageNum) + "]")
             print("----------------------")
+            sys.stdout.flush()
             pageNum += 1
 
     # Record state to data.killmailsitems because we're done with a specific typeID
