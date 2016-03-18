@@ -55,6 +55,7 @@ for typeID in ships:
                 if checkforkillmail(killID, killHash) == False:  # Check if killmail exists, if not, fetch from CREST
                     crestURL = 'https://public-crest.eveonline.com/killmails/' + str(killID) + '/' + str(killHash) + '/'
                     print("[" + str(gettypeName(typeID[0])) + "][page:" + str(pageNum) + "][count:" + str(killmailInsertCount) + "][killTime:" + str(killTime) + "][killID:" + str(killID) + "][solarSystemName:" + str(getSolarSystemName(solarSystemID)) + "]")  # Feedback
+                    sys.stdout.flush()
                     try:
                         crestKill = requests.get(crestURL)
                     except (ConnectionError, ChunkedEncodingError) as e:
