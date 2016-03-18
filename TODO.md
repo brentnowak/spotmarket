@@ -3,7 +3,7 @@
 
 - [ ] [new] Create freighter security index based on killmails  
 - [ ] [new] Work on indexes, add item destruction based on killmails  
-- [ ] [new] Create process to fill in killmails that lack JSON data or zKb values
+- [ ] [new] Create process to fill in killmails that lack JSON data or zKb values  
 
 - [ ] [bug] bootstrap-table table headers that contain icons do not align correctly with rows  
 - [ ] [bug] Security reports have hardcoded time range for data that calculates ratting rate  
