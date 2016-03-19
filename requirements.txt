@@ -1,0 +1,8 @@
+ConfigParser
+psycopg2
+requests==2.9.1
+evelink
+pycrest
+pandas
+arrow
+flask
