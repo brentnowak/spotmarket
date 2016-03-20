@@ -18,35 +18,57 @@
         <div class="col-lg-12">
             <div class="panel panel-primary">
                 <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Faction Kills by Universe
+                </div>
+            </div>
+            <div class="d3-graph-npckills-universe"></div>
+            <script>
+                graphJumps({
+                    width: 720,
+                    height: 340,
+                    marginright: 58,
+                    marginleft: 80,
+                    ylegend: 'sum',
+                    selector: '.d3-graph-npckills-universe',
+                    json: '/api/npckills/universe'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
                     <span class="glyphicon glyphicon-stats"></span> Faction Kills by Security
                 </div>
             </div>
-                <div class="d3-graph-universe"></div>
-                <script>
-                    graph({
-                        width: 720,
-                        height: 340,
-                        marginright: 25,
-                        selector: '.d3-graph-universe',
-                        csv: '/dist/data/npckills_universe.csv'
-                    });
-                </script>
+            <div class="d3-graph-npckills-security"></div>
+            <script>
+                graphJumps({
+                    width: 720,
+                    height: 340,
+                    marginright: 35,
+                    marginleft: 80,
+                    ylegend: 'sum',
+                    selector: '.d3-graph-npckills-security',
+                    json: '/api/npckills/security'
+                });
+            </script>
 
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <span class="glyphicon glyphicon-stats"></span> Faction Kills by Faction
                 </div>
             </div>
-                <div class="d3-graph-universe-factions"></div>
-                <script>
-                    graph({
-                        width: 720,
-                        height: 340,
-                        marginright: 105,
-                        selector: '.d3-graph-universe-factions',
-                        csv: '/dist/data/npckills_factions.csv'
-                    });
-                </script>
+            <div class="d3-graph-npckills-faction"></div>
+            <script>
+                graphJumps({
+                    width: 720,
+                    height: 340,
+                    marginright: 100,
+                    marginleft: 80,
+                    ylegend: 'sum',
+                    selector: '.d3-graph-npckills-faction',
+                    json: '/api/npckills/faction'
+                });
+            </script>
 
 
             <div class="panel panel-primary">
@@ -54,17 +76,17 @@
                     <span class="glyphicon glyphicon-stats"></span> Sovereignty Changes
                 </div>
             </div>
-                <div class="d3-graph-sov-changes-per-day"></div>
-                <script>
-                    graphJumps({ /* Sov Change per Day */
-                        width: 720,
-                        height: 340,
-                        marginright: 40,
-                        marginleft: 40,
-                        selector: '.d3-graph-sov-changes-per-day',
-                        json: '/api/report/index/sovchanges'
-                    });
-                </script>
+            <div class="d3-graph-sov-changes-per-day"></div>
+            <script>
+                graphJumps({ /* Sov Change per Day */
+                    width: 720,
+                    height: 340,
+                    marginright: 40,
+                    marginleft: 40,
+                    selector: '.d3-graph-sov-changes-per-day',
+                    json: '/api/report/index/sovchanges'
+                });
+            </script>
 
         </div><!-- /.col-lg-12 -->
     </div><!-- /.row -->

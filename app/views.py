@@ -160,6 +160,14 @@ def indexreport_capitalships():
                            header="Capital Ships",
                            nav="Capital Ships")
 
+@app.route('/report/index/goldenroute')
+def indexreport_goldenroute():
+    return render_template('pages/indexReports/goldenroute.html',
+                           title="Golden Route",
+                           header="Golden Route",
+                           nav="Golden Route")
+
+
 #
 # regionReports
 #
@@ -415,10 +423,32 @@ def indexreport_indexitems(typenames):
     if typenames == "freighters":
         return getindextypeids((20183, 20189, 20187, 20183, ), 5000000000)
     if typenames == "jumpfreighters":
-        return getindextypeids((gettypeIDsfromGroupID(902)), 5000000000)
+        return getindextypeids(jumpFreighters, 5000000000)
     if typenames == "ore":
         return getindextypeids((34328, 28606), 300000000)
 
+@app.route('/api/report/index/goldenroute/<typenames>')
+def api_goldenroute(typenames):
+    if typenames == "freighters":
+        return getkillmails_typeid_solarsystem(freighters, golden_route)
+    if typenames == "jumpfreighters":
+        return getkillmails_typeid_solarsystem(jumpFreighters, golden_route)
+    if typenames == "allfreighters":
+        return getkillmails_typeid_solarsystem(allFreighters, golden_route)
+    if typenames == "ore":
+        return getkillmails_typeid_solarsystem(oreFreighters, golden_route)
+
+@app.route('/api/npckills/universe')
+def api_npckillsuniverse():
+    return getnpckills_byuniverse()
+
+@app.route('/api/npckills/security')
+def api_npckillssecurity():
+    return getnpckills_byallsecurity()
+
+@app.route('/api/npckills/faction')
+def api_getnpckillsfactions():
+    return getnpckills_byallfactions()
 
 # Map
 @app.route('/api/map/conquerablestations')

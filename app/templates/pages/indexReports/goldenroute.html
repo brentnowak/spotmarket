@@ -1,0 +1,138 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{header}}</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-bookmark"></span> Index Definition
+                </div>
+            </div>
+            <h4>Formula</h4>
+            <code>Jita <-> Amarr</code>
+            <h4>Resample</h4>
+            <code>1 week</code>
+
+            <p></p>
+            <br>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> All Freighter Kills
+                </div>
+            </div>
+            <div class="row show-grid">
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/20185_64.png"><code>Charon</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/20189_64.png"><code>Fenrir</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/20187_64.png"><code>Obelisk</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/20183_64.png"><code>Providence</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/28848_64.png"><code>Anshar</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/28850_64.png"><code>Ark</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/28846_64.png"><code>Nomad</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/28844_64.png"><code>Rhea</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/34328_64.png"><code>Bowhead</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/28606_64.png"><code>Orca</code></div>
+            </div>
+            <div class="d3-graph-goldenroute-allfreighters"></div>
+            <script>
+                graphJumps({ /* All Freighters */
+                    width: 720,
+                    height: 340,
+                    ylegend: 'all freighters',
+                    selector: '.d3-graph-goldenroute-allfreighters',
+                    json: '/api/report/index/goldenroute/allfreighters'
+                });
+            </script>
+
+            <p></p>
+            <br>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Freighter Kills
+                </div>
+            </div>
+            <div class="row show-grid">
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/20185_64.png"><code>Charon</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/20189_64.png"><code>Fenrir</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/20187_64.png"><code>Obelisk</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/20183_64.png"><code>Providence</code></div>
+            </div>
+            <div class="d3-graph-goldenroute-freighters"></div>
+            <script>
+                graphJumps({ /* Freighters */
+                    width: 720,
+                    height: 340,
+                    ylegend: 'freighters',
+                    selector: '.d3-graph-goldenroute-freighters',
+                    json: '/api/report/index/goldenroute/freighters'
+                });
+            </script>
+
+            <p></p>
+            <br>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Jump Freighter Kills
+                </div>
+            </div>
+            <div class="row show-grid">
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/28848_64.png"><code>Anshar</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/28850_64.png"><code>Ark</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/28846_64.png"><code>Nomad</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/28844_64.png"><code>Rhea</code></div>
+            </div>
+            <div class="d3-graph-goldenroute-jumpfreighters"></div>
+            <script>
+                graphJumps({ /* Jump Freighters */
+                    width: 720,
+                    height: 340,
+                    ylegend: 'jump freighters',
+                    selector: '.d3-graph-goldenroute-jumpfreighters',
+                    json: '/api/report/index/goldenroute/jumpfreighters'
+                });
+            </script>
+
+            <p></p>
+            <br>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> ORE Kills
+                </div>
+            </div>
+            <div class="row show-grid">
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/34328_64.png"><code>Bowhead</code></div>
+                <div class="col-xs-2"><img src="https://image.eveonline.com/Type/28606_64.png"><code>Orca</code></div>
+            </div>
+            <div class="d3-graph-goldenroute-ore"></div>
+            <script>
+                graphJumps({ /* ORE */
+                    width: 720,
+                    height: 340,
+                    ylegend: 'ore',
+                    selector: '.d3-graph-goldenroute-ore',
+                    json: '/api/report/index/goldenroute/ore'
+                });
+            </script>
+
+        </div><!-- /.col-lg-12 -->
+    </div><!-- /.row -->
+
+</div>
+<!-- /#page-wrapper -->
+
+{% endblock %}

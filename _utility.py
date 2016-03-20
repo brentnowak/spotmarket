@@ -8,12 +8,10 @@ import time
 import arrow
 import pycrest
 import pandas as pd
-import fileinput
-import requests
 import json
-import sys
 
 from psycopg2.extras import RealDictCursor
+from _globals import *
 
 #############################
 # Database
@@ -129,6 +127,7 @@ def gettypeIDsfromGroupID(groupID):
     results = cursor.fetchall()
     return tuple(results)
 
+
 #
 # Input     moonName
 # Output    moonID
@@ -147,42 +146,41 @@ def getmoonIDfromName(typeID):
     return results[0]
 
 
+def getnpckills_byallfactions():
+    df = getnpckills_byregions(regions_angel, "Angel Cartel")
+    df = df.combine_first(getnpckills_byregions(regions_blood, "Blood Raiders"))
+    df = df.combine_first(getnpckills_byregions(regions_guristas, "Guristas"))
+    df = df.combine_first(getnpckills_byregions(regions_sanshas, "Sansha's Nation"))
+    df = df.combine_first(getnpckills_byregions(regions_serpentis, "Serpentis"))
+    return df.reset_index().to_json(orient='records',date_format='iso')
+
 #
-# Input     regionID
+# Input     regions
 # Output    dataframe of SUM_factionKills grouped by timestamp
 #
-def getregions_byfaction(factionID):
+def getnpckills_byregions(regions, factionName):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    sql = """SELECT
-      "chrFactions"."factionName",
-      "chrFactions"."factionID",
-      "mapRegions"."regionName",
-      "mapRegions"."regionID"
+    sql = '''SELECT
+    SUM(mapkills."factionKills") as factionKills,
+      mapkills."timestamp"
     FROM
-      public."chrFactions",
-      public."mapRegions"
+      data.mapkills,
+      public."mapRegions",
+      public."mapSolarSystems"
     WHERE
-      "mapRegions"."factionID" = "chrFactions"."factionID"
-      AND "mapRegions"."factionID" = %s
-    """
-    data = (factionID, )
+      "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
+      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      public."mapSolarSystems"."regionID" IN %s
+    GROUP BY mapkills."timestamp"
+    ORDER BY timestamp DESC
+    '''
+    data = (regions, )
     cursor.execute(sql, data)
-    df = pd.DataFrame(cursor.fetchall(),columns=['factionName','factionID','regionName','regionID'])
+    df = pd.DataFrame(cursor.fetchall(),columns=[factionName, 'timestamp'])
+    df = df.set_index(['timestamp'])
+    df = df.resample("12H",how='sum')
     cursor.close()
-    return df
-
-
-#
-# Input     dataframe of a single region
-# Output    dataframe of regions
-#
-def getnpckills_byregions(regions):
-    df = pd.DataFrame()
-    for region in regions:
-        df_result = getnpckills_byregion(region)
-        df = df.append(df_result)
-    df.reset_index()
     return df
 
 
@@ -194,17 +192,18 @@ def getnpckills_byuniverse():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = """SELECT
-      SUM(mapkills."factionKills") as SUM_factionKills, timestamp
+      SUM(mapkills."factionKills") as factionKills, timestamp
     FROM
       data.mapkills
     GROUP BY mapkills."timestamp"
     ORDER BY timestamp DESC
     """
     cursor.execute(sql)
-    df = pd.DataFrame(cursor.fetchall(),columns=['SUM_factionKills', 'timestamp'])
+    df = pd.DataFrame(cursor.fetchall(),columns=['factionKills', 'timestamp'])
     df = df.set_index(['timestamp'])
+    df = df.resample("12H",how='sum')
     cursor.close()
-    return df
+    return df.reset_index().to_json(orient='records',date_format='iso')
 
 
 #
@@ -215,7 +214,8 @@ def getnpckills_byallsecurity():
     df = getnpckills_bysecurity(0.5, 1.0, 'high')
     df = df.combine_first(getnpckills_bysecurity(0.0, 0.5, 'low'))
     df = df.combine_first(getnpckills_bysecurity(-1, 0.0, 'null'))
-    return df
+    df = df.resample("12H",how='sum')
+    return df.reset_index().to_json(orient='records',date_format='iso')
 
 
 def getnpckills_bysecurity(low, high, name):
@@ -236,36 +236,6 @@ def getnpckills_bysecurity(low, high, name):
     cursor.execute(sql, data)
     df = pd.DataFrame(cursor.fetchall(),columns=[name, 'timestamp'])
     df = df.set_index(['timestamp'])
-    cursor.close()
-    return df
-
-
-#
-# Input     regionID
-# Output    dataframe of SUM_factionKills grouped by timestamp
-#
-def getnpckills_byregion(regionID):
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
-    sql = """SELECT
-      "mapSolarSystems"."regionID",
-      "mapRegions"."regionName",
-    SUM(mapkills."factionKills") as SUM_factionKills,
-      mapkills."timestamp"
-    FROM
-      data.mapkills,
-      public."mapRegions",
-      public."mapSolarSystems"
-    WHERE
-      "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
-      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
-      public."mapSolarSystems"."regionID" = %s
-    GROUP BY mapkills."timestamp", public."mapSolarSystems"."regionID", "mapRegions"."regionName"
-    ORDER BY timestamp DESC
-    """
-    data = (regionID, )
-    cursor.execute(sql, data)
-    df = pd.DataFrame(cursor.fetchall(),columns=['regionID', 'regionName', 'SUM_factionKills', 'timestamp'])
     cursor.close()
     return df
 
@@ -1881,7 +1851,7 @@ def mapjumps_solarsystemID(solarSystemID):
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','shipJumps','solarSystemName'])
     cursor.close()
     df = pd.pivot_table(df,index='timestamp',columns='solarSystemName',values='shipJumps')
-    df = df.resample("12H")
+    df = df.resample("12H",how='sum')
     return df.reset_index().to_json(orient='records',date_format='iso')
 
 
@@ -1903,7 +1873,7 @@ def mapjumps_tradehubs():
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','shipJumps','solarSystemName'])
     cursor.close()
     df = pd.pivot_table(df,index='timestamp',columns='solarSystemName',values='shipJumps')
-    df = df.resample("12H")
+    df = df.resample("12H",how='sum')
     return df.reset_index().to_json(orient='records',date_format='iso')
 
 
@@ -1932,7 +1902,7 @@ def mapkills_jumpsbyregion(regionID):
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','SUM_shipJumps','regionName'])
     cursor.close()
     df = pd.pivot_table(df,index='timestamp',columns='regionName',values='SUM_shipJumps')
-    df = df.resample("12H")
+    df = df.resample("12H",how='sum')
     return df.reset_index().to_json(orient='records',date_format='iso')
 
 
@@ -1961,7 +1931,7 @@ def mapkills_npckillsbyregion(regionID):
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','SUM_factionKills','regionName'])
     cursor.close()
     df = pd.pivot_table(df,index='timestamp',columns='regionName',values='SUM_factionKills')
-    df = df.resample("12H")
+    df = df.resample("12H",how='sum')
     return df.reset_index().to_json(orient='records',date_format='iso')
 
 
@@ -1990,7 +1960,7 @@ def mapkills_shipkillsbyregion(regionID):
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','SUM_shipKills','regionName'])
     cursor.close()
     df = pd.pivot_table(df,index='timestamp',columns='regionName',values='SUM_shipKills')
-    df = df.resample("12H")
+    df = df.resample("12H",how='sum')
     return df.reset_index().to_json(orient='records',date_format='iso')
 
 
@@ -2019,7 +1989,7 @@ def mapkills_podkillsbyregion(regionID):
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','SUM_podKills','regionName'])
     cursor.close()
     df = pd.pivot_table(df,index='timestamp',columns='regionName',values='SUM_podKills')
-    df = df.resample("12H")
+    df = df.resample("12H",how='sum')
     return df.reset_index().to_json(orient='records',date_format='iso')
 
 
@@ -2082,4 +2052,32 @@ def getindextypeids(typeIDlist, divisor):
     cursor.close()
     df = df.groupby(['timestamp']).mean()
     df = df.resample("1W")
+    return df.reset_index().to_json(orient='records',date_format='iso')
+
+
+def getkillmails_typeid_solarsystem(typeIDs, solarSystemIDs):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+     COUNT(killmails."killData"->'solarSystem'->'id') as count,
+     killmails."killData"->'killTime' as timestamp
+    FROM
+     data.killmails,
+     public."invTypes"
+    WHERE
+     (killmails."killData"->'victim'->'shipType'->'id')::text::int = "invTypes"."typeID" AND
+     (killmails."killData"->'victim'->'shipType'->'id')::text::int IN %s AND
+     (killmails."killData"->'solarSystem'->'id')::text::int IN %s
+    GROUP BY
+     timestamp
+    ORDER BY
+     timestamp DESC'''
+    data = (typeIDs, solarSystemIDs, )
+    cursor.execute(sql, data, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['count','timestamp'])
+    cursor.close()
+    df['timestamp'] = df['timestamp'].str.replace('.','-')
+    df['timestamp'] = pd.to_datetime(df['timestamp'])
+    df = df.set_index('timestamp')
+    df = df.resample("1M",how='sum')
     return df.reset_index().to_json(orient='records',date_format='iso')

@@ -95,22 +95,6 @@ Processes
 Output: Populate 'data.moonminerals' with CREST verified moons from 'data.moonverify' table.  
 
 
-Report Services
-==================
-
-**report_market.py *work in progress***
-
-Input: Price data from 'data.markethistory' table.
-
-Output: /api/market/ REST Endpoint
-
-**report_npckills.py**
-
-Input: NPC kill data from 'data.mapkills' table.
-
-Output: pandas .csv reports to */app/dist/data/* folder for graphing.
-
-
 Install Notes
 ==================
 
