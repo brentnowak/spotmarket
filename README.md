@@ -132,14 +132,7 @@ apt-get build-dep python-psycopg2
 apt-get install python-pip
 apt-get install supervisor
 apt-get install git
-pip install ConfigParser
-pip install psycopg2
-pip install requests --upgrade (2.9.1+)
-pip install evelink (XML API)
-pip install pycrest (CREST API)
-pip install pandas (1GB RAM+)
-pip install arrow
-pip install flask
+pip install -r requirements.txt
 ```
 
 **Clone GitHub Project**
