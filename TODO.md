@@ -18,13 +18,14 @@
 ==================
   
 - [ ] [enhancement] Create Docker image  
-- [ ] [enhancement] Research replacing cron jobs with a better solution
-- [ ] [enhancement] Organize API endpoints into a more logical pattern    
+- [ ] [enhancement] Display tags rather than numbers for severity on log pages  
+- [ ] [enhancement] Research replacing cron jobs with a better solution  
+- [ ] [enhancement] Organize API endpoints into a more logical pattern  
 
 0.4 Release (Completed)
 ==================
   
-- [x] [new] Creation of ship index report
+- [x] [new] Creation of ship index report  
 - [x] [bug] Change timestamp for zkillboard and markethistory consumer to use UTC for mental sanity   
 - [x] [enhancement] Add 404 error page  
 - [x] [enhancement] Change to postgres 9.5.1 to support jsonb  

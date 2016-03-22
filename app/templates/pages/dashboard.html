@@ -15,62 +15,36 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-12">
-            <div class="panel panel-primary">
+        <div class="col-md-8">
+           <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <span class="glyphicon glyphicon-stats"></span> Faction Kills by Universe
+                    <span class="fa fa-table"></span> Market
                 </div>
-            </div>
-            <div class="d3-graph-npckills-universe"></div>
-            <script>
-                graphJumps({
-                    width: 720,
-                    height: 340,
-                    marginright: 58,
-                    marginleft: 80,
-                    ylegend: 'sum',
-                    selector: '.d3-graph-npckills-universe',
-                    json: '/api/npckills/universe'
-                });
-            </script>
-
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <span class="glyphicon glyphicon-stats"></span> Faction Kills by Security
-                </div>
-            </div>
-            <div class="d3-graph-npckills-security"></div>
-            <script>
-                graphJumps({
-                    width: 720,
-                    height: 340,
-                    marginright: 35,
-                    marginleft: 80,
-                    ylegend: 'sum',
-                    selector: '.d3-graph-npckills-security',
-                    json: '/api/npckills/security'
-                });
-            </script>
-
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <span class="glyphicon glyphicon-stats"></span> Faction Kills by Faction
-                </div>
-            </div>
-            <div class="d3-graph-npckills-faction"></div>
-            <script>
-                graphJumps({
-                    width: 720,
-                    height: 340,
-                    marginright: 100,
-                    marginleft: 80,
-                    ylegend: 'sum',
-                    selector: '.d3-graph-npckills-faction',
-                    json: '/api/npckills/faction'
-                });
-            </script>
-
-
+           </div>
+            <table class="table table-striped table-bordered table-hover">
+                <tbody>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Item</th>
+                            <th>Price</th>
+                            <th>1 Day</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td><img src="https://image.eveonline.com/Type/29668_64.png" height="32" width="32"></td>
+                        <td>30 Day Pilot's License Extension (PLEX)</td>
+                        <td><code>{{plexgetlatestprice}}</code></td>
+                        <td><code>{{plexgetlatestpricechange}}%</code></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <span class="glyphicon glyphicon-stats"></span> Sovereignty Changes
@@ -83,11 +57,70 @@
                     height: 340,
                     marginright: 40,
                     marginleft: 40,
+                    ylegend: '',
                     selector: '.d3-graph-sov-changes-per-day',
                     json: '/api/report/index/sovchanges'
                 });
             </script>
+        </div>
 
+        <div class="col-md-4">
+            <div class="panel panel-green">
+                <div class="panel-heading">
+                    <span class="fa fa-database"></span> Statistics
+                </div>
+            </div>
+            <table class="table table-striped table-bordered table-hover">
+                <tbody>
+                    <tr>
+                        <td><i class="fa fa-crosshairs"></i> Killmails</td>
+                        <td><code>{{countdatakillmails}}</code></td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-circle-o"></i> Moon Records</td>
+                        <td><code>{{countdatamoonminerals}}</code></td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-check-circle"></i> Verified Moon Records</td>
+                        <td><code>{{countdatamoonverify}}</code></td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-automobile"></i> Latest Jita Jumps/Hour</td>
+                        <td><code>{{countlatestjitajump}}</code></td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-clock-o"></i> Lastest Jump Data</td>
+                        <td><code>{{latestjumpdatatime}}</code></td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-flag"></i> Latest Sov Change</td>
+                        <td><code>{{latestsovdatatime}}</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="panel panel-green">
+                <div class="panel-heading">
+                    <span class="fa fa-database"></span> System
+                </div>
+            </div>
+
+            <table class="table table-striped table-bordered table-hover">
+                <tbody>
+                    <tr>
+                        <td><i class="fa fa-gears"></i> System Memory</td>
+                        <td><code>{{psutil_getmemory}}%</code></td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-chain"></i> CREST Connections</td>
+                        <td><code>{{psutil_crestconnections}}</code></td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-chain"></i> zKillboard Connections</td>
+                        <td><code>{{psutil_zkillboardconnections}}</code></td>
+                    </tr>
+                </tbody>
+            </table>
         </div><!-- /.col-lg-12 -->
     </div><!-- /.row -->
 

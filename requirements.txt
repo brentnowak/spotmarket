@@ -4,5 +4,6 @@ requests==2.9.1
 evelink
 pycrest
 pandas
+psutil
 arrow
 flask

@@ -1489,13 +1489,13 @@ def getsoveventsumbyday():  # TODO remove hard coded date start, scrape Dotlan f
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''
     SELECT date_trunc('day', timestamp) AS timestamp,
-        COUNT(*) AS sovCount
+        COUNT(*) AS sovChange
         FROM data.mapsov
         WHERE timestamp >= DATE('2016-02-03')
         GROUP BY date_trunc('day', timestamp)
         ORDER BY timestamp DESC'''
     cursor.execute(sql, )
-    df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','sovcount'])
+    df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','sovchange'])
     cursor.close()
     df = df.set_index(['timestamp'])
     return df.reset_index().to_json(orient='records',date_format='iso')
@@ -1596,6 +1596,45 @@ def gettoprattingbyregion(regionID):
     df = pd.DataFrame(cursor.fetchall(),columns=['solarSystemName', 'security', 'ticker', 'name', 'allianceID', 'SUM_factionKills'])
     cursor.close()
     return df
+
+
+def getkillmailsbyregion(regionID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''
+    SELECT
+      killmails."killData"->'killTime' as timestamp,
+      killmails."killID",
+      killmails."killHash",
+      killmails."totalValue",
+      killmails."killData"->'attackerCount' as attackerCount,
+      killmails."killData"->'victim'->'damageTaken' as damageTaken,
+      killmails."killData"->'victim'->'alliance'->'name' as allianceName,
+      (killmails."killData"->'victim'->'shipType'->'id')::text::int as typeID,
+      "invTypes"."typeName",
+      "mapSolarSystems"."solarSystemName",
+      "mapSolarSystems"."security"
+    FROM
+      data.killmails,
+      public."invTypes",
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      (killmails."killData"->'victim'->'shipType'->'id')::text::int = "invTypes"."typeID" AND
+      "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
+      "mapSolarSystems"."solarSystemID" = (killmails."killData"->'solarSystem'->'id')::text::int AND
+      public."mapSolarSystems"."regionID" = %s AND
+      (killmails."killData"->'victim'->'shipType'->'id')::text::int NOT IN (33477)
+    ORDER BY
+     timestamp DESC
+    '''
+    data = (regionID, )
+    cursor.execute(sql, data, )
+    df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','killID','killHash','totalValue','attackerCount','damageTaken','allianceName', 'typeID', 'typeName', 'solarSystemName', 'security'])
+    cursor.close()
+    df['timestamp'] = df['timestamp'].str.replace('.','-')
+    df['timestamp'] = pd.to_datetime(df['timestamp'])
+    return df.reset_index().to_json(orient='records',date_format='iso')
 
 
 #############################

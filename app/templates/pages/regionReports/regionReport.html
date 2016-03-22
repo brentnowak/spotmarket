@@ -80,6 +80,37 @@
 
             <div class="panel panel-primary">
                 <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Killmails
+                </div>
+                <div class="panel-body">
+                <table data-toggle="table"
+                       data-sort-name="timestamp"
+                       data-sort-order="desc"
+                       data-show-refresh="true"
+                       data-striped="true"
+                       data-show-toggle="true"
+                       data-search="true"
+                       data-url="/api/killmails/region/{{ regionID }}"
+                       data-height="400">
+                <thead>
+                    <tr>
+                        <th data-field="timestamp" data-align="right">timestamp</th>
+                        <th data-field="typeID" data-formatter="invTypeIconFormatter" data-width=32px data-align="right"></th>
+                        <th data-field="typeName" data-sortable="true" data-align="right">typeName</th>
+                        <th data-field="totalValue" data-sortable="true" data-align="right">totalValue</th>
+                        <th data-field="attackerCount" data-sortable="true" data-align="right">attackerCount</th>
+                        <th data-field="damageTaken" data-sortable="true" data-align="right">damagetaken</th>
+                        <th data-field="solarSystemName" data-align="right">solarSystemName</th>
+                        <th data-field="security" data-formatter="numberDec" data-align="right">security</th>
+                        <th data-field="allianceName" data-align="right">allianceName</th>
+                    </tr>
+                </thead>
+                </table>
+                </div>
+            </div>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
                     <span class="glyphicon glyphicon-stats"></span> Top Ratting Systems
                 </div>
                 <div class="panel-body">

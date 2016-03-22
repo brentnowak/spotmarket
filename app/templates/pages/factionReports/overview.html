@@ -1,0 +1,79 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{header}}</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Faction Kills by Universe
+                </div>
+            </div>
+            <div class="d3-graph-npckills-universe"></div>
+            <script>
+                graphJumps({
+                    width: 720,
+                    height: 340,
+                    marginright: 58,
+                    marginleft: 80,
+                    ylegend: 'sum',
+                    selector: '.d3-graph-npckills-universe',
+                    json: '/api/npckills/universe'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Faction Kills by Security
+                </div>
+            </div>
+            <div class="d3-graph-npckills-security"></div>
+            <script>
+                graphJumps({
+                    width: 720,
+                    height: 340,
+                    marginright: 35,
+                    marginleft: 80,
+                    ylegend: 'sum',
+                    selector: '.d3-graph-npckills-security',
+                    json: '/api/npckills/security'
+                });
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Faction Kills by Faction
+                </div>
+            </div>
+            <div class="d3-graph-npckills-faction"></div>
+            <script>
+                graphJumps({
+                    width: 720,
+                    height: 340,
+                    marginright: 100,
+                    marginleft: 80,
+                    ylegend: 'sum',
+                    selector: '.d3-graph-npckills-faction',
+                    json: '/api/npckills/faction'
+                });
+            </script>
+
+        </div><!-- /.col-lg-12 -->
+    </div><!-- /.row -->
+
+</div>
+<!-- /#page-wrapper -->
+
+{% endblock %}

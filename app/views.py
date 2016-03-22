@@ -1,31 +1,49 @@
 from flask import render_template
 from app import app
 from _utility import *
+from _dashboard import *
 
 
 #############################
 # Main pages
 #############################
-@app.route('/login.html')
-def login():
-    return render_template('pages/login.html', title="Login")
-
 @app.route('/')
 @app.route('/dashboard')
 def index():
-    return render_template('pages/dashboard.html', title="Dashboard", header="Dashboard")
+    return render_template('pages/dashboard.html', title="Dashboard", header="Dashboard",
+                           timeutc=timeutc(),
+                           countdatakillmails="{:,.0f}".format(countdatakillmails()),
+                           countdatamoonminerals="{:,.0f}".format(countdatamoonminerals()),
+                           countdatamoonverify="{:,.0f}".format(countdatamoonverify()),
+                           countlatestjitajump="{:,.0f}".format(countlatestjitajump()),
+                           latestjumpdatatime=latestjumpdatatime().strftime('%Y-%m-%d %H:%M:%S'),
+                           latestsovdatatime=latestsovdatatime().strftime('%Y-%m-%d %H:%M:%S'),
+                           psutil_getmemory=psutil_getmemory(),
+                           plexgetlatestprice="{:,.2f}".format(getlatestprice(29668, 10000002)),
+                           plexgetlatestpricechange="{:,.2f}".format(getpricepercentchange(29668, 10000002)),
+                           psutil_crestconnections=psutil_crestconnections(),
+                           psutil_zkillboardconnections=psutil_zkillboardconnections())
 
 @app.route('/system/logs')
 def system():
-    return render_template('pages/logs.html', title="Logs", header="Logs")
+    return render_template('pages/logs.html',
+                           title="Logs",
+                           header="Logs",
+                           timeutc=timeutc())
 
 @app.route('/system/settings')
 def settings():
-    return render_template('pages/settings.html', title="Settings", header="Settings")
+    return render_template('pages/settings.html',
+                           title="Settings",
+                           header="Settings",
+                           timeutc=timeutc())
 
 @app.route('/trade/wallet')
 def wallet():
-    return render_template('pages/wallet.html', title="Wallet", header="Wallet")
+    return render_template('pages/wallet.html',
+                           title="Wallet",
+                           header="Wallet",
+                           timeutc=timeutc())
 
 @app.route('/blank.html')
 def blank():
@@ -59,6 +77,10 @@ def grid():
 def forms():
     return render_template('pages/forms.html', title="Forms", header="Forms", nav="Forms Page")
 
+@app.route('/tables.html')
+def tables():
+    return render_template('pages/tables.html', title="Tables", header="Tables", nav="Tables Page")
+
 
 #############################
 # Error Handling
@@ -68,58 +90,105 @@ def page_not_found(e):
     return render_template('pages/404.html'), 404
 
 
-#
+#############################
 #   factionReport
-#
+#############################
+@app.route('/report/faction/overview')
+def faction_report_overview():
+    return render_template('pages/factionReports/overview.html',
+                           title="Overview",
+                           header="Overview",
+                           nav="Overview",
+                           timeutc=timeutc())
 
 @app.route('/report/faction/angel')
 def faction_report_angel():
-    return render_template('pages/factionReports/angel.html', title="Angel Cartel", header="Angel Cartel", nav="Angel Cartel")
+    return render_template('pages/factionReports/angel.html',
+                           title="Angel Cartel",
+                           header="Angel Cartel",
+                           nav="Angel Cartel",
+                           timeutc=timeutc())
 
 @app.route('/report/faction/blood')
 def faction_report_blood():
-    return render_template('pages/factionReports/blood.html', title="Blood Raiders", header="Blood Raiders", nav="Blood Raiders")
+    return render_template('pages/factionReports/blood.html',
+                           title="Blood Raiders",
+                           header="Blood Raiders",
+                           nav="Blood Raiders",
+                           timeutc=timeutc())
 
 @app.route('/report/faction/guristas')
 def faction_report_guristas():
-    return render_template('pages/factionReports/guristas.html', title="Guristas", header="Guristas", nav="Guristas")
+    return render_template('pages/factionReports/guristas.html',
+                           title="Guristas",
+                           header="Guristas",
+                           nav="Guristas",
+                           timeutc=timeutc())
 
 @app.route('/report/faction/sansha')
 def faction_report_sansha():
-    return render_template('pages/factionReports/sansha.html', title="Sansha's Nation", header="Sansha's Nation", nav="Sansha's Nation")
+    return render_template('pages/factionReports/sansha.html',
+                           title="Sansha's Nation",
+                           header="Sansha's Nation",
+                           nav="Sansha's Nation",
+                           timeutc=timeutc())
 
 @app.route('/report/faction/serpentis')
 def faction_report_serpentis():
-    return render_template('pages/factionReports/serpentis.html', title="Serpentis", header="Serpentis", nav="Serpentis")
+    return render_template('pages/factionReports/serpentis.html',
+                           title="Serpentis",
+                           header="Serpentis",
+                           nav="Serpentis",
+                           timeutc=timeutc())
 
 @app.route('/report/faction/mordu')
 def faction_report_mordu():
-    return render_template('pages/factionReports/mordu.html', title="Mordu's Legion Command", header="Mordu's Legion Command", nav="Mordu's Legion Command")
+    return render_template('pages/factionReports/mordu.html',
+                           title="Mordu's Legion Command",
+                           header="Mordu's Legion Command",
+                           nav="Mordu's Legion Command",
+                           timeutc=timeutc())
 
 @app.route('/report/faction/sisters')
 def faction_report_sisters():
-    return render_template('pages/factionReports/sisters.html', title="Servant Sisters of EVE", header="Servant Sisters of EVE", nav="Servant Sisters of EVE")
+    return render_template('pages/factionReports/sisters.html',
+                           title="Servant Sisters of EVE",
+                           header="Servant Sisters of EVE",
+                           nav="Servant Sisters of EVE",
+                           timeutc=timeutc())
 
 
-#
+#############################
 #   securityReport
-#
+#############################
 @app.route('/report/security/highsec')
 def securityreporthighsec():
-    return render_template('pages/securityReports/highsec.html', title="Highsec", header="Highsec", nav="Highsec")
+    return render_template('pages/securityReports/highsec.html',
+                           title="Highsec",
+                           header="Highsec",
+                           nav="Highsec",
+                           timeutc=timeutc())
 
 @app.route('/report/security/lowsec')
 def securityreportlowsec():
-    return render_template('pages/securityReports/lowsec.html', title="Lowsec", header="Lowsec", nav="Lowsec")
+    return render_template('pages/securityReports/lowsec.html',
+                           title="Lowsec",
+                           header="Lowsec",
+                           nav="Lowsec",
+                           timeutc=timeutc())
 
 @app.route('/report/security/nullsec')
 def securityreportnullsec():
-    return render_template('pages/securityReports/nullsec.html', title="Nullsec", header="Nullsec", nav="Nullsec")
+    return render_template('pages/securityReports/nullsec.html',
+                           title="Nullsec",
+                           header="Nullsec",
+                           nav="Nullsec",
+                           timeutc=timeutc())
 
 
-#
+#############################
 # indexReports
-#
+#############################
 @app.route('/report/index/universe')
 def indexreport_universe():
     return render_template('pages/indexReports/universe.html', title="Universe", header="Universe", nav="Universe")
@@ -130,6 +199,7 @@ def indexreport_deadend():
                            title="Dead End Systems",
                            header="Dead End Systems",
                            nav="Dead End Systems",
+                           timeutc=timeutc(),
                            systemList=json.loads(getdeadendsystems(1)))
 
 @app.route('/report/index/pirateships')
@@ -137,108 +207,144 @@ def indexreport_pirateships():
     return render_template('pages/indexReports/pirateships.html',
                            title="Pirate Ships",
                            header="Pirate Ships",
-                           nav="Pirate Ships")
+                           nav="Pirate Ships",
+                           timeutc=timeutc())
 
 @app.route('/report/index/boosters')
 def indexreport_boosters():
     return render_template('pages/indexReports/boosters.html',
                            title="Boosters",
                            header="Boosters",
-                           nav="Boosters")
+                           nav="Boosters",
+                           timeutc=timeutc())
 
 @app.route('/report/index/pilotservices')
 def indexreport_pilotservices():
     return render_template('pages/indexReports/pilotservices.html',
                            title="Pilot Services",
                            header="Pilot Services",
-                           nav="Pilot Services")
+                           nav="Pilot Services",
+                           timeutc=timeutc())
 
 @app.route('/report/index/capitalships')
 def indexreport_capitalships():
     return render_template('pages/indexReports/capitalships.html',
                            title="Capital Ships",
                            header="Capital Ships",
-                           nav="Capital Ships")
+                           nav="Capital Ships",
+                           timeutc=timeutc())
 
 @app.route('/report/index/goldenroute')
 def indexreport_goldenroute():
     return render_template('pages/indexReports/goldenroute.html',
                            title="Golden Route",
                            header="Golden Route",
-                           nav="Golden Route")
+                           nav="Golden Route",
+                           timeutc=timeutc())
 
 
-#
+#############################
 # regionReports
-#
+#############################
 @app.route('/report/region/<regionID>')
 def regionreport(regionID):
     regionName = getregionName(regionID)
     return render_template('pages/regionReports/regionReport.html',
                            regionID=regionID,
                            regionName=regionName,
-                           title="Region 1",
-                           header="Region 1",
-                           nav="Region 1")
+                           timeutc=timeutc())
 
 
-#
+#############################
 # jumpReports
-#
+#############################
 @app.route('/report/jump/tradehubs')
 def jumpreport_tradehubs():
     return render_template('pages/jumpReports/tradehubs.html',
                            title="Trade Hubs",
                            header="Trade Hubs",
-                           nav="Trade Hubs")
+                           nav="Trade Hubs",
+                           timeutc=timeutc())
 
-#
+#############################
 # marketReports
-#
+#############################
 @app.route('/report/market/pilotservices/')
 def marketreport_pilotservices():
     return render_template('pages/marketReports/pilotservices.html',
                            title="Pilot Services",
                            header="Pilot Services",
-                           nav="Pilot Services")
+                           nav="Pilot Services",
+                           timeutc=timeutc())
 
-#
+#############################
 # moonReports
-#
+#############################
 @app.route('/report/moon/sov')
 def moonreport_sov():
-    return render_template('pages/moonReports/sov.html', title="Sovereignty", header="Sovereignty", nav="Sovereignty")
+    return render_template('pages/moonReports/sov.html',
+                           title="Sovereignty",
+                           header="Sovereignty",
+                           nav="Sovereignty",
+                           timeutc=timeutc())
 
 @app.route('/report/moon/gases')
 def moonreport_gases():
-    return render_template('pages/moonReports/gases.html', title="Gasses", header="Gasses", nav="Gasses")
+    return render_template('pages/moonReports/gases.html',
+                           title="Gasses",
+                           header="Gasses",
+                           nav="Gasses",
+                           timeutc=timeutc())
 
 @app.route('/report/moon/r8')
 def moonreport_r8():
-    return render_template('pages/moonReports/r8.html', title="Rarity 8", header="Rarity 8", nav="Rarity 8")
+    return render_template('pages/moonReports/r8.html',
+                           title="Rarity 8",
+                           header="Rarity 8",
+                           nav="Rarity 8",
+                           timeutc=timeutc())
 
 @app.route('/report/moon/r16')
 def moonreport_r16():
-    return render_template('pages/moonReports/r16.html', title="Rarity 16", header="Rarity 16", nav="Rarity 16")
+    return render_template('pages/moonReports/r16.html',
+                           title="Rarity 16",
+                           header="Rarity 16",
+                           nav="Rarity 16",
+                           timeutc=timeutc())
 
 @app.route('/report/moon/r32')
 def moonreport_r32():
-    return render_template('pages/moonReports/r32.html', title="Rarity 32", header="Rarity 32", nav="Rarity 32")
+    return render_template('pages/moonReports/r32.html',
+                           title="Rarity 32",
+                           header="Rarity 32",
+                           nav="Rarity 32",
+                           timeutc=timeutc())
 
 @app.route('/report/moon/r64')
 def moonreport_r64():
-    return render_template('pages/moonReports/r64.html', title="Rarity 64", header="Rarity 64", nav="Rarity 64")
+    return render_template('pages/moonReports/r64.html',
+                           title="Rarity 64",
+                           header="Rarity 64",
+                           nav="Rarity 64",
+                           timeutc=timeutc())
 
-#
+
+#############################
 # Map
-#
+#############################
 @app.route('/map/sovereignty')
 def map_sovereignty():
-    return render_template('pages/mapReports/sovereignty.html', title="Sovereignty", header="Sovereignty")
+    return render_template('pages/mapReports/sovereignty.html',
+                           title="Sovereignty",
+                           header="Sovereignty",
+                           timeutc=timeutc())
 
 @app.route('/map/conquerablestations')
 def map_conquerablestations():
-    return render_template('pages/mapReports/conquerablestations.html', title="Conquerable Stations", header="Conquerable Stations")
+    return render_template('pages/mapReports/conquerablestations.html',
+                           title="Conquerable Stations",
+                           header="Conquerable Stations",
+                           timeutc=timeutc())
 
 
 #############################
@@ -368,6 +474,10 @@ def api_regionsovereignty(regionID):
 def api_gettoprattingbyregion(regionID):
     df = gettoprattingbyregion(regionID)
     return df.reset_index().to_json(orient='records')
+
+@app.route('/api/killmails/region/<regionID>')
+def api_getkillmailsbyregion(regionID):
+    return getkillmailsbyregion(regionID)
 
 # Moons
 @app.route('/api/moonminerals/regionid/<regionID>')
