@@ -82,7 +82,15 @@ for typeID in ships:
     setzkbshipresult(typeID[0], 1)  # Successful run sets importResult to 1
 
     # Be nice to squizz and sleep for 5 seconds before requesting another 200 KMs
+    print("----------------------")
+    print("[Completed Ship:" + str(gettypeName(typeID[0])) + "]")
+    print("----------------------")
+    sys.stdout.flush()
     sleep(5)
 
 # Sleep for 1 hour before ending and triggering another run via supervisor
+print("----------------------")
+print("[Completed Run:Sleeping for 1 Hour]")
+print("----------------------")
+sys.stdout.flush()
 sleep(3600)
