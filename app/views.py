@@ -25,7 +25,8 @@ def index():
                            plexgetlatestpricechange="{:,.2f}".format(getpricepercentchange(29668, 10000002)),
                            psutil_crestconnections=psutil_crestconnections(),
                            psutil_zkillboardconnections=psutil_zkillboardconnections(),
-                           getwallettransactions=getwallettransactions(10))
+                           getwallettransactions=getwallettransactions(10),
+                           getwalletbalances=getwalletbalances())
 
 @app.route('/system/logs')
 def system():

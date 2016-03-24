@@ -189,3 +189,23 @@ def getwallettransactions(limit):
     cursor.execute(sql, data)
     results = cursor.fetchall()  # TODO return dictionary rather than list
     return results
+
+
+def getwalletbalances():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''
+    SELECT
+      DISTINCT ON (characters."characterName") characters."characterName",
+      characters."characterID",
+      balances.balance
+    FROM
+      data.characters,
+      data.balances
+    WHERE
+      balances."characterID" = characters."characterID" AND
+      characters."walletEnable" = 1
+    GROUP BY  characters."characterName", balances.balance, characters."characterID"'''
+    cursor.execute(sql, )
+    results = cursor.fetchall()  # TODO return dictionary rather than list
+    return results

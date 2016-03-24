@@ -43,6 +43,7 @@
                     {% endfor %}
                 </tbody>
             </table>
+
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <span class="fa fa-table"></span> Market
@@ -72,6 +73,7 @@
                     </tr>
                 </tbody>
             </table>
+
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <span class="glyphicon glyphicon-stats"></span> Sovereignty Changes
@@ -92,6 +94,31 @@
         </div>
 
         <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="fa fa-table"></span> Balances
+                </div>
+            </div>
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th class="text-right">Character</th>
+                        <th class="text-right">Balance</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in getwalletbalances %}
+                    <tr>
+                        <td class="text-center"><img src="https://image.eveonline.com/Character/{{item[1]}}_256.jpg" height="32" width="32"></td>
+                        <td class="text-right"><samp>{{item[0]}}</samp></td>
+                        <td class="text-right"><code>{{ '{:,.0f}'.format(item[2] | int) }}</code></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <span class="fa fa-database"></span> Database Statistics
