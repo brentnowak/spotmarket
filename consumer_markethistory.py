@@ -38,9 +38,13 @@ def main():
     regionIDs = ['10000002']
 
     typeIDs = getmarketrecords()
+    totalItems = float(len(typeIDs))
+    currentItem = float(1)
     for typeID in typeIDs:
-        print("[regionID:10000002][typeID:" + str(typeID[0]) + "][" + str(gettypeName(typeID[0])) + "]") # TODO cleanup on output
         getmarkethistory(10000002, typeID[0])
+        progress = str("{0:.2f}".format(currentItem/totalItems*100)) + "%"
+        print("[regionID:10000002][" + progress + "][typeID:" + str(typeID[0]) + "][" + str(gettypeName(typeID[0])) + "]") # TODO cleanup on output
+        currentItem += 1
 
 
 if __name__ == "__main__":

@@ -17,6 +17,28 @@ def countdatakillmails():
     return result[0]
 
 
+def countdatawallet():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+        COUNT(*)
+        FROM data.wallet'''
+    cursor.execute(sql, )
+    result = cursor.fetchone()
+    return result[0]
+
+
+def countdatamarkethistory():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+        COUNT(*)
+        FROM data.markethistory'''
+    cursor.execute(sql, )
+    result = cursor.fetchone()
+    return result[0]
+
+
 def countdatamoonminerals():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
@@ -146,3 +168,24 @@ def getpricepercentchange(typeID, regionID):
     cursor.execute(sql, data)
     result = cursor.fetchone()
     return result[0]
+
+
+def getwallettransactions(limit):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      wallet."typeName",
+      wallet.quantity,
+      wallet."typeID",
+      wallet.price,
+      wallet.profit,
+      wallet."transactionDateTime"
+    FROM
+      data.wallet
+    ORDER BY
+     wallet."transactionDateTime" DESC
+    LIMIT %s'''
+    data = (limit, )
+    cursor.execute(sql, data)
+    results = cursor.fetchall()  # TODO return dictionary rather than list
+    return results

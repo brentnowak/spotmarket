@@ -21,6 +21,7 @@
 - [ ] [enhancement] Display tags rather than numbers for severity on log pages  
 - [ ] [enhancement] Research replacing cron jobs with a better solution  
 - [ ] [enhancement] Organize API endpoints into a more logical pattern  
+- [ ] [enhancement] PostgreSQL 9.5.1 performance tuning  
 
 0.4 Release (Completed)
 ==================

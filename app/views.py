@@ -16,13 +16,16 @@ def index():
                            countdatamoonminerals="{:,.0f}".format(countdatamoonminerals()),
                            countdatamoonverify="{:,.0f}".format(countdatamoonverify()),
                            countlatestjitajump="{:,.0f}".format(countlatestjitajump()),
+                           countdatamarkethistory="{:,.0f}".format(countdatamarkethistory()),
+                           countdatawallet="{:,.0f}".format(countdatawallet()),
                            latestjumpdatatime=latestjumpdatatime().strftime('%Y-%m-%d %H:%M:%S'),
                            latestsovdatatime=latestsovdatatime().strftime('%Y-%m-%d %H:%M:%S'),
                            psutil_getmemory=psutil_getmemory(),
                            plexgetlatestprice="{:,.2f}".format(getlatestprice(29668, 10000002)),
                            plexgetlatestpricechange="{:,.2f}".format(getpricepercentchange(29668, 10000002)),
                            psutil_crestconnections=psutil_crestconnections(),
-                           psutil_zkillboardconnections=psutil_zkillboardconnections())
+                           psutil_zkillboardconnections=psutil_zkillboardconnections(),
+                           getwallettransactions=getwallettransactions(10))
 
 @app.route('/system/logs')
 def system():

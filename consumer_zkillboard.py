@@ -18,6 +18,7 @@ import sys
 from _utility import *
 from _consumer_kills import *
 from requests.exceptions import ConnectionError, ChunkedEncodingError
+from time import sleep
 import requests.packages.urllib3
 
 requests.packages.urllib3.disable_warnings()
@@ -79,3 +80,9 @@ for typeID in ships:
     # Record state to data.killmailsitems because we're done with a specific typeID
     setzkbshipenable(typeID[0], 0)  # Successful run sets enabled to 0
     setzkbshipresult(typeID[0], 1)  # Successful run sets importResult to 1
+
+    # Be nice to squizz and sleep for 5 seconds before requesting another 200 KMs
+    sleep(5)
+
+# Sleep for 1 hour before ending and triggering another run via supervisor
+sleep(3600)

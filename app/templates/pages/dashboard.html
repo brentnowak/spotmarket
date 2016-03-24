@@ -16,26 +16,53 @@
 
     <div class="row">
         <div class="col-md-8">
-           <div class="panel panel-primary">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="fa fa-table"></span> Wallet
+                </div>
+            </div>
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th class="text-right">Item</th>
+                        <th class="text-right">Quantity</th>
+                        <th class="text-right">Total</th>
+                        <th class="text-right">Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in getwallettransactions %}
+                    <tr>
+                        <td class="text-center"><img src="https://image.eveonline.com/Type/{{item[2]}}_64.png" height="32" width="32"></td>
+                        <td class="text-right"><samp>{{item[0]}}</samp></td>
+                        <td class="text-right"><samp>{{ '{:,.0f}'.format(item[1] | int) }}</samp></td>
+                        <td class="text-right"><samp>{{ '{:,.2f}'.format(item[3] | int) }}</samp></td>
+                        <td class="text-right"><samp>{{item[5]}}</samp></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="panel panel-primary">
                 <div class="panel-heading">
                     <span class="fa fa-table"></span> Market
                 </div>
-           </div>
+            </div>
             <table class="table table-striped table-bordered table-hover">
                 <tbody>
                     <thead>
                         <tr>
                             <th></th>
-                            <th>Item</th>
-                            <th>Price</th>
-                            <th>1 Day</th>
+                            <th class="text-right">Item</th>
+                            <th class="text-right">Price</th>
+                            <th class="text-right">1 Day</th>
                         </tr>
                     </thead>
                     <tr>
-                        <td><img src="https://image.eveonline.com/Type/29668_64.png" height="32" width="32"></td>
-                        <td>30 Day Pilot's License Extension (PLEX)</td>
-                        <td><code>{{plexgetlatestprice}}</code></td>
-                        <td><code>{{plexgetlatestpricechange}}%</code></td>
+                        <td class="text-center"><img src="https://image.eveonline.com/Type/29668_64.png" height="32" width="32"></td>
+                        <td class="text-right"><samp>30 Day Pilot's License Extension (PLEX)</samp></td>
+                        <td class="text-right"><samp>{{plexgetlatestprice}}</samp></td>
+                        <td class="text-right"><samp>{{plexgetlatestpricechange}}%</samp></td>
                     </tr>
                     <tr>
                         <td></td>
@@ -65,9 +92,9 @@
         </div>
 
         <div class="col-md-4">
-            <div class="panel panel-green">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <span class="fa fa-database"></span> Statistics
+                    <span class="fa fa-database"></span> Database Statistics
                 </div>
             </div>
             <table class="table table-striped table-bordered table-hover">
@@ -77,29 +104,47 @@
                         <td><code>{{countdatakillmails}}</code></td>
                     </tr>
                     <tr>
-                        <td><i class="fa fa-circle-o"></i> Moon Records</td>
+                        <td><i class="glyphicon glyphicon-book"></i> Market Prices</td>
+                        <td><code>{{countdatamarkethistory}}</code></td>
+                    </tr>
+                    <tr>
+                        <td><i class="glyphicon glyphicon-piggy-bank"></i> Wallet Transactions</td>
+                        <td><code>{{countdatawallet}}</code></td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-circle-o"></i> Moons</td>
                         <td><code>{{countdatamoonminerals}}</code></td>
                     </tr>
                     <tr>
-                        <td><i class="fa fa-check-circle"></i> Verified Moon Records</td>
+                        <td><i class="fa fa-check-circle"></i> Verified Moons</td>
                         <td><code>{{countdatamoonverify}}</code></td>
                     </tr>
+                </tbody>
+            </table>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="fa fa-database"></span> Latest Data
+                </div>
+            </div>
+            <table class="table table-striped table-bordered table-hover">
+                <tbody>
                     <tr>
-                        <td><i class="fa fa-automobile"></i> Latest Jita Jumps/Hour</td>
+                        <td><i class="fa fa-bar-chart-o"></i> Jita Jumps/Hour</td>
                         <td><code>{{countlatestjitajump}}</code></td>
                     </tr>
                     <tr>
-                        <td><i class="fa fa-clock-o"></i> Lastest Jump Data</td>
+                        <td><i class="fa fa-clock-o"></i> Map Jumps</td>
                         <td><code>{{latestjumpdatatime}}</code></td>
                     </tr>
                     <tr>
-                        <td><i class="fa fa-flag"></i> Latest Sov Change</td>
+                        <td><i class="fa fa-flag"></i> Sovereignty</td>
                         <td><code>{{latestsovdatatime}}</code></td>
                     </tr>
                 </tbody>
             </table>
 
-            <div class="panel panel-green">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
                     <span class="fa fa-database"></span> System
                 </div>
