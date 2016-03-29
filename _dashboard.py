@@ -196,16 +196,54 @@ def getwalletbalances():
     cursor = conn.cursor()
     sql = '''
     SELECT
-      DISTINCT ON (characters."characterName") characters."characterName",
+    DISTINCT ON (characters."characterName") characters."characterName",
       characters."characterID",
-      balances.balance
+      charbalances.balance,
+      charbalances."timestamp"
     FROM
       data.characters,
-      data.balances
+      data.charbalances
     WHERE
-      balances."characterID" = characters."characterID" AND
-      characters."walletEnable" = 1
-    GROUP BY  characters."characterName", balances.balance, characters."characterID"'''
+      charbalances."characterID" = characters."characterID" AND
+      characters."enableWallet" = 1
+    GROUP BY  characters."characterName",
+      charbalances.balance,
+      characters."characterID",
+      charbalances."timestamp"
+    ORDER BY characters."characterName", charbalances."timestamp" DESC
+    '''
+    cursor.execute(sql, )
+    results = cursor.fetchall()  # TODO return dictionary rather than list
+    return results
+
+
+def getwalletbalancestotal():
+    total = 0
+    results = getwalletbalances()
+    for row in results:  #  TODO correct this to use dictionary rather than list
+        total += int(row[2])
+    return total
+
+
+def getskillqueues():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      characters."characterID",
+      characters."characterName",
+      "invTypes"."typeName",
+      charskillqueues.level,
+      charskillqueues.endtime - current_timestamp as timeLeft,
+      (CAST(EXTRACT(EPOCH FROM current_timestamp) AS FLOAT) - CAST(EXTRACT(EPOCH FROM charskillqueues.starttime) AS FLOAT)) / (CAST(EXTRACT(EPOCH FROM charskillqueues.endtime) AS FLOAT) - CAST(EXTRACT(EPOCH FROM charskillqueues.starttime) AS FLOAT)) * 100 AS progress
+    FROM
+      data.characters,
+      data.charskillqueues,
+      public."invTypes"
+    WHERE
+      characters."characterID" = charskillqueues."characterID" AND
+      charskillqueues."typeID" = "invTypes"."typeID" AND
+      charskillqueues.queueposition = 0 AND
+      CAST(EXTRACT(EPOCH FROM charskillqueues.endtime) AS INTEGER) != CAST(EXTRACT(EPOCH FROM charskillqueues.starttime) AS INTEGER)'''
     cursor.execute(sql, )
     results = cursor.fetchall()  # TODO return dictionary rather than list
     return results

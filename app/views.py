@@ -1,6 +1,7 @@
 from flask import render_template
 from app import app
 from _utility import *
+from _api import *
 from _dashboard import *
 
 
@@ -26,7 +27,9 @@ def index():
                            psutil_crestconnections=psutil_crestconnections(),
                            psutil_zkillboardconnections=psutil_zkillboardconnections(),
                            getwallettransactions=getwallettransactions(10),
-                           getwalletbalances=getwalletbalances())
+                           getwalletbalances=getwalletbalances(),
+                           getwalletbalancestotal=getwalletbalancestotal(),
+                           getskillqueues=getskillqueues())
 
 @app.route('/system/logs')
 def system():
@@ -187,6 +190,17 @@ def securityreportnullsec():
                            title="Nullsec",
                            header="Nullsec",
                            nav="Nullsec",
+                           timeutc=timeutc())
+
+#############################
+#   characterReport
+#############################
+@app.route('/report/character/blueprints')
+def characterreport_blueprints():
+    return render_template('pages/characterReports/blueprints.html',
+                           title="Blueprints",
+                           header="Blueprints",
+                           nav="Blueprints",
                            timeutc=timeutc())
 
 
@@ -462,7 +476,7 @@ def api_regionID(regionID):
 # Market
 @app.route('/api/typeName/<typeID>')
 def api_typeID(typeID):
-    return getmarkethistory_typeid(typeID)
+    return getmarkethistory_typeID(typeID)
 
 @app.route('/api/market/avgprice/<typeID>')
 def api_marketavgprice(typeID):
@@ -592,3 +606,7 @@ def api_mapkills_podkillsbyregion(regionID):
 @app.route('/api/map/jumps/region/<regionID>')
 def api_mapkills_jumpsbyregion(regionID):
     return mapkills_jumpsbyregion(regionID)
+
+@app.route('/api/character/blueprints')
+def api_characterblueprints():
+    return getcharacterblueprints()

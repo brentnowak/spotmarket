@@ -3,7 +3,8 @@
 
 - [ ] [new] Create freighter security index based on killmails  
 - [ ] [new] Work on indexes, add item destruction based on killmails  
-- [ ] [new] Create process to fill in killmails that lack JSON data or zKb values  
+- [ ] [new] Create process to fill in killmails that lack JSON data or zKb values
+- [ ] [new] Add character information (blueprints, wallet, journal, orders) 
 - [ ] [bug] bootstrap-table table headers that contain icons do not align correctly with rows  
 - [ ] [bug] Security reports have hardcoded time range for data that calculates ratting rate  
 - [ ] [bug] On most graphs, label for line appears to the left  
@@ -13,6 +14,9 @@
 - [x] [enhancement] Change factionReport charts to be driven by JSON  
 - [ ] [enhancement] Learn how to use Classes and clean up utility scripts 
 - [ ] [enhancement] Add website favicon  
+- [ ] [enhancement] Move API items to _api.py  
+
+Add Prospect and Venture to zkb watch
 
 0.6 Release
 ==================

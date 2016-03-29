@@ -192,3 +192,15 @@ def setzkblastpage(typeID, lastPage):
     conn.commit()
     conn.close()
     return 0
+
+def gettopkmlackingvalue():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT killmails."killID"
+    FROM
+      data.killmails
+    WHERE "totalVallue" < 0
+    LIMIT 1'''
+    cursor.execute(sql, )
+    result = cursor.fetchone()
+    return result[0]

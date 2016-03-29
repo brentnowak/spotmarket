@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------------
-# consumer_wallet.py
+# consumer_charwallet.py
 # https://github.com/brentnowak/spotmarket
 #-----------------------------------------------------------------------------
 # Version: 0.1
@@ -12,7 +12,7 @@ import evelink.api
 import evelink.parsing.wallet_transactions
 
 def main():
-    service = "consumer_wallet.py"
+    service = "consumer_charwallet.py"
 
     # Get characters with walletEnabled = 1
     characters = json.loads(getcharacters())

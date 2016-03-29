@@ -1,0 +1,52 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{header}}</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-file"></span> Blueprints
+                    </div>
+                </div>
+                <table data-toggle="table"
+                       data-sort-name="typeName"
+                       data-sort-order="asc"
+                       data-show-refresh="true"
+                       data-show-toggle="true"
+                       data-striped="true"
+                       data-search="true"
+                       data-url="/api/character/blueprints"
+                       data-height="800">
+                <thead>
+                    <tr>
+                        <th data-field="typeID" data-formatter="invTypeIconFormatter" data-width=32px data-align="right"></th>
+                        <th data-field="typeName" data-sortable="true" data-align="right">typeName</th>
+                        <th data-field="characterName" data-sortable="true" data-align="right">characterName</th>
+                        <th data-field="materialefficiency" data-sortable="true" data-align="right">ME</th>
+                        <th data-field="timeefficiency" data-sortable="true" data-align="right">TE</th>
+                        <th data-field="runs" data-sortable="true" data-align="right">runs</th>
+                    </tr>
+                </thead>
+                </table>
+            </div>
+        </div>
+
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+
+{% endblock %}
