@@ -21,16 +21,35 @@
                 </div>
             </div>
             <div class="d3-graph-guristas"></div>
-
-            <p></p>
-            <br>
+            <script>
+                graphJumps({
+                    width: 720,
+                    height: 340,
+                    marginright: 58,
+                    marginleft: 80,
+                    ylegend: 'sum',
+                    selector: '.d3-graph-guristas',
+                    json: '/api/npckills/faction/guristas'
+                });
+            </script>
 
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <span class="glyphicon glyphicon-stats"></span> Region Totals - 12H Resample - 1.5D Window
                 </div>
             </div>
-            <div class="d3-graph-guristas-sum"></div>
+            <div class="d3-graph-guristas-totals"></div>
+            <script>
+                graphJumps({
+                    width: 720,
+                    height: 340,
+                    marginright: 58,
+                    marginleft: 80,
+                    ylegend: 'sum',
+                    selector: '.d3-graph-guristas-totals',
+                    json: '/api/npckills/faction/totals/guristas'
+                });
+            </script>
         </div><!-- /.col-lg-12 -->
     </div><!-- /.row -->
 

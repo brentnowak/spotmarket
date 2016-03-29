@@ -21,16 +21,36 @@
                 </div>
             </div>
             <div class="d3-graph-angel"></div>
-
-            <p></p>
-            <br>
+            <script>
+                graphJumps({
+                    width: 720,
+                    height: 340,
+                    marginright: 58,
+                    marginleft: 80,
+                    ylegend: 'sum',
+                    selector: '.d3-graph-angel',
+                    json: '/api/npckills/faction/angel'
+                });
+            </script>
 
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <span class="glyphicon glyphicon-stats"></span> Region Totals - 12H Resample - 1.5D Window
                 </div>
             </div>
-            <div class="d3-graph-angel-sum"></div>
+            <div class="d3-graph-angel-totals"></div>
+            <script>
+                graphJumps({
+                    width: 720,
+                    height: 340,
+                    marginright: 58,
+                    marginleft: 80,
+                    ylegend: 'sum',
+                    selector: '.d3-graph-angel-totals',
+                    json: '/api/npckills/faction/totals/angel'
+                });
+            </script>
+
         </div><!-- /.col-lg-12 -->
     </div><!-- /.row -->
 

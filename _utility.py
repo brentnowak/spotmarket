@@ -145,7 +145,10 @@ def getmoonIDfromName(typeID):
     results = cursor.fetchone()
     return results[0]
 
-
+#
+# Input     getnpckills_byregions
+# Output    JSON of every faction region
+#
 def getnpckills_byallfactions():
     df = getnpckills_byregions(regions_angel, "Angel Cartel")
     df = df.combine_first(getnpckills_byregions(regions_blood, "Blood Raiders"))
@@ -183,6 +186,30 @@ def getnpckills_byregions(regions, factionName):
     cursor.close()
     return df
 
+def getnpckills_byfaction(regions):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+    SUM(mapkills."factionKills") as factionKills,
+      mapkills."timestamp",
+      "mapRegions"."regionName"
+    FROM
+      data.mapkills,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
+      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      public."mapSolarSystems"."regionID" IN %s
+    GROUP BY mapkills."timestamp", "mapRegions"."regionName"
+    ORDER BY timestamp DESC'''
+    data = (regions,)
+    cursor.execute(sql, data)
+    df = pd.DataFrame(cursor.fetchall(), columns=['factionKills', 'timestamp', 'regionName'])
+    df = pd.pivot_table(df, index='timestamp', columns='regionName', values='factionKills')
+    df = df.resample("12H", how='sum')
+    cursor.close()
+    return df.reset_index().to_json(orient='records',date_format='iso')
 
 #
 # Input     regionID

@@ -57,7 +57,7 @@
                     <span class="glyphicon glyphicon-stats"></span> Faction Kills by Faction
                 </div>
             </div>
-            <div class="d3-graph-npckills-faction"></div>
+            <div class="d3-graph-npckills-all-factions"></div>
             <script>
                 graphJumps({
                     width: 720,
@@ -65,8 +65,8 @@
                     marginright: 100,
                     marginleft: 80,
                     ylegend: 'sum',
-                    selector: '.d3-graph-npckills-faction',
-                    json: '/api/npckills/faction'
+                    selector: '.d3-graph-npckills-all-factions',
+                    json: '/api/npckills/faction/totals/all'
                 });
             </script>
 

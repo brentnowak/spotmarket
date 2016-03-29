@@ -574,9 +574,39 @@ def api_npckillsuniverse():
 def api_npckillssecurity():
     return getnpckills_byallsecurity()
 
-@app.route('/api/npckills/faction')
-def api_getnpckillsfactions():
-    return getnpckills_byallfactions()
+@app.route('/api/npckills/faction/totals/<factionName>')
+def api_getnpckills_totalbyregions(factionName):
+    if factionName == "all":
+        return getnpckills_byallfactions()
+    if factionName == "angel":
+        df = getnpckills_byregions(regions_angel, "Angel Cartel")
+        return df.reset_index().to_json(orient='records',date_format='iso')
+    if factionName == "blood":
+        df = getnpckills_byregions(regions_blood, "Blood Raiders")
+        return df.reset_index().to_json(orient='records',date_format='iso')
+    if factionName == "guristas":
+        df = getnpckills_byregions(regions_guristas, "Guristas")
+        return df.reset_index().to_json(orient='records', date_format='iso')
+    if factionName == "sansha":
+        df = getnpckills_byregions(regions_sanshas, "Sansha's Nation")
+        return df.reset_index().to_json(orient='records', date_format='iso')
+    if factionName == "serpentis":
+        df = getnpckills_byregions(regions_serpentis, "Serpentis")
+        return df.reset_index().to_json(orient='records', date_format='iso')
+
+@app.route('/api/npckills/faction/<factionName>')
+def api_getnpckills_byregions(factionName):
+    if factionName == "angel":
+        return getnpckills_byfaction(regions_angel)
+    if factionName == "blood":
+        return getnpckills_byfaction(regions_blood)
+    if factionName == "guristas":
+        return getnpckills_byfaction(regions_guristas)
+    if factionName == "sansha":
+        return getnpckills_byfaction(regions_sanshas)
+    if factionName == "serpentis":
+        return getnpckills_byfaction(regions_serpentis)
+
 
 # Map
 @app.route('/api/map/conquerablestations')

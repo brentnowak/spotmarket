@@ -21,6 +21,17 @@
                 </div>
             </div>
             <div class="d3-graph-blood"></div>
+            <script>
+                graphJumps({
+                    width: 720,
+                    height: 340,
+                    marginright: 58,
+                    marginleft: 80,
+                    ylegend: 'sum',
+                    selector: '.d3-graph-blood',
+                    json: '/api/npckills/faction/blood'
+                });
+            </script>
 
             <p></p>
             <br>
@@ -30,7 +41,18 @@
                     <span class="glyphicon glyphicon-stats"></span> Region Totals - 12H Resample - 1.5D Window
                 </div>
             </div>
-            <div class="d3-graph-blood-sum"></div>
+            <div class="d3-graph-blood-totals"></div>
+            <script>
+                graphJumps({
+                    width: 720,
+                    height: 340,
+                    marginright: 58,
+                    marginleft: 80,
+                    ylegend: 'sum',
+                    selector: '.d3-graph-blood-totals',
+                    json: '/api/npckills/faction/totals/blood'
+                });
+            </script>
         </div><!-- /.col-lg-12 -->
     </div><!-- /.row -->
 
