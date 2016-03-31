@@ -282,7 +282,10 @@ def getkillid(killmailID):
     data = (killmailID, )
     cursor.execute(sql, data, )
     result = cursor.fetchone()
-    return result[0]
+    if result != None:
+        return result[0]
+    else:
+        return 0
 
 
 def getkmdetails(killID):
