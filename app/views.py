@@ -45,12 +45,6 @@ def settings():
                            header="Settings",
                            timeutc=timeutc())
 
-@app.route('/trade/wallet')
-def wallet():
-    return render_template('pages/wallet.html',
-                           title="Wallet",
-                           header="Wallet",
-                           timeutc=timeutc())
 
 @app.route('/blank.html')
 def blank():
@@ -204,6 +198,14 @@ def characterreport_blueprints():
                            timeutc=timeutc())
 
 
+@app.route('/report/character/wallet')
+def wallet():
+    return render_template('pages/characterReports/wallet.html',
+                           title="Wallet",
+                           header="Wallet",
+                           timeutc=timeutc())
+
+
 #############################
 # indexReports
 #############################
@@ -284,6 +286,7 @@ def jumpreport_tradehubs():
                            nav="Trade Hubs",
                            timeutc=timeutc())
 
+
 #############################
 # marketReports
 #############################
@@ -348,7 +351,7 @@ def moonreport_r64():
 
 
 #############################
-# Map
+# mapReports
 #############################
 @app.route('/map/sovereignty')
 def map_sovereignty():
@@ -363,6 +366,18 @@ def map_conquerablestations():
                            title="Conquerable Stations",
                            header="Conquerable Stations",
                            timeutc=timeutc())
+
+
+#############################
+# warReports
+#############################
+@app.route('/report/war/worldwarbee')
+def warreport_worldwarbee():
+    return render_template('pages/warReports/worldwarbee.html',
+                           title="World War Bee",
+                           header="World War Bee",
+                           timeutc=timeutc())
+
 
 
 #############################
@@ -606,6 +621,11 @@ def api_getnpckills_byregions(factionName):
         return getnpckills_byfaction(regions_sanshas)
     if factionName == "serpentis":
         return getnpckills_byfaction(regions_serpentis)
+
+@app.route('/api/npckills/war/<warName>')
+def api_getnpckills_bywar(warName):
+    if warName == "worldwarbee":
+        return getnpckills_bywar(warName)
 
 
 # Map

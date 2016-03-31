@@ -36,31 +36,29 @@
                             </tr>
                         </thead>
                         </table>
-                    </div>
-                    <div class="col-lg-6">
-                        <div id="pie_allalliances"></div>
-                        <script>
-                        // Initialize empty array
-                        var data = [];
+                </div>
+                <div id="pie_allalliances"></div>
+                <script>
+                // Initialize empty array
+                var data = [];
 
-                        // Get JSON data and wait for the response
-                        d3.json("/api/moonminerals/alliance/", function(error, json) {
+                // Get JSON data and wait for the response
+                d3.json("/api/moonminerals/alliance/", function(error, json) {
 
-                          $.each(json, function(d,i){
-                            data.push({
-                              label: i.name,
-                              value: i.sum_moonid
-                            })
-                          })
+                  $.each(json, function(d,i){
+                    data.push({
+                      label: i.name,
+                      value: i.sum_moonid
+                    })
+                  })
 
-                          var pie = new d3pie("pie_allalliances", {
-                            "data": {
-                              "content": data
-                            }
-                          });
-                        });
-                        </script>
-                    </div>
+                  var pie = new d3pie("pie_allalliances", {
+                    "data": {
+                      "content": data
+                    }
+                  });
+                });
+                </script>
                 </div>
             </div>
         </div><!-- /.col-lg-6 -->

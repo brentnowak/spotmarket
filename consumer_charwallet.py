@@ -7,6 +7,7 @@
 #-----------------------------------------------------------------------------
 
 from _utility import *
+from _consumer_charwallet import *
 import evelink.char
 import evelink.api
 import evelink.parsing.wallet_transactions
@@ -46,7 +47,7 @@ def main():
             personal = 0 # TODO allow user to true/false switch items for personal use
             profit = 0 # TODO profit calculations based on a first in/first out movement if items in a inventory table
             insertcount = insertwallettransaction(transactionDateTime, transactionID, quantity, typeName, typeID, price, clientID, clientName, walletID, stationID, stationName, transactionType, personal, profit)
-            detail = "[wallet " + str(walletID) + "] insert " + str(insertcount)
+            detail = "[wallet:" + str(walletID) + "] insert " + str(insertcount)
             timestamp = arrow.get() # Get arrow object
             timestamp = timestamp.timestamp # Get timestamp of arrow object
             insertlog_timestamp(service, 0, detail, timestamp)

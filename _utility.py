@@ -157,6 +157,16 @@ def getnpckills_byallfactions():
     df = df.combine_first(getnpckills_byregions(regions_serpentis, "Serpentis"))
     return df.reset_index().to_json(orient='records',date_format='iso')
 
+def getnpckills_bywar(warName):
+    if warName == "worldwarbee":
+        df = getnpckills_byregions((10000023, ), "Pure Blind")
+        df = df.combine_first(getnpckills_byregions((10000010, ), "Tribute"))
+        df = df.combine_first(getnpckills_byregions((10000003, ), "Vale of the Silent"))
+        df = df.combine_first(getnpckills_byregions((10000015,), "Venal"))
+        return df.reset_index().to_json(orient='records', date_format='iso')
+    else:
+        return "No Data"
+
 #
 # Input     regions
 # Output    dataframe of SUM_factionKills grouped by timestamp
@@ -174,7 +184,8 @@ def getnpckills_byregions(regions, factionName):
     WHERE
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
       "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
-      public."mapSolarSystems"."regionID" IN %s
+      public."mapSolarSystems"."regionID" IN %s AND
+      timestamp < DATE('2016-03-30')
     GROUP BY mapkills."timestamp"
     ORDER BY timestamp DESC
     '''
@@ -200,7 +211,8 @@ def getnpckills_byfaction(regions):
     WHERE
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
       "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
-      public."mapSolarSystems"."regionID" IN %s
+      public."mapSolarSystems"."regionID" IN %s AND
+      timestamp < DATE('2016-03-30')
     GROUP BY mapkills."timestamp", "mapRegions"."regionName"
     ORDER BY timestamp DESC'''
     data = (regions,)
@@ -1591,6 +1603,7 @@ def getkillmailsbyregion(regionID):
       (killmails."killData"->'victim'->'shipType'->'id')::text::int NOT IN (33477)
     ORDER BY
      timestamp DESC
+    LIMIT 100
     '''
     data = (regionID, )
     cursor.execute(sql, data, )

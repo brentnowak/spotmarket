@@ -24,7 +24,7 @@
                 graphJumps({
                     width: 720,
                     height: 340,
-                    ylegend: 'SUM_shipJumps',
+                    ylegend: 'ship jumps',
                     selector: '.d3-graph-shipjumps-{{ regionID }}',
                     json: '/api/map/jumps/region/{{ regionID }}'
                 });
@@ -40,7 +40,7 @@
                 graphJumps({
                     width: 720,
                     height: 340,
-                    ylegend: 'SUM_npcKills',
+                    ylegend: 'npc kills',
                     selector: '.d3-graph-npckills-{{ regionID }}',
                     json: '/api/map/npckills/region/{{ regionID }}'
                 });
@@ -56,7 +56,7 @@
                 graphJumps({
                     width: 720,
                     height: 340,
-                    ylegend: 'SUM_shipKills',
+                    ylegend: 'ship kills',
                     selector: '.d3-graph-shipkills-{{ regionID }}',
                     json: '/api/map/shipkills/region/{{ regionID }}'
                 });
@@ -72,7 +72,7 @@
                 graphJumps({
                     width: 720,
                     height: 340,
-                    ylegend: 'SUM_podKills',
+                    ylegend: 'pod kills',
                     selector: '.d3-graph-podkills-{{ regionID }}',
                     json: '/api/map/podkills/region/{{ regionID }}'
                 });
@@ -90,7 +90,7 @@
                        data-striped="true"
                        data-show-toggle="true"
                        data-search="true"
-                       data-url="/api/killmails/region/{{ regionID }}"
+                       data-url="//api/killmails/region/{{ regionID }}"
                        data-pagination="true"
                        data-page-size="50"
                        data-page-list="[50, 100, 200]"
