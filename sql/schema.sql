@@ -1057,7 +1057,8 @@ ALTER TABLE ONLY wallet
 -- Name: idx_killmails_solarsystemid; Type: INDEX; Schema: data; Owner: spotmarketadmin
 --
 
-CREATE INDEX idx_killmails_solarsystemid ON killmails USING btree (((("killData" -> 'solarSystem'::text) -> 'id'::text)));
+CREATE INDEX idx_killmails_solarsystemid 
+  ON killmails ((("killData"->'solarSystem')->>'id'::int));
 
 
 --
@@ -1065,7 +1066,11 @@ CREATE INDEX idx_killmails_solarsystemid ON killmails USING btree (((("killData"
 -- Name: idx_killmails_typeid; Type: INDEX; Schema: data; Owner: spotmarketadmin
 --
 
-CREATE INDEX idx_killmails_typeid ON killmails USING btree ((((("killData" -> 'victim'::text) -> 'shipType'::text) -> 'id'::text)));
+CREATE INDEX idx_killmails_typeid 
+  ON killmails (((("killData"->'victim')->'shipType')->>'id'::int));
+  
+CREATE INDEX idx_killmails_timestamp
+  ON killmails ((("killData"->'killTime')) DESC)
 
 
 --
