@@ -2078,12 +2078,10 @@ def getkillmails_typeid_solarsystem(typeIDs, solarSystemIDs):
      COUNT(killmails."killData"->'solarSystem'->'id') as count,
      killmails."killData"->'killTime' as timestamp
     FROM
-     data.killmails,
-     public."invTypes"
+     data.killmails
     WHERE
-     (killmails."killData"->'victim'->'shipType'->'id')::text::int = "invTypes"."typeID" AND
-     (killmails."killData"->'victim'->'shipType'->'id')::text::int IN %s AND
-     (killmails."killData"->'solarSystem'->'id')::text::int IN %s
+     (killmails."killData"->'victim'->'shipType'->>'id')::int IN %s AND
+     (killmails."killData"->'solarSystem'->>'id')::int IN %s
     GROUP BY
      timestamp
     ORDER BY
