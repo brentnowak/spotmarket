@@ -315,6 +315,47 @@ def getkmdetails(killID):
     results = cursor.fetchone()
     return results
 
+
+def gettotalbadjson():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT COUNT(*)
+    FROM
+    data.killmails
+    WHERE (killmails."killData"->'victim'->'shipType'->'id')::text::int IS NULL
+    '''
+    cursor.execute(sql, )
+    result = cursor.fetchone()
+    return result[0]
+
+
+def getkmbadjson():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''
+    SELECT "killID", "killHash"
+    FROM
+      data.killmails
+    WHERE (killmails."killData"->'victim'->'shipType'->'id')::text::int IS NULL
+    LIMIT 1'''
+    cursor.execute(sql, )
+    results = cursor.fetchone()
+    return results
+
+
+def setkmjson(killID, killData):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''UPDATE data.killmails
+    SET "killData" = %s
+    WHERE killmails."killID" = %s'''
+    data = (killData, killID,)
+    cursor.execute(sql, data, )
+    conn.commit()
+    conn.close()
+    return 0
+
+
 def insertkillmailsumrecord(killID, characterID, corporationID, typeID, attackerCount, damageTaken, timestamp, solarSystemID, x, y, z):
     try:
         conn = psycopg2.connect(conn_string)

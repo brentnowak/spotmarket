@@ -173,7 +173,7 @@ def getnpckills_bywar(warName):
 #
 def getnpckills_byregions(regions, factionName):
     conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
+    cursor = conn.cursor()  # TODO Change timestamp < to today - 1
     sql = '''SELECT
     SUM(mapkills."factionKills") as factionKills,
       mapkills."timestamp"
@@ -199,7 +199,7 @@ def getnpckills_byregions(regions, factionName):
 
 def getnpckills_byfaction(regions):
     conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
+    cursor = conn.cursor()  # TODO Change timestamp < to today - 1
     sql = '''SELECT
     SUM(mapkills."factionKills") as factionKills,
       mapkills."timestamp",
