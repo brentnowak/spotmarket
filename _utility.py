@@ -173,7 +173,7 @@ def getnpckills_bywar(warName):
 #
 def getnpckills_byregions(regions, factionName):
     conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()  # TODO Change timestamp < to today - 1
+    cursor = conn.cursor()
     sql = '''SELECT
     SUM(mapkills."factionKills") as factionKills,
       mapkills."timestamp"
@@ -185,7 +185,7 @@ def getnpckills_byregions(regions, factionName):
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
       "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
       public."mapSolarSystems"."regionID" IN %s AND
-      timestamp < DATE('2016-04-01')
+      timestamp < TIMESTAMP 'yesterday'
     GROUP BY mapkills."timestamp"
     ORDER BY timestamp DESC
     '''
@@ -197,9 +197,10 @@ def getnpckills_byregions(regions, factionName):
     cursor.close()
     return df
 
+
 def getnpckills_byfaction(regions):
     conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()  # TODO Change timestamp < to today - 1
+    cursor = conn.cursor()
     sql = '''SELECT
     SUM(mapkills."factionKills") as factionKills,
       mapkills."timestamp",
@@ -212,7 +213,7 @@ def getnpckills_byfaction(regions):
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
       "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
       public."mapSolarSystems"."regionID" IN %s AND
-      timestamp < DATE('2016-04-01')
+      timestamp < TIMESTAMP 'yesterday'
     GROUP BY mapkills."timestamp", "mapRegions"."regionName"
     ORDER BY timestamp DESC'''
     data = (regions,)
@@ -234,6 +235,8 @@ def getnpckills_byuniverse():
       SUM(mapkills."factionKills") as factionKills, timestamp
     FROM
       data.mapkills
+    WHERE
+      timestamp < TIMESTAMP 'yesterday'
     GROUP BY mapkills."timestamp"
     ORDER BY timestamp DESC
     """
@@ -267,7 +270,8 @@ def getnpckills_bysecurity(low, high, name):
       public."mapSolarSystems"
     WHERE
       mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
-     "mapSolarSystems"."security" BETWEEN %s AND %s
+     "mapSolarSystems"."security" BETWEEN %s AND %s AND
+      timestamp < TIMESTAMP 'yesterday'
     GROUP BY mapkills."timestamp"
     ORDER BY timestamp DESC
     """
@@ -277,6 +281,64 @@ def getnpckills_bysecurity(low, high, name):
     df = df.set_index(['timestamp'])
     cursor.close()
     return df
+
+
+#
+# Regional Reports by Name
+# "The North", "The South"
+#
+def getnpckills_byregionsname(regions, regionName):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+    SUM(mapkills."factionKills") as factionKills,
+      mapkills."timestamp"
+    FROM
+      data.mapkills,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
+      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      public."mapSolarSystems"."regionID" IN %s AND
+      timestamp < TIMESTAMP 'yesterday'
+    GROUP BY mapkills."timestamp"
+    ORDER BY timestamp DESC
+    '''
+    data = (regions, )
+    cursor.execute(sql, data)
+    df = pd.DataFrame(cursor.fetchall(),columns=[regionName, 'timestamp'])
+    df = df.set_index(['timestamp'])
+    df = df.resample("12H",how='sum')
+    cursor.close()
+    return df.reset_index().to_json(orient='records', date_format='iso')
+
+
+def getjumps_byregionsname(regions, regionName):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+    SUM(mapjumps."shipJumps") as shipJumps,
+      mapjumps."timestamp"
+    FROM
+      data.mapjumps,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
+      "mapSolarSystems"."solarSystemID" = mapjumps."solarSystemID" AND
+      public."mapSolarSystems"."regionID" IN %s AND
+      timestamp < TIMESTAMP 'yesterday'
+    GROUP BY mapjumps."timestamp"
+    ORDER BY timestamp DESC
+    '''
+    data = (regions, )
+    cursor.execute(sql, data)
+    df = pd.DataFrame(cursor.fetchall(),columns=[regionName, 'timestamp'])
+    df = df.set_index(['timestamp'])
+    df = df.resample("12H",how='sum')
+    cursor.close()
+    return df.reset_index().to_json(orient='records', date_format='iso')
 
 
 #
