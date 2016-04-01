@@ -185,7 +185,7 @@ def getnpckills_byregions(regions, factionName):
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
       "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
       public."mapSolarSystems"."regionID" IN %s AND
-      timestamp < DATE('2016-03-30')
+      timestamp < DATE('2016-04-01')
     GROUP BY mapkills."timestamp"
     ORDER BY timestamp DESC
     '''
@@ -212,7 +212,7 @@ def getnpckills_byfaction(regions):
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
       "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
       public."mapSolarSystems"."regionID" IN %s AND
-      timestamp < DATE('2016-03-30')
+      timestamp < DATE('2016-04-01')
     GROUP BY mapkills."timestamp", "mapRegions"."regionName"
     ORDER BY timestamp DESC'''
     data = (regions,)
@@ -1586,7 +1586,7 @@ def getkillmailsbyregion(regionID):
       killmails."killData"->'attackerCount' as attackerCount,
       killmails."killData"->'victim'->'damageTaken' as damageTaken,
       killmails."killData"->'victim'->'alliance'->'name' as allianceName,
-      (killmails."killData"->'victim'->'shipType'->'id')::text::int as typeID,
+      (killmails."killData"->'victim'->'shipType'->>'id')::int as typeID,
       "invTypes"."typeName",
       "mapSolarSystems"."solarSystemName",
       "mapSolarSystems"."security"
@@ -1596,11 +1596,11 @@ def getkillmailsbyregion(regionID):
       public."mapRegions",
       public."mapSolarSystems"
     WHERE
-      (killmails."killData"->'victim'->'shipType'->'id')::text::int = "invTypes"."typeID" AND
+      (killmails."killData"->'victim'->'shipType'->>'id')::int = "invTypes"."typeID" AND
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
-      "mapSolarSystems"."solarSystemID" = (killmails."killData"->'solarSystem'->'id')::text::int AND
+      "mapSolarSystems"."solarSystemID" = (killmails."killData"->'solarSystem'->>'id')::int AND
       public."mapSolarSystems"."regionID" = %s AND
-      (killmails."killData"->'victim'->'shipType'->'id')::text::int NOT IN (33477)
+      (killmails."killData"->'victim'->'shipType'->>'id')::int NOT IN (33477)
     ORDER BY
      timestamp DESC
     LIMIT 100

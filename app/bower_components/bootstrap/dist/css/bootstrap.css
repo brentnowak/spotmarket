@@ -2266,7 +2266,7 @@ th {
 .table > thead > tr > td,
 .table > tbody > tr > td,
 .table > tfoot > tr > td {
-  padding: 8px;
+  padding: 4px;
   line-height: 1.42857143;
   vertical-align: top;
   border-top: 1px solid #ddd;
@@ -3886,7 +3886,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .nav > li > a {
   position: relative;
   display: block;
-  padding: 10px 15px;
+  padding: 4px 8px;
 }
 .nav > li > a:hover,
 .nav > li > a:focus {
@@ -4396,7 +4396,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   }
 }
 .navbar-default {
-  background-color: #f8f8f8;
+  background-color: #f5f5f5;
   border-color: #e7e7e7;
 }
 .navbar-default .navbar-brand {

@@ -36,7 +36,7 @@
                 <tbody>
                     {% for item in getskillqueues %}
                     <tr>
-                        <td class="text-center"><img src="https://image.eveonline.com/Character/{{item[0]}}_256.jpg" height="32" width="32"></td>
+                        <td class="text-center"><img src="https://image.eveonline.com/Character/{{item[0]}}_256.jpg" height="24" width="24"></td>
                         <td class="text-right"><samp>{{item[1]}}</samp></td>
                         <td class="text-right">{{item[2]}}</td>
                         <td class="text-right">{{item[3]}}</td>
@@ -71,7 +71,7 @@
                 <tbody>
                     {% for item in getwallettransactions %}
                     <tr>
-                        <td class="text-center"><img src="https://image.eveonline.com/Type/{{item[2]}}_64.png" height="32" width="32"></td>
+                        <td class="text-center"><img src="https://image.eveonline.com/Type/{{item[2]}}_64.png" height="24" width="24"></td>
                         <td class="text-right"><samp>{{item[0]}}</samp></td>
                         <td class="text-right"><samp>{{ '{:,.0f}'.format(item[1] | int) }}</samp></td>
                         <td class="text-right"><samp>{{ '{:,.2f}'.format(item[3] | int) }}</samp></td>
@@ -97,7 +97,7 @@
                         </tr>
                     </thead>
                     <tr>
-                        <td class="text-center"><img src="https://image.eveonline.com/Type/29668_64.png" height="32" width="32"></td>
+                        <td class="text-center"><img src="https://image.eveonline.com/Type/29668_64.png" height="24" width="24"></td>
                         <td class="text-right"><samp>30 Day Pilot's License Extension (PLEX)</samp></td>
                         <td class="text-right"><samp>{{plexgetlatestprice}}</samp></td>
                         <td class="text-right"><samp>{{plexgetlatestpricechange}}%</samp></td>
@@ -148,7 +148,7 @@
                 <tbody>
                     {% for item in getwalletbalances %}
                     <tr>
-                        <td class="text-center"><img src="https://image.eveonline.com/Character/{{item[1]}}_256.jpg" height="32" width="32"></td>
+                        <td class="text-center"><img src="https://image.eveonline.com/Character/{{item[1]}}_256.jpg" height="24" width="24"></td>
                         <td class="text-right"><samp>{{item[0]}}</samp></td>
                         <td class="text-right"><code>{{ '{:,.0f}'.format(item[2] | int) }}</code></td>
                     </tr>
@@ -157,8 +157,8 @@
                 <tfoot>
                     <tr>
                         <td></td>
-                        <td class="text-right">Total ISK</td>
-                        <td class="text-right"><code>{{ '{:,.0f}'.format(getwalletbalancestotal | int) }}</code></td>
+                        <td></td>
+                        <td class="text-right"><b>{{ '{:,.0f}'.format(getwalletbalancestotal | int) }}</b></td>
                     </tr>
                 </tfoot>
             </table>
