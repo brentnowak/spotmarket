@@ -16,8 +16,29 @@
 
     <ul class="nav navbar-top-links navbar-right">
         <li class="dropdown">
-            <samp>{{timeutc}}</samp>
+            <samp>{{timeutc}} UTC</samp>
         </li>
+
+        <!-- /.dropdown -->
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="fa fa-tags fa-fw"></i>  <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+                <li>
+                    <a href="/system/market"><i class="fa fa-caret-right fa-fw"></i> Market</a>
+                </li>
+                <li>
+                    <a href="/system/zkillboard"><i class="fa fa-caret-right fa-fw"></i> zKillboard</a>
+                </li>
+                <li>
+                    <a href="/system/stations"><i class="fa fa-caret-right fa-fw"></i> Stations</a>
+                </li>
+            </ul>
+            <!-- /.dropdown-Watch -->
+        </li>
+        <!-- /.dropdown -->
+
         <!-- /.dropdown -->
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -25,15 +46,27 @@
             </a>
             <ul class="dropdown-menu dropdown-user">
                 <li>
-                    <a href="/system/settings"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                </li>
-                <li>
-                    <a href="/system/logs"><i class="fa fa-gear fa-fw"></i> Logs</a>
+                    <a href="/system/characters"><i class="fa fa-caret-right fa-fw"></i> Characters</a>
                 </li>
             </ul>
-            <!-- /.dropdown-user -->
+            <!-- /.dropdown-Characters -->
         </li>
         <!-- /.dropdown -->
+
+        <!-- /.dropdown -->
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="fa fa-wrench fa-fw"></i>  <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-system">
+                <li>
+                    <a href="/system/logs"><i class="fa fa-caret-right fa-fw"></i> Logs</a>
+                </li>
+            </ul>
+            <!-- /.dropdown-System -->
+        </li>
+        <!-- /.dropdown -->
+
     </ul>
     <!-- /.navbar-top-links -->
 

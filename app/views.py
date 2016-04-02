@@ -34,17 +34,31 @@ def index():
                            countsovchangelastday=countsovchangelastday())
 
 @app.route('/system/logs')
-def system():
-    return render_template('pages/logs.html',
+def systemsettings_logs():
+    return render_template('pages/systemSettings/logs.html',
                            title="Logs",
                            header="Logs",
                            timeutc=timeutc())
 
-@app.route('/system/settings')
-def settings():
-    return render_template('pages/settings.html',
-                           title="Settings",
-                           header="Settings",
+@app.route('/system/market')
+def systemsettings_settings():
+    return render_template('pages/systemSettings/market.html',
+                           title="Market",
+                           header="Market",
+                           timeutc=timeutc())
+
+@app.route('/system/characters')
+def systemsettings_characters():
+    return render_template('pages/systemSettings/characters.html',
+                           title="Characters",
+                           header="Characters",
+                           timeutc=timeutc())
+
+@app.route('/system/zkillboard')
+def systemsettings_zkillboard():
+    return render_template('pages/systemSettings/zkillboard.html',
+                           title="zKillboard",
+                           header="zKillboard",
                            timeutc=timeutc())
 
 
@@ -492,8 +506,8 @@ def api_getzkillboarditems():
 
 # Wallet
 @app.route('/api/wallet/transactions')
-def api_wallettransactions():
-    return getwallettransactions()
+def api_getallwallettransactions():
+    return getallwallettransactions()
 
 @app.route('/api/wallet/typeid/<typeID>/<transactionType>')
 def api_getwallet_typeid(typeID, transactionType):

@@ -22,7 +22,7 @@ def countdatawallet():
     cursor = conn.cursor()
     sql = '''SELECT
         COUNT(*)
-        FROM data.wallet'''
+        FROM data.charwallet'''
     cursor.execute(sql, )
     result = cursor.fetchone()
     return result[0]
@@ -185,22 +185,23 @@ def getpricepercentchange(typeID, regionID):
 
 def getwallettransactions(limit):
     conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      wallet."typeName",
-      wallet.quantity,
-      wallet."typeID",
-      wallet.price,
-      wallet.profit,
-      wallet."transactionDateTime"
+      charwallet."typeName",
+      charwallet.quantity,
+      charwallet."typeID",
+      charwallet.price,
+      charwallet.profit,
+      charwallet."transactionDateTime" as timestamp
     FROM
-      data.wallet
+      data.charwallet
     ORDER BY
-     wallet."transactionDateTime" DESC
+     charwallet."transactionDateTime" DESC
     LIMIT %s'''
     data = (limit, )
-    cursor.execute(sql, data)
-    results = cursor.fetchall()  # TODO return dictionary rather than list
+    cursor.execute(sql, data, )
+    results = cursor.fetchall()
+    cursor.close()
     return results
 
 

@@ -59,7 +59,7 @@ def getprofitpersolarsystem(typeID):
       charwallet."stationID" = "mapDenormalize"."itemID" AND
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
       "mapDenormalize"."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
-      charwallet."typeID" = 12038
+      charwallet."typeID" = %s
     GROUP BY
       "mapSolarSystems"."solarSystemName",
       "mapRegions"."regionName"
@@ -99,3 +99,38 @@ def getregionalstats(typeID):
     results = cursor.fetchall()
     cursor.close()
     return results
+
+
+def getallwallettransactions():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''SELECT
+      to_char(charwallet."transactionDateTime", 'YYYY-MM-dd HH:mm:ss') AS timestamp,
+      quantity,
+      "typeName",
+      "charwallet"."typeID",
+      "charwallet"."typeID" as "iconID",
+      price,
+      "stationID",
+      "transactionType",
+      personal,
+      profit,
+      "mapDenormalize"."itemName" as "stationName",
+      "mapSolarSystems"."solarSystemName",
+      "mapRegions"."regionName"
+    FROM data.charwallet,
+      public."mapDenormalize",
+      public."mapSolarSystems",
+      public."mapRegions"
+    WHERE
+      charwallet."stationID" = "mapDenormalize"."itemID" AND
+      "mapSolarSystems"."solarSystemID" = "mapDenormalize"."solarSystemID" AND
+      "mapSolarSystems"."regionID" = "mapRegions"."regionID"
+    ORDER BY
+     charwallet."transactionDateTime" DESC'''
+    cursor.execute(sql, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results

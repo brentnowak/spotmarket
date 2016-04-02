@@ -71,11 +71,11 @@
                 <tbody>
                     {% for item in getwallettransactions %}
                     <tr>
-                        <td class="text-center"><img src="https://image.eveonline.com/Type/{{item[2]}}_64.png" height="24" width="24"></td>
-                        <td class="text-right"><samp>{{item[0]}}</samp></td>
-                        <td class="text-right"><samp>{{ '{:,.0f}'.format(item[1] | int) }}</samp></td>
-                        <td class="text-right"><samp>{{ '{:,.2f}'.format(item[3] | int) }}</samp></td>
-                        <td class="text-right"><samp>{{item[5]}}</samp></td>
+                        <td class="text-center"><img src='https://image.eveonline.com/Type/{{item["typeID"]}}_64.png' height="24" width="24"></td>
+                        <td class="text-right"><samp><a href='/report/market/item/{{item["typeID"]}}'>{{item["typeName"]}}</a></samp></td>
+                        <td class="text-right"><samp>{{ '{:,.0f}'.format(item["quantity"] | int) }}</samp></td>
+                        <td class="text-right"><samp>{{ '{:,.2f}'.format(item["price"] | int) }}</samp></td>
+                        <td class="text-right"><samp>{{item["timestamp"]}}</samp></td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -158,7 +158,7 @@
                     <tr>
                         <td></td>
                         <td></td>
-                        <td class="text-right"><b>{{ '{:,.0f}'.format(getwalletbalancestotal | int) }}</b></td>
+                        <td class="text-right"><samp>{{ '{:,.0f}'.format(getwalletbalancestotal | int) }}</samp></td>
                     </tr>
                 </tfoot>
             </table>
@@ -171,23 +171,23 @@
                 <tbody>
                     <tr>
                         <td><i class="fa fa-crosshairs"></i> Killmails</td>
-                        <td><code>{{countdatakillmails}}</code></td>
+                        <td class="text-right"><code>{{countdatakillmails}}</code></td>
                     </tr>
                     <tr>
                         <td><i class="glyphicon glyphicon-book"></i> Market Prices</td>
-                        <td><code>{{countdatamarkethistory}}</code></td>
+                        <td class="text-right"><code>{{countdatamarkethistory}}</code></td>
                     </tr>
                     <tr>
                         <td><i class="glyphicon glyphicon-piggy-bank"></i> Wallet Transactions</td>
-                        <td><code>{{countdatawallet}}</code></td>
+                        <td class="text-right"><code>{{countdatawallet}}</code></td>
                     </tr>
                     <tr>
                         <td><i class="fa fa-circle-o"></i> Moons</td>
-                        <td><code>{{countdatamoonminerals}}</code></td>
+                        <td class="text-right"><code>{{countdatamoonminerals}}</code></td>
                     </tr>
                     <tr>
                         <td><i class="fa fa-check-circle"></i> Verified Moons</td>
-                        <td><code>{{countdatamoonverify}}</code></td>
+                        <td class="text-right"><code>{{countdatamoonverify}}</code></td>
                     </tr>
                 </tbody>
             </table>
@@ -201,19 +201,19 @@
                 <tbody>
                     <tr>
                         <td><i class="fa fa-bar-chart-o"></i> Jita Jumps/Hour</td>
-                        <td><code>{{countlatestjitajump}}</code></td>
+                        <td class="text-right"><code>{{countlatestjitajump}}</code></td>
                     </tr>
                     <tr>
                         <td><i class="fa fa-clock-o"></i> Map Jumps</td>
-                        <td><code>{{latestjumpdatatime}}</code></td>
+                        <td class="text-right"><code>{{latestjumpdatatime}}</code></td>
                     </tr>
                     <tr>
                         <td><i class="fa fa-flag"></i> Sovereignty</td>
-                        <td><code>{{latestsovdatatime}}</code></td>
+                        <td class="text-right"><code>{{latestsovdatatime}}</code></td>
                     </tr>
                     <tr>
                         <td><i class="fa fa-flag"></i> Sovereignty 24 Hours</td>
-                        <td><code>{{countsovchangelastday}}</code></td>
+                        <td class="text-right"><code>{{countsovchangelastday}}</code></td>
                     </tr>
                 </tbody>
             </table>
@@ -228,15 +228,15 @@
                 <tbody>
                     <tr>
                         <td><i class="fa fa-gears"></i> System Memory</td>
-                        <td><code>{{psutil_getmemory}}%</code></td>
+                        <td class="text-right"><code>{{psutil_getmemory}}%</code></td>
                     </tr>
                     <tr>
                         <td><i class="fa fa-chain"></i> CREST Connections</td>
-                        <td><code>{{psutil_crestconnections}}</code></td>
+                        <td class="text-right"><code>{{psutil_crestconnections}}</code></td>
                     </tr>
                     <tr>
                         <td><i class="fa fa-chain"></i> zKillboard Connections</td>
-                        <td><code>{{psutil_zkillboardconnections}}</code></td>
+                        <td class="text-right"><code>{{psutil_zkillboardconnections}}</code></td>
                     </tr>
                 </tbody>
             </table>

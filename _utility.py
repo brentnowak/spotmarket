@@ -1445,6 +1445,7 @@ def getmarketitems():
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
       marketitems."typeID",
+      marketitems."typeID" as "iconID",
       "invTypes"."typeName",
       "invMarketGroups"."marketGroupName",
       marketitems.enabled,
@@ -1470,6 +1471,7 @@ def getzkillboarditems():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
+      killmailsitems."typeID" as "iconID",
       killmailsitems."typeID",
       "invTypes"."typeName",
       "invMarketGroups"."marketGroupName",
@@ -1497,7 +1499,13 @@ def getcharacters():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      *
+      "walletID",
+      "characterID",
+      "characterID" as "iconID",
+      "characterName",
+      "keyID", RIGHT("vCode", 6) as "vCode",
+      "enableWallet", "enableJournal", "enableOrders", "enableBlueprints",
+      "displayWallet", "displayOrders", "displayBlueprints", "corpKey"
     FROM
       data.characters'''
     cursor.execute(sql, )

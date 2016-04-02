@@ -1,0 +1,62 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{{header}}</h1>List of typeIDs used in zKillboard imports.
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                        <input class="form-control" placeholder="typeName"><br>
+                        <button type="button" class="btn btn-danger">Add Item</button>
+                    </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-danger">Enable All</button><p></p>
+                        <button type="button" class="btn btn-danger">Disable All</button><p></p>
+                        <button type="button" class="btn btn-danger">Import All</button>
+                    </div>
+                </div>
+                <table data-toggle="table"
+                       data-sort-name="logID"
+                       data-sort-order="desc"
+                       data-show-refresh="true"
+                       data-show-toggle="true"
+                       data-striped="true"
+                       data-search="true"
+                       data-url="/api/zkillboarditems"
+                       data-height="600">
+                <thead>
+                    <tr>
+                        <th data-field="iconID" data-formatter="invTypeIconFormatter" data-width=32px></th>
+                        <th data-field="typeID" data-sortable="true" data-align="right">typeID</th>
+                        <th data-field="typeName" data-sortable="true" data-align="right">typeName</th>
+                        <th data-field="marketGroupName" data-sortable="true" data-align="right">marketGroupName</th>
+                        <th data-field="enabled" data-sortable="true" data-align="right">enabled</th>
+                        <th data-field="lastPage" data-sortable="true" data-align="right">lastPage</th>
+                        <th data-field="importResult" data-sortable="true" data-align="right">importResult</th>
+                        <th data-field="importTimestamp" data-sortable="true" data-align="right">importTimestamp</th>
+                    </tr>
+                </thead>
+                </table>
+            </div>
+        </div>
+
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+
+{% endblock %}
