@@ -1944,7 +1944,8 @@ def mapjumps_solarsystemID(solarSystemID):
       data.mapjumps,
       public."mapSolarSystems"
     WHERE mapjumps."solarSystemID" = %s AND
-      "mapSolarSystems"."solarSystemID" = mapjumps."solarSystemID"
+      "mapSolarSystems"."solarSystemID" = mapjumps."solarSystemID" AND
+      timestamp < TIMESTAMP 'yesterday'
     ORDER BY mapjumps."timestamp" DESC'''
     data = (solarSystemID, )
     cursor.execute(sql, data, )
@@ -1967,7 +1968,8 @@ def mapjumps_tradehubs():
       public."mapSolarSystems"
     WHERE
       "mapSolarSystems"."solarSystemID" = mapjumps."solarSystemID" AND
-      mapjumps."solarSystemID" IN (30002187, 30000142, 30002659, 30002510)
+      mapjumps."solarSystemID" IN (30002187, 30000142, 30002659, 30002510) AND
+      timestamp < TIMESTAMP 'yesterday'
     ORDER BY mapjumps."timestamp" DESC'''
     cursor.execute(sql, )
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','shipJumps','solarSystemName'])
@@ -1991,7 +1993,8 @@ def mapkills_jumpsbyregion(regionID):
     WHERE
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
       "mapSolarSystems"."solarSystemID" = mapjumps."solarSystemID" AND
-      "mapSolarSystems"."regionID" = %s
+      "mapSolarSystems"."regionID" = %s AND
+      timestamp < TIMESTAMP 'yesterday'
     GROUP BY
       mapjumps."timestamp",
       "mapRegions"."regionName"
@@ -2020,7 +2023,8 @@ def mapkills_npckillsbyregion(regionID):
     WHERE
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
       "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
-      "mapSolarSystems"."regionID" = %s
+      "mapSolarSystems"."regionID" = %s AND
+      timestamp < TIMESTAMP 'yesterday'
     GROUP BY
       mapkills."timestamp",
       "mapRegions"."regionName"
@@ -2049,7 +2053,8 @@ def mapkills_shipkillsbyregion(regionID):
     WHERE
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
       "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
-      "mapSolarSystems"."regionID" = %s
+      "mapSolarSystems"."regionID" = %s AND
+      timestamp < TIMESTAMP 'yesterday'
     GROUP BY
       mapkills."timestamp",
       "mapRegions"."regionName"
@@ -2078,7 +2083,8 @@ def mapkills_podkillsbyregion(regionID):
     WHERE
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
       "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
-      "mapSolarSystems"."regionID" = %s
+      "mapSolarSystems"."regionID" = %s AND
+      timestamp < TIMESTAMP 'yesterday'
     GROUP BY
       mapkills."timestamp",
       "mapRegions"."regionName"
