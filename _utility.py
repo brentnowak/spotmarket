@@ -145,6 +145,28 @@ def getmoonIDfromName(typeID):
     results = cursor.fetchone()
     return results[0]
 
+def gettypeiddetails(typeID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''SELECT
+      "invTypes"."typeName",
+      "invMetaTypes"."metaGroupID",
+      "invMetaGroups"."metaGroupName",
+      "invTypes".volume
+    FROM
+      public."invTypes",
+      public."invMetaTypes",
+      public."invMetaGroups"
+    WHERE
+      "invTypes"."typeID" = "invMetaTypes"."typeID" AND
+      "invMetaGroups"."metaGroupID" = "invMetaTypes"."metaGroupID" AND
+      "invTypes"."typeID" = %s'''
+    data = (typeID,)
+    cursor.execute(sql, data, )
+    results = cursor.fetchall()
+    return results[0]
+
+
 #
 # Input     getnpckills_byregions
 # Output    JSON of every faction region

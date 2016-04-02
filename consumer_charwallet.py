@@ -31,6 +31,7 @@ def main():
         charresponse = charapi.wallet_transactions()
         charresponse = charresponse[0]
 
+        insertcount = 0
         for row in charresponse:
             transactionDateTime = row['timestamp']
             transactionID = row['journal_id']
@@ -42,15 +43,16 @@ def main():
             clientName = row['client']['name']
             walletID = walletID
             stationID = row['station']['id']
-            stationName = row['station']['name']
+            #stationName = row['station']['name'] Not used
             transactionType = row['action']
             personal = 0 # TODO allow user to true/false switch items for personal use
             profit = 0 # TODO profit calculations based on a first in/first out movement if items in a inventory table
-            insertcount = insertwallettransaction(transactionDateTime, transactionID, quantity, typeName, typeID, price, clientID, clientName, walletID, stationID, stationName, transactionType, personal, profit)
-            detail = "[wallet:" + str(walletID) + "] insert " + str(insertcount)
-            timestamp = arrow.get() # Get arrow object
-            timestamp = timestamp.timestamp # Get timestamp of arrow object
-            insertlog_timestamp(service, 0, detail, timestamp)
+            insertcount += insertwallettransaction(transactionDateTime, transactionID, quantity, typeName, typeID, price, clientID,
+                                    clientName, characterID, stationID, transactionType, personal, profit)
+
+        detail = "[character:" + str(characterName) + "][insert:" + str(insertcount) + "]"
+        timestamp = arrow.utcnow().format('YYYY-MM-DD HH:mm:ss')
+        insertlog(service, 0, detail, timestamp)
 
 if __name__ == "__main__":
     main()

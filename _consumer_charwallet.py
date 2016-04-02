@@ -29,8 +29,7 @@ def getwallettransactions():
         return results
 
 
-def insertwallettransaction(transactionDateTime, transactionID, quantity, typeName, typeID, price, clientID, clientName, walletID, stationID, stationName, transactionType, personal, profit):
-    insertcount = 0
+def insertwallettransaction(transactionDateTime, transactionID, quantity, typeName, typeID, price, clientID, clientName, characterID, stationID, transactionType, personal, profit):
     try:
         conn = psycopg2.connect(conn_string)
         cursor = conn.cursor()
@@ -43,18 +42,17 @@ def insertwallettransaction(transactionDateTime, transactionID, quantity, typeNa
             price,
             "clientID",
             "clientName",
-            "walletID",
+            "characterID",
             "stationID",
-            "stationName",
             "transactionType",
             personal,
             profit)
-        VALUES (to_timestamp(%s), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
-        data = (transactionDateTime, transactionID, quantity, typeName, typeID, price, clientID, clientName, walletID, stationID, stationName, transactionType, personal, profit, )
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
+        data = (transactionDateTime, transactionID, quantity, typeName, typeID, price, clientID, clientName, characterID, stationID, transactionType, personal, profit, )
         cursor.execute(sql, data)
     except psycopg2.IntegrityError:
         conn.rollback()
     else:
         conn.commit()
-        insertcount += 1
-    return insertcount
+        return 1
+    return 0

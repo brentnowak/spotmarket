@@ -1,0 +1,153 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header"><img src="https://image.eveonline.com/Type/{{typeID}}_64.png"> {{typeName}}</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-map-marker"></span> Regional Data
+                </div>
+            </div>
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-right">regionName</th>
+                        <th class="text-right">avgPrice</th>
+                        <th class="text-right">dailyVolume</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in getregionalstats %}
+                    <tr>
+                        <td class="text-right"><samp>{{item["regionName"]}}</samp></td>
+                        <td class="text-right"><samp>{{ '{:,.2f}'.format(item["avgPrice"] | int) }}</samp></td>
+                        <td class="text-right"><samp>{{ '{:,.0f}'.format(item["volume"] | int) }}</samp></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="fa fa-bank"></span> Top Profit Locations
+                </div>
+            </div>
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-right">solarSystemName</th>
+                        <th class="text-right">regionName</th>
+                        <th class="text-right">sumQuantity</th>
+                        <th class="text-right">sumProfit</th>
+                        <th class="text-right">averageProfit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in getprofitpersolarsystem %}
+                    <tr>
+                        <td class="text-right"><samp>{{item["solarSystemName"]}}</samp></td>
+                        <td class="text-right"><samp>{{item["regionName"]}}</samp></td>
+                        <td class="text-right"><samp>{{ '{:,.0f}'.format(item["sumquantity"] | int) }}</samp></td>
+                        <td class="text-right"><samp>{{ '{:,.2f}'.format(item["sumprofit"] | int) }}</samp></td>
+                        <td class="text-right"><samp>{{ '{:,.2f}'.format(item["averageprofit"] | int) }}</samp></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <p>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="fa fa-table"></span> Price
+                </div>
+            </div>
+                <div class="d3-graph-price-{{typeID}}"></div>
+                    <script>
+                        graphPrice({
+                            width: 670,
+                            height: 340,
+                            marginright: 50,
+                            marginleft: 80,
+                            selector: '.d3-graph-price-{{typeID}}',
+                            json: '/api/market/avgprice/{{typeID}}'
+                        });
+                    </script>
+
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Sales
+                </div>
+                    <table data-toggle="table"
+                           data-sort-name="timestamp"
+                           data-sort-order="desc"
+                           data-striped="true"
+                           data-url="/api/wallet/typeid/{{typeID}}/sell"
+                           data-height="300">
+                        <thead>
+                            <tr>
+                            <th data-field="timestamp" data-sortable="true">timestamp</th>
+                            <th data-field="quantity" data-sortable="true" data-align="right">quantity</th>
+                            <th data-field="price" data-sortable="true" data-align="right" data-formatter="numberDec">price</th>
+                            <th data-field="totalprice" data-sortable="true" data-align="right" data-formatter="numberDec">totalPrice</th>
+                            <th data-field="profit" data-sortable="true" data-align="right" data-formatter="numberDec">profit</th>
+                            <th data-field="stationname" data-sortable="true" data-align="right">stationName</th>
+                            <th data-field="solarSystemName" data-sortable="true" data-align="right">solarSystemName</th>
+                            <th data-field="regionName" data-sortable="true" data-align="right">regionName</th>
+                            </tr>
+                        </thead>
+                    </table>
+            </div>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Purchases
+                </div>
+                    <table data-toggle="table"
+                           data-sort-name="timestamp"
+                           data-sort-order="desc"
+                           data-striped="true"
+                           data-url="/api/wallet/typeid/{{typeID}}/buy"
+                           data-height="300">
+                        <thead>
+                            <tr>
+                            <th data-field="timestamp" data-sortable="true">timestamp</th>
+                            <th data-field="quantity" data-sortable="true" data-align="right">quantity</th>
+                            <th data-field="price" data-sortable="true" data-align="right" data-formatter="numberDec">price</th>
+                            <th data-field="totalprice" data-sortable="true" data-align="right" data-formatter="numberDec">totalPrice</th>
+                            <th data-field="profit" data-sortable="true" data-align="right" data-formatter="numberDec">profit</th>
+                            <th data-field="stationname" data-sortable="true" data-align="right">stationName</th>
+                            <th data-field="solarSystemName" data-sortable="true" data-align="right">solarSystemName</th>
+                            <th data-field="regionName" data-sortable="true" data-align="right">regionName</th>
+                            </tr>
+                        </thead>
+                    </table>
+            </div>
+
+        </div><!-- /.col-lg-12 -->
+    </div><!-- /.row -->
+
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+
+{% endblock %}

@@ -17,7 +17,7 @@ requests.packages.urllib3.disable_warnings()
 service = "consumer_validatekillmails.py"
 
 totalEmptyValue = gettotalkmemptyvalues()
-#totalBadJSON = gettotalbadjson()
+totalBadJSON = gettotalbadjson()
 
 #
 # Look for KMs with missing totalValues
@@ -48,7 +48,7 @@ print("[km][all killmail values populated]")
 while getkmbadjson() != None:
     try:
         kill = getkmbadjson()
-        print(kill)
+        print("[badJSON:" + str(totalBadJSON) + "][killiID:" + str(kill['killID']) + "]")
         crestURL = 'https://public-crest.eveonline.com/killmails/' + str(kill['killID']) + '/' + str(kill['killHash']) + '/'
         try:
             crestKill = requests.get(crestURL)
@@ -56,5 +56,6 @@ while getkmbadjson() != None:
             print(e)
         else:
             setkmjson(kill['killID'], crestKill.text)
+            totalBadJSON -= 1
     except Exception as e:
         print(e)

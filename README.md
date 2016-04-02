@@ -116,12 +116,14 @@ apt-get build-dep python-psycopg2
 apt-get install python-pip
 apt-get install supervisor
 apt-get install git
-pip install -r requirements.txt
 ```
 
 **Clone GitHub Project**
+Install in /home/ubuntu due to some hardcoded paths.
 ```shell
 git clone https://github.com/brentnowak/spotmarket
+cd spotmarket
+pip install -r requirements.txt
 ```
 
 **Make Scripts Executable**
@@ -176,7 +178,7 @@ Type "help" for help.
 
 spotmarket=>
 ```
-Create the schema by running schema.sql located under *\sql* directory.  
+Create the schema by pasting in schema.sql located under *\sql* directory.  
 You can connect to the database using the command listed above and create the tables or use a GUI tool such as pgAdmin.  
 
 **Import Eve Static Data**

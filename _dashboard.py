@@ -109,6 +109,19 @@ def latestsovdatatime():
     return result[0]
 
 
+def countsovchangelastday():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      COUNT(*)
+    FROM
+      data.mapsov
+    WHERE mapsov."timestamp" >= NOW() - '1 day'::INTERVAL'''
+    cursor.execute(sql, )
+    result = cursor.fetchone()
+    return result[0]
+
+
 def psutil_getmemory():
     return psutil.virtual_memory().percent
 

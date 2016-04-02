@@ -7,18 +7,18 @@ CREATE TABLE data.charwallet
   "transactionDateTime" timestamp without time zone NOT NULL,
   "transactionID" bigint NOT NULL,
   quantity bigint NOT NULL,
-  "typeName" character varying(255) NOT NULL,
+  "typeName" text NOT NULL,
   "typeID" integer NOT NULL,
-  price double precision NOT NULL,
+  price real NOT NULL,
   "clientID" bigint NOT NULL,
-  "clientName" character varying(255) NOT NULL,
-  "walletID" integer NOT NULL,
+  "clientName" text NOT NULL,
+  "characterID" integer NOT NULL,
   "stationID" bigint NOT NULL,
-  "transactionType" character varying(4) NOT NULL,
-  personal int NOT NULL DEFAULT,
-  transactionFor integer NOT NULL,
-  journalTransactionID bitint NOT NULL,
-  profit double precision NOT NULL DEFAULT (0)::double precision,
+  "transactionType" text NOT NULL,
+  personal integer NOT NULL,
+  transactionfor integer,
+  journaltransactionid bigint,
+  profit real,
   CONSTRAINT pkey_charwallet PRIMARY KEY ("transactionID")
 )
 WITH (
@@ -26,3 +26,22 @@ WITH (
 );
 ALTER TABLE data.charwallet
   OWNER TO spotmarketadmin;
+
+-- Index: data.idx_charwallet_stationid
+
+-- DROP INDEX data.idx_charwallet_stationid;
+
+CREATE INDEX idx_charwallet_stationid
+  ON data.charwallet
+  USING btree
+  ("stationID" DESC NULLS LAST);
+
+-- Index: data.idx_charwallet_typeid
+
+-- DROP INDEX data.idx_charwallet_typeid;
+
+CREATE INDEX idx_charwallet_typeid
+  ON data.charwallet
+  USING btree
+  ("typeID" DESC NULLS LAST);
+

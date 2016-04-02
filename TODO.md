@@ -1,31 +1,41 @@
 0.5 Release
 ==================
 
-- [ ] [new] Create freighter security index based on killmails  
-- [ ] [new] Work on indexes, add item destruction based on killmails  
-- [ ] [new] Create process to fill in killmails that lack JSON data or zKb values
-- [ ] [new] Add character information (blueprints, wallet, journal, orders) 
-- [ ] [bug] bootstrap-table table headers that contain icons do not align correctly with rows  
+- [x] [new] Character Blueprints table and page  
+- [ ] [new] Character Orders table and page  
+- [ ] [new] Character Journal table and page  
+- [ ] [new] Character Wallet table and page  
+- [x] [new] Work on data.killmails indexes to improve performance  
+- [x] [new] Create process to fill in killmails that lack JSON data or zKb values  
 - [ ] [bug] Security reports have hardcoded time range for data that calculates ratting rate  
-- [ ] [bug] On most graphs, label for line appears to the left  
-- [ ] [enhancement] Add second axis to d3js charts to denote Eve expansions  
-- [ ] [enhancement] Personalize 404 error page  
-- [ ] [enhancement] Add functional buttons on Settings page to control imports  
+- [x] [enhancement] Change graphs to exclude last 24 hours as it causes graphs to improperly trend  
+- [x] [enhancement] Personalize 404 error page  
 - [x] [enhancement] Change factionReport charts to be driven by JSON  
-- [ ] [enhancement] Learn how to use Classes and clean up utility scripts 
-- [ ] [enhancement] Add website favicon  
-- [ ] [enhancement] Move API items to _api.py  
-
-Add Prospect and Venture to zkb watch
 
 0.6 Release
 ==================
+
+- [ ] [bug] On most graphs, label for line appears to the left  
+- [ ] [bug] bootstrap-table table headers that contain icons do not align correctly with rows  
+- [ ] [new] Create freighter security index based on killmails  
+- [ ] [enhancement] Add functional buttons on Settings page to control imports  
+- [ ] [enhancement] Learn how to use Classes and clean up utility scripts  
+- [ ] [enhancement] Add second axis to d3js charts to denote Eve expansions  
+- [ ] [enhancement] Add website favicon  
+- [ ] [enhancement] Move API items to _api.py  
+
+0.7 Release
+==================
   
-- [ ] [enhancement] Create Docker image  
 - [ ] [enhancement] Display tags rather than numbers for severity on log pages  
 - [ ] [enhancement] Research replacing cron jobs with a better solution  
 - [ ] [enhancement] Organize API endpoints into a more logical pattern  
 - [ ] [enhancement] PostgreSQL 9.5.1 performance tuning  
+
+0.8 Release
+==================
+
+- [ ] [enhancement] Create Docker image  
 
 0.4 Release (Completed)
 ==================

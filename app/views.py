@@ -3,6 +3,7 @@ from app import app
 from _utility import *
 from _api import *
 from _dashboard import *
+from _wallet import *
 
 
 #############################
@@ -29,7 +30,8 @@ def index():
                            getwallettransactions=getwallettransactions(10),
                            getwalletbalances=getwalletbalances(),
                            getwalletbalancestotal=getwalletbalancestotal(),
-                           getskillqueues=getskillqueues())
+                           getskillqueues=getskillqueues(),
+                           countsovchangelastday=countsovchangelastday())
 
 @app.route('/system/logs')
 def system():
@@ -268,11 +270,18 @@ def indexreport_goldenroute():
 #############################
 @app.route('/report/region/<regionID>')
 def regionreport(regionID):
-    regionName = getregionName(regionID)
-    return render_template('pages/regionReports/regionReport.html',
+    if regionID == "north":
+        return render_template('pages/regionReports/north.html',
+                               header="The North",
+                               regionName=regionID,
+                               timeutc=timeutc())
+    else:
+        regionName = getregionName(regionID)
+        return render_template('pages/regionReports/regionReport.html',
                            regionID=regionID,
                            regionName=regionName,
                            timeutc=timeutc())
+
 
 
 #############################
@@ -297,6 +306,16 @@ def marketreport_pilotservices():
                            header="Pilot Services",
                            nav="Pilot Services",
                            timeutc=timeutc())
+
+@app.route('/report/market/item/<typeID>')
+def marketreport_item(typeID):
+    return render_template('pages/marketReports/item.html',
+                           typeID=typeID,
+                           typeName=gettypeName(typeID),
+                           getprofitpersolarsystem=getprofitpersolarsystem(typeID),
+                           getregionalstats=getregionalstats(typeID),
+                           timeutc=timeutc())
+
 
 #############################
 # moonReports
@@ -476,6 +495,10 @@ def api_getzkillboarditems():
 def api_wallettransactions():
     return getwallettransactions()
 
+@app.route('/api/wallet/typeid/<typeID>/<transactionType>')
+def api_getwallet_typeid(typeID, transactionType):
+    return getwallet_typeid(typeID, transactionType)
+
 
 # Sovereignty
 @app.route('/api/sov/events')
@@ -643,7 +666,10 @@ def api_mapjumps_tradehubs():
 
 @app.route('/api/map/npckills/region/<regionID>')
 def api_mapkills_npckillsbyregion(regionID):
-    return mapkills_npckillsbyregion(regionID)
+    if regionID == "north":
+        return getnpckills_byregionsname(regions_north, "The North")
+    else:
+        return mapkills_npckillsbyregion(regionID)
 
 @app.route('/api/map/shipkills/region/<regionID>')
 def api_mapkills_shipkillsbyregion(regionID):
@@ -655,7 +681,10 @@ def api_mapkills_podkillsbyregion(regionID):
 
 @app.route('/api/map/jumps/region/<regionID>')
 def api_mapkills_jumpsbyregion(regionID):
-    return mapkills_jumpsbyregion(regionID)
+    if regionID == "north":
+        return getjumps_byregionsname(regions_north, "The North")
+    else:
+        return mapkills_jumpsbyregion(regionID)
 
 @app.route('/api/character/blueprints')
 def api_characterblueprints():
