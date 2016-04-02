@@ -5,7 +5,7 @@
 -- Dumped from database version 9.5.1
 -- Dumped by pg_dump version 9.5.0
 
--- Started on 2016-03-31 17:12:43
+-- Started on 2016-04-02 14:16:47
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -46,7 +46,7 @@ CREATE TABLE alliances (
 ALTER TABLE alliances OWNER TO spotmarketadmin;
 
 --
--- TOC entry 303 (class 1259 OID 653601)
+-- TOC entry 302 (class 1259 OID 653601)
 -- Name: characters; Type: TABLE; Schema: data; Owner: spotmarketadmin
 --
 
@@ -70,7 +70,7 @@ CREATE TABLE characters (
 ALTER TABLE characters OWNER TO spotmarketadmin;
 
 --
--- TOC entry 308 (class 1259 OID 653626)
+-- TOC entry 307 (class 1259 OID 653626)
 -- Name: charbalances; Type: TABLE; Schema: data; Owner: spotmarketadmin
 --
 
@@ -85,7 +85,7 @@ CREATE TABLE charbalances (
 ALTER TABLE charbalances OWNER TO spotmarketadmin;
 
 --
--- TOC entry 307 (class 1259 OID 653624)
+-- TOC entry 306 (class 1259 OID 653624)
 -- Name: charbalances_balanceID_seq; Type: SEQUENCE; Schema: data; Owner: spotmarketadmin
 --
 
@@ -100,8 +100,8 @@ CREATE SEQUENCE "charbalances_balanceID_seq"
 ALTER TABLE "charbalances_balanceID_seq" OWNER TO spotmarketadmin;
 
 --
--- TOC entry 2653 (class 0 OID 0)
--- Dependencies: 307
+-- TOC entry 2651 (class 0 OID 0)
+-- Dependencies: 306
 -- Name: charbalances_balanceID_seq; Type: SEQUENCE OWNED BY; Schema: data; Owner: spotmarketadmin
 --
 
@@ -109,7 +109,7 @@ ALTER SEQUENCE "charbalances_balanceID_seq" OWNED BY charbalances."balanceID";
 
 
 --
--- TOC entry 304 (class 1259 OID 653609)
+-- TOC entry 303 (class 1259 OID 653609)
 -- Name: charblueprints; Type: TABLE; Schema: data; Owner: spotmarketadmin
 --
 
@@ -129,7 +129,32 @@ CREATE TABLE charblueprints (
 ALTER TABLE charblueprints OWNER TO spotmarketadmin;
 
 --
--- TOC entry 305 (class 1259 OID 653614)
+-- TOC entry 308 (class 1259 OID 814534)
+-- Name: charjournal; Type: TABLE; Schema: data; Owner: spotmarketadmin
+--
+
+CREATE TABLE charjournal (
+    "transactionDateTime" timestamp without time zone NOT NULL,
+    "refID" bigint NOT NULL,
+    "refTypeID" real NOT NULL,
+    "ownerName1" text NOT NULL,
+    "ownerID1" integer NOT NULL,
+    "ownerName2" text,
+    "ownerID2" integer,
+    "argName1" text,
+    "argID1" integer,
+    amount real,
+    balance real,
+    reason text,
+    "taxReceiverID" integer,
+    "taxAmount" real
+);
+
+
+ALTER TABLE charjournal OWNER TO spotmarketadmin;
+
+--
+-- TOC entry 304 (class 1259 OID 653614)
 -- Name: charorders; Type: TABLE; Schema: data; Owner: spotmarketadmin
 --
 
@@ -155,7 +180,7 @@ CREATE TABLE charorders (
 ALTER TABLE charorders OWNER TO spotmarketadmin;
 
 --
--- TOC entry 306 (class 1259 OID 653619)
+-- TOC entry 305 (class 1259 OID 653619)
 -- Name: charskillqueues; Type: TABLE; Schema: data; Owner: spotmarketadmin
 --
 
@@ -172,6 +197,32 @@ CREATE TABLE charskillqueues (
 
 
 ALTER TABLE charskillqueues OWNER TO spotmarketadmin;
+
+--
+-- TOC entry 309 (class 1259 OID 814545)
+-- Name: charwallet; Type: TABLE; Schema: data; Owner: spotmarketadmin
+--
+
+CREATE TABLE charwallet (
+    "transactionDateTime" timestamp without time zone NOT NULL,
+    "transactionID" bigint NOT NULL,
+    quantity bigint NOT NULL,
+    "typeName" text NOT NULL,
+    "typeID" integer NOT NULL,
+    price real NOT NULL,
+    "clientID" bigint NOT NULL,
+    "clientName" text NOT NULL,
+    "characterID" integer NOT NULL,
+    "stationID" bigint NOT NULL,
+    "transactionType" text NOT NULL,
+    personal integer NOT NULL,
+    transactionfor integer,
+    journaltransactionid bigint,
+    profit real
+);
+
+
+ALTER TABLE charwallet OWNER TO spotmarketadmin;
 
 --
 -- TOC entry 276 (class 1259 OID 17015)
@@ -222,7 +273,7 @@ CREATE SEQUENCE "killmails_killmailID_seq"
 ALTER TABLE "killmails_killmailID_seq" OWNER TO spotmarketadmin;
 
 --
--- TOC entry 2654 (class 0 OID 0)
+-- TOC entry 2652 (class 0 OID 0)
 -- Dependencies: 278
 -- Name: killmails_killmailID_seq; Type: SEQUENCE OWNED BY; Schema: data; Owner: spotmarketadmin
 --
@@ -263,59 +314,12 @@ CREATE SEQUENCE "killmailsitems_killmailsitemsID_seq"
 ALTER TABLE "killmailsitems_killmailsitemsID_seq" OWNER TO spotmarketadmin;
 
 --
--- TOC entry 2655 (class 0 OID 0)
+-- TOC entry 2653 (class 0 OID 0)
 -- Dependencies: 280
 -- Name: killmailsitems_killmailsitemsID_seq; Type: SEQUENCE OWNED BY; Schema: data; Owner: spotmarketadmin
 --
 
 ALTER SEQUENCE "killmailsitems_killmailsitemsID_seq" OWNED BY killmailsitems."killmailsitemsID";
-
-
---
--- TOC entry 310 (class 1259 OID 763016)
--- Name: killmailssum; Type: TABLE; Schema: data; Owner: spotmarketadmin
---
-
-CREATE TABLE killmailssum (
-    "killmailssumID" integer NOT NULL,
-    "killID" integer NOT NULL,
-    "characterID" integer NOT NULL,
-    "corporationID" integer,
-    "typeID" integer NOT NULL,
-    "attackerCount" integer NOT NULL,
-    "damageTaken" integer NOT NULL,
-    "timestamp" timestamp without time zone NOT NULL,
-    "solarSystemID" integer NOT NULL,
-    x double precision,
-    y double precision,
-    z double precision
-);
-
-
-ALTER TABLE killmailssum OWNER TO spotmarketadmin;
-
---
--- TOC entry 309 (class 1259 OID 763014)
--- Name: killmailssum_killmailssumID_seq; Type: SEQUENCE; Schema: data; Owner: spotmarketadmin
---
-
-CREATE SEQUENCE "killmailssum_killmailssumID_seq"
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE "killmailssum_killmailssumID_seq" OWNER TO spotmarketadmin;
-
---
--- TOC entry 2656 (class 0 OID 0)
--- Dependencies: 309
--- Name: killmailssum_killmailssumID_seq; Type: SEQUENCE OWNED BY; Schema: data; Owner: spotmarketadmin
---
-
-ALTER SEQUENCE "killmailssum_killmailssumID_seq" OWNED BY killmailssum."killmailssumID";
 
 
 --
@@ -350,7 +354,7 @@ CREATE SEQUENCE "logs_logID_seq"
 ALTER TABLE "logs_logID_seq" OWNER TO spotmarketadmin;
 
 --
--- TOC entry 2657 (class 0 OID 0)
+-- TOC entry 2654 (class 0 OID 0)
 -- Dependencies: 282
 -- Name: logs_logID_seq; Type: SEQUENCE OWNED BY; Schema: data; Owner: spotmarketadmin
 --
@@ -389,7 +393,7 @@ CREATE SEQUENCE "mapfaction_systemfactionID_seq"
 ALTER TABLE "mapfaction_systemfactionID_seq" OWNER TO spotmarketadmin;
 
 --
--- TOC entry 2658 (class 0 OID 0)
+-- TOC entry 2655 (class 0 OID 0)
 -- Dependencies: 284
 -- Name: mapfaction_systemfactionID_seq; Type: SEQUENCE OWNED BY; Schema: data; Owner: spotmarketadmin
 --
@@ -428,7 +432,7 @@ CREATE SEQUENCE "mapjumps_systemjumpID_seq"
 ALTER TABLE "mapjumps_systemjumpID_seq" OWNER TO spotmarketadmin;
 
 --
--- TOC entry 2659 (class 0 OID 0)
+-- TOC entry 2656 (class 0 OID 0)
 -- Dependencies: 286
 -- Name: mapjumps_systemjumpID_seq; Type: SEQUENCE OWNED BY; Schema: data; Owner: spotmarketadmin
 --
@@ -469,7 +473,7 @@ CREATE SEQUENCE "mapkills_systemkillID_seq"
 ALTER TABLE "mapkills_systemkillID_seq" OWNER TO spotmarketadmin;
 
 --
--- TOC entry 2660 (class 0 OID 0)
+-- TOC entry 2657 (class 0 OID 0)
 -- Dependencies: 288
 -- Name: mapkills_systemkillID_seq; Type: SEQUENCE OWNED BY; Schema: data; Owner: spotmarketadmin
 --
@@ -509,7 +513,7 @@ CREATE SEQUENCE "mapsov_systemsovID_seq"
 ALTER TABLE "mapsov_systemsovID_seq" OWNER TO spotmarketadmin;
 
 --
--- TOC entry 2661 (class 0 OID 0)
+-- TOC entry 2658 (class 0 OID 0)
 -- Dependencies: 290
 -- Name: mapsov_systemsovID_seq; Type: SEQUENCE OWNED BY; Schema: data; Owner: spotmarketadmin
 --
@@ -553,7 +557,7 @@ CREATE SEQUENCE "markethistory_markethistoryID_seq"
 ALTER TABLE "markethistory_markethistoryID_seq" OWNER TO spotmarketadmin;
 
 --
--- TOC entry 2662 (class 0 OID 0)
+-- TOC entry 2659 (class 0 OID 0)
 -- Dependencies: 292
 -- Name: markethistory_markethistoryID_seq; Type: SEQUENCE OWNED BY; Schema: data; Owner: spotmarketadmin
 --
@@ -593,7 +597,7 @@ CREATE SEQUENCE "marketitems_marketitemsID_seq"
 ALTER TABLE "marketitems_marketitemsID_seq" OWNER TO spotmarketadmin;
 
 --
--- TOC entry 2663 (class 0 OID 0)
+-- TOC entry 2660 (class 0 OID 0)
 -- Dependencies: 294
 -- Name: marketitems_marketitemsID_seq; Type: SEQUENCE OWNED BY; Schema: data; Owner: spotmarketadmin
 --
@@ -671,7 +675,7 @@ CREATE SEQUENCE "moonverify_moonverifyID_seq"
 ALTER TABLE "moonverify_moonverifyID_seq" OWNER TO spotmarketadmin;
 
 --
--- TOC entry 2664 (class 0 OID 0)
+-- TOC entry 2661 (class 0 OID 0)
 -- Dependencies: 299
 -- Name: moonverify_moonverifyID_seq; Type: SEQUENCE OWNED BY; Schema: data; Owner: spotmarketadmin
 --
@@ -708,7 +712,7 @@ CREATE SEQUENCE "settings_settingID_seq"
 ALTER TABLE "settings_settingID_seq" OWNER TO spotmarketadmin;
 
 --
--- TOC entry 2665 (class 0 OID 0)
+-- TOC entry 2662 (class 0 OID 0)
 -- Dependencies: 301
 -- Name: settings_settingID_seq; Type: SEQUENCE OWNED BY; Schema: data; Owner: spotmarketadmin
 --
@@ -717,32 +721,7 @@ ALTER SEQUENCE "settings_settingID_seq" OWNED BY settings."settingID";
 
 
 --
--- TOC entry 302 (class 1259 OID 17094)
--- Name: wallet; Type: TABLE; Schema: data; Owner: spotmarketadmin
---
-
-CREATE TABLE wallet (
-    "transactionDateTime" timestamp without time zone NOT NULL,
-    "transactionID" bigint NOT NULL,
-    quantity bigint NOT NULL,
-    "typeName" character varying(255) NOT NULL,
-    "typeID" integer NOT NULL,
-    price double precision NOT NULL,
-    "clientID" bigint NOT NULL,
-    "clientName" character varying(255) NOT NULL,
-    "walletID" integer NOT NULL,
-    "stationID" bigint NOT NULL,
-    "stationName" character varying(255) NOT NULL,
-    "transactionType" character varying(4) NOT NULL,
-    personal smallint DEFAULT (0)::smallint NOT NULL,
-    profit double precision DEFAULT (0)::double precision NOT NULL
-);
-
-
-ALTER TABLE wallet OWNER TO spotmarketadmin;
-
---
--- TOC entry 2471 (class 2604 OID 653629)
+-- TOC entry 2468 (class 2604 OID 653629)
 -- Name: balanceID; Type: DEFAULT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -750,7 +729,7 @@ ALTER TABLE ONLY charbalances ALTER COLUMN "balanceID" SET DEFAULT nextval('"cha
 
 
 --
--- TOC entry 2458 (class 2604 OID 17110)
+-- TOC entry 2457 (class 2604 OID 17110)
 -- Name: killmailID; Type: DEFAULT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -758,7 +737,7 @@ ALTER TABLE ONLY killmails ALTER COLUMN "killmailID" SET DEFAULT nextval('"killm
 
 
 --
--- TOC entry 2459 (class 2604 OID 17111)
+-- TOC entry 2458 (class 2604 OID 17111)
 -- Name: killmailsitemsID; Type: DEFAULT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -766,15 +745,7 @@ ALTER TABLE ONLY killmailsitems ALTER COLUMN "killmailsitemsID" SET DEFAULT next
 
 
 --
--- TOC entry 2472 (class 2604 OID 763019)
--- Name: killmailssumID; Type: DEFAULT; Schema: data; Owner: spotmarketadmin
---
-
-ALTER TABLE ONLY killmailssum ALTER COLUMN "killmailssumID" SET DEFAULT nextval('"killmailssum_killmailssumID_seq"'::regclass);
-
-
---
--- TOC entry 2460 (class 2604 OID 17112)
+-- TOC entry 2459 (class 2604 OID 17112)
 -- Name: logID; Type: DEFAULT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -782,7 +753,7 @@ ALTER TABLE ONLY logs ALTER COLUMN "logID" SET DEFAULT nextval('"logs_logID_seq"
 
 
 --
--- TOC entry 2461 (class 2604 OID 17113)
+-- TOC entry 2460 (class 2604 OID 17113)
 -- Name: systemfactionID; Type: DEFAULT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -790,7 +761,7 @@ ALTER TABLE ONLY mapfaction ALTER COLUMN "systemfactionID" SET DEFAULT nextval('
 
 
 --
--- TOC entry 2462 (class 2604 OID 17114)
+-- TOC entry 2461 (class 2604 OID 17114)
 -- Name: systemjumpID; Type: DEFAULT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -798,7 +769,7 @@ ALTER TABLE ONLY mapjumps ALTER COLUMN "systemjumpID" SET DEFAULT nextval('"mapj
 
 
 --
--- TOC entry 2463 (class 2604 OID 17115)
+-- TOC entry 2462 (class 2604 OID 17115)
 -- Name: systemkillID; Type: DEFAULT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -806,7 +777,7 @@ ALTER TABLE ONLY mapkills ALTER COLUMN "systemkillID" SET DEFAULT nextval('"mapk
 
 
 --
--- TOC entry 2464 (class 2604 OID 17116)
+-- TOC entry 2463 (class 2604 OID 17116)
 -- Name: systemsovID; Type: DEFAULT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -814,7 +785,7 @@ ALTER TABLE ONLY mapsov ALTER COLUMN "systemsovID" SET DEFAULT nextval('"mapsov_
 
 
 --
--- TOC entry 2465 (class 2604 OID 17117)
+-- TOC entry 2464 (class 2604 OID 17117)
 -- Name: markethistoryID; Type: DEFAULT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -822,7 +793,7 @@ ALTER TABLE ONLY markethistory ALTER COLUMN "markethistoryID" SET DEFAULT nextva
 
 
 --
--- TOC entry 2466 (class 2604 OID 17118)
+-- TOC entry 2465 (class 2604 OID 17118)
 -- Name: marketitemsID; Type: DEFAULT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -830,7 +801,7 @@ ALTER TABLE ONLY marketitems ALTER COLUMN "marketitemsID" SET DEFAULT nextval('"
 
 
 --
--- TOC entry 2467 (class 2604 OID 17119)
+-- TOC entry 2466 (class 2604 OID 17119)
 -- Name: moonverifyID; Type: DEFAULT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -838,7 +809,7 @@ ALTER TABLE ONLY moonverify ALTER COLUMN "moonverifyID" SET DEFAULT nextval('"mo
 
 
 --
--- TOC entry 2468 (class 2604 OID 17120)
+-- TOC entry 2467 (class 2604 OID 17120)
 -- Name: settingID; Type: DEFAULT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -846,7 +817,7 @@ ALTER TABLE ONLY settings ALTER COLUMN "settingID" SET DEFAULT nextval('"setting
 
 
 --
--- TOC entry 2492 (class 2606 OID 23588)
+-- TOC entry 2488 (class 2606 OID 23588)
 -- Name: mapjumps_pkey; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -855,7 +826,7 @@ ALTER TABLE ONLY mapjumps
 
 
 --
--- TOC entry 2474 (class 2606 OID 23590)
+-- TOC entry 2470 (class 2606 OID 23590)
 -- Name: pk_alliances; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -864,7 +835,7 @@ ALTER TABLE ONLY alliances
 
 
 --
--- TOC entry 2529 (class 2606 OID 653631)
+-- TOC entry 2523 (class 2606 OID 653631)
 -- Name: pk_charbalances; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -873,7 +844,7 @@ ALTER TABLE ONLY charbalances
 
 
 --
--- TOC entry 2523 (class 2606 OID 653613)
+-- TOC entry 2517 (class 2606 OID 653613)
 -- Name: pk_charblueprints; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -882,7 +853,7 @@ ALTER TABLE ONLY charblueprints
 
 
 --
--- TOC entry 2525 (class 2606 OID 653618)
+-- TOC entry 2519 (class 2606 OID 653618)
 -- Name: pk_charorders; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -891,7 +862,7 @@ ALTER TABLE ONLY charorders
 
 
 --
--- TOC entry 2527 (class 2606 OID 653623)
+-- TOC entry 2521 (class 2606 OID 653623)
 -- Name: pk_charskillqueues; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -900,7 +871,7 @@ ALTER TABLE ONLY charskillqueues
 
 
 --
--- TOC entry 2476 (class 2606 OID 23592)
+-- TOC entry 2472 (class 2606 OID 23592)
 -- Name: pk_conquerablestations; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -909,7 +880,7 @@ ALTER TABLE ONLY conquerablestations
 
 
 --
--- TOC entry 2481 (class 2606 OID 23594)
+-- TOC entry 2477 (class 2606 OID 23594)
 -- Name: pk_killmails; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -918,7 +889,7 @@ ALTER TABLE ONLY killmails
 
 
 --
--- TOC entry 2483 (class 2606 OID 23596)
+-- TOC entry 2479 (class 2606 OID 23596)
 -- Name: pk_killmailsitems; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -927,16 +898,7 @@ ALTER TABLE ONLY killmailsitems
 
 
 --
--- TOC entry 2534 (class 2606 OID 763021)
--- Name: pk_killmailssum; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
---
-
-ALTER TABLE ONLY killmailssum
-    ADD CONSTRAINT pk_killmailssum PRIMARY KEY ("killID");
-
-
---
--- TOC entry 2485 (class 2606 OID 23598)
+-- TOC entry 2481 (class 2606 OID 23598)
 -- Name: pk_logs; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -945,7 +907,7 @@ ALTER TABLE ONLY logs
 
 
 --
--- TOC entry 2488 (class 2606 OID 23600)
+-- TOC entry 2484 (class 2606 OID 23600)
 -- Name: pk_mapfaction; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -954,7 +916,7 @@ ALTER TABLE ONLY mapfaction
 
 
 --
--- TOC entry 2496 (class 2606 OID 23602)
+-- TOC entry 2492 (class 2606 OID 23602)
 -- Name: pk_mapkills; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -963,7 +925,7 @@ ALTER TABLE ONLY mapkills
 
 
 --
--- TOC entry 2499 (class 2606 OID 23604)
+-- TOC entry 2495 (class 2606 OID 23604)
 -- Name: pk_mapsov; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -972,7 +934,7 @@ ALTER TABLE ONLY mapsov
 
 
 --
--- TOC entry 2503 (class 2606 OID 23606)
+-- TOC entry 2499 (class 2606 OID 23606)
 -- Name: pk_markethistory; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -981,7 +943,7 @@ ALTER TABLE ONLY markethistory
 
 
 --
--- TOC entry 2505 (class 2606 OID 23608)
+-- TOC entry 2501 (class 2606 OID 23608)
 -- Name: pk_marketitems; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -990,7 +952,7 @@ ALTER TABLE ONLY marketitems
 
 
 --
--- TOC entry 2507 (class 2606 OID 23610)
+-- TOC entry 2503 (class 2606 OID 23610)
 -- Name: pk_moonevemoons; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -999,7 +961,7 @@ ALTER TABLE ONLY moonevemoons
 
 
 --
--- TOC entry 2509 (class 2606 OID 23612)
+-- TOC entry 2505 (class 2606 OID 23612)
 -- Name: pk_moonevemoonsitems; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -1008,7 +970,7 @@ ALTER TABLE ONLY moonevemoonsitems
 
 
 --
--- TOC entry 2511 (class 2606 OID 23614)
+-- TOC entry 2507 (class 2606 OID 23614)
 -- Name: pk_moonminerals; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -1017,7 +979,7 @@ ALTER TABLE ONLY moonminerals
 
 
 --
--- TOC entry 2515 (class 2606 OID 23616)
+-- TOC entry 2511 (class 2606 OID 23616)
 -- Name: pk_moonverify; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -1026,7 +988,7 @@ ALTER TABLE ONLY moonverify
 
 
 --
--- TOC entry 2517 (class 2606 OID 23618)
+-- TOC entry 2513 (class 2606 OID 23618)
 -- Name: pk_settings; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -1035,7 +997,7 @@ ALTER TABLE ONLY settings
 
 
 --
--- TOC entry 2521 (class 2606 OID 653608)
+-- TOC entry 2515 (class 2606 OID 653608)
 -- Name: pkey_characters; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
 --
 
@@ -1044,16 +1006,65 @@ ALTER TABLE ONLY characters
 
 
 --
--- TOC entry 2519 (class 2606 OID 23620)
--- Name: wallet_pkey; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
+-- TOC entry 2528 (class 2606 OID 814541)
+-- Name: pkey_charjournal; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
 --
 
-ALTER TABLE ONLY wallet
-    ADD CONSTRAINT wallet_pkey PRIMARY KEY ("transactionID");
+ALTER TABLE ONLY charjournal
+    ADD CONSTRAINT pkey_charjournal PRIMARY KEY ("refID");
 
 
 --
--- TOC entry 2477 (class 1259 OID 792646)
+-- TOC entry 2532 (class 2606 OID 814552)
+-- Name: pkey_charwallet; Type: CONSTRAINT; Schema: data; Owner: spotmarketadmin
+--
+
+ALTER TABLE ONLY charwallet
+    ADD CONSTRAINT pkey_charwallet PRIMARY KEY ("transactionID");
+
+
+--
+-- TOC entry 2524 (class 1259 OID 814542)
+-- Name: idx_charjournal_ownerid1; Type: INDEX; Schema: data; Owner: spotmarketadmin
+--
+
+CREATE INDEX idx_charjournal_ownerid1 ON charjournal USING btree ("ownerID1" DESC NULLS LAST);
+
+
+--
+-- TOC entry 2525 (class 1259 OID 814543)
+-- Name: idx_charjournal_ownerid2; Type: INDEX; Schema: data; Owner: spotmarketadmin
+--
+
+CREATE INDEX idx_charjournal_ownerid2 ON charjournal USING btree ("ownerID2" DESC NULLS LAST);
+
+
+--
+-- TOC entry 2526 (class 1259 OID 814544)
+-- Name: idx_charjournal_taxreceiverid; Type: INDEX; Schema: data; Owner: spotmarketadmin
+--
+
+CREATE INDEX idx_charjournal_taxreceiverid ON charjournal USING btree ("taxReceiverID" DESC NULLS LAST);
+
+
+--
+-- TOC entry 2529 (class 1259 OID 814553)
+-- Name: idx_charwallet_stationid; Type: INDEX; Schema: data; Owner: spotmarketadmin
+--
+
+CREATE INDEX idx_charwallet_stationid ON charwallet USING btree ("stationID" DESC NULLS LAST);
+
+
+--
+-- TOC entry 2530 (class 1259 OID 814554)
+-- Name: idx_charwallet_typeid; Type: INDEX; Schema: data; Owner: spotmarketadmin
+--
+
+CREATE INDEX idx_charwallet_typeid ON charwallet USING btree ("typeID" DESC NULLS LAST);
+
+
+--
+-- TOC entry 2473 (class 1259 OID 792646)
 -- Name: idx_killmails_solarsystemid; Type: INDEX; Schema: data; Owner: spotmarketadmin
 --
 
@@ -1061,7 +1072,7 @@ CREATE INDEX idx_killmails_solarsystemid ON killmails USING btree ((((("killData
 
 
 --
--- TOC entry 2478 (class 1259 OID 792655)
+-- TOC entry 2474 (class 1259 OID 792655)
 -- Name: idx_killmails_timestamp; Type: INDEX; Schema: data; Owner: spotmarketadmin
 --
 
@@ -1069,7 +1080,7 @@ CREATE INDEX idx_killmails_timestamp ON killmails USING btree ((("killData" -> '
 
 
 --
--- TOC entry 2479 (class 1259 OID 792649)
+-- TOC entry 2475 (class 1259 OID 792649)
 -- Name: idx_killmails_typeid; Type: INDEX; Schema: data; Owner: spotmarketadmin
 --
 
@@ -1077,31 +1088,7 @@ CREATE INDEX idx_killmails_typeid ON killmails USING btree (((((("killData" -> '
 
 
 --
--- TOC entry 2530 (class 1259 OID 767464)
--- Name: idx_killmailssum_corporationid; Type: INDEX; Schema: data; Owner: spotmarketadmin
---
-
-CREATE INDEX idx_killmailssum_corporationid ON killmailssum USING btree ("corporationID" DESC NULLS LAST);
-
-
---
--- TOC entry 2531 (class 1259 OID 767451)
--- Name: idx_killmailssum_solarsystemid; Type: INDEX; Schema: data; Owner: spotmarketadmin
---
-
-CREATE INDEX idx_killmailssum_solarsystemid ON killmailssum USING btree ("solarSystemID" DESC NULLS LAST);
-
-
---
--- TOC entry 2532 (class 1259 OID 767433)
--- Name: idx_killmailssum_typeid; Type: INDEX; Schema: data; Owner: spotmarketadmin
---
-
-CREATE INDEX idx_killmailssum_typeid ON killmailssum USING btree ("typeID" DESC NULLS LAST);
-
-
---
--- TOC entry 2486 (class 1259 OID 23623)
+-- TOC entry 2482 (class 1259 OID 23623)
 -- Name: idx_mapfaction_timestamp; Type: INDEX; Schema: data; Owner: spotmarketadmin
 --
 
@@ -1109,7 +1096,7 @@ CREATE INDEX idx_mapfaction_timestamp ON mapfaction USING btree ("timestamp" DES
 
 
 --
--- TOC entry 2489 (class 1259 OID 23624)
+-- TOC entry 2485 (class 1259 OID 23624)
 -- Name: idx_mapjumps_solarsystemid; Type: INDEX; Schema: data; Owner: spotmarketadmin
 --
 
@@ -1117,7 +1104,7 @@ CREATE INDEX idx_mapjumps_solarsystemid ON mapjumps USING btree ("solarSystemID"
 
 
 --
--- TOC entry 2490 (class 1259 OID 23625)
+-- TOC entry 2486 (class 1259 OID 23625)
 -- Name: idx_mapjumps_timestamp; Type: INDEX; Schema: data; Owner: spotmarketadmin
 --
 
@@ -1125,7 +1112,7 @@ CREATE INDEX idx_mapjumps_timestamp ON mapjumps USING btree ("timestamp" DESC NU
 
 
 --
--- TOC entry 2493 (class 1259 OID 23626)
+-- TOC entry 2489 (class 1259 OID 23626)
 -- Name: idx_mapkills_solarsystemid; Type: INDEX; Schema: data; Owner: spotmarketadmin
 --
 
@@ -1133,7 +1120,7 @@ CREATE INDEX idx_mapkills_solarsystemid ON mapkills USING btree ("solarSystemID"
 
 
 --
--- TOC entry 2494 (class 1259 OID 23627)
+-- TOC entry 2490 (class 1259 OID 23627)
 -- Name: idx_mapkills_timestamp; Type: INDEX; Schema: data; Owner: spotmarketadmin
 --
 
@@ -1141,7 +1128,7 @@ CREATE INDEX idx_mapkills_timestamp ON mapkills USING btree ("timestamp" DESC NU
 
 
 --
--- TOC entry 2497 (class 1259 OID 23628)
+-- TOC entry 2493 (class 1259 OID 23628)
 -- Name: idx_mapsov_timestamp; Type: INDEX; Schema: data; Owner: spotmarketadmin
 --
 
@@ -1149,7 +1136,7 @@ CREATE INDEX idx_mapsov_timestamp ON mapsov USING btree ("timestamp" DESC NULLS 
 
 
 --
--- TOC entry 2500 (class 1259 OID 23629)
+-- TOC entry 2496 (class 1259 OID 23629)
 -- Name: idx_markethistory_regionid; Type: INDEX; Schema: data; Owner: spotmarketadmin
 --
 
@@ -1157,7 +1144,7 @@ CREATE INDEX idx_markethistory_regionid ON markethistory USING btree ("regionID"
 
 
 --
--- TOC entry 2501 (class 1259 OID 23630)
+-- TOC entry 2497 (class 1259 OID 23630)
 -- Name: idx_markethistory_timestamp; Type: INDEX; Schema: data; Owner: spotmarketadmin
 --
 
@@ -1165,7 +1152,7 @@ CREATE INDEX idx_markethistory_timestamp ON markethistory USING btree ("timestam
 
 
 --
--- TOC entry 2512 (class 1259 OID 23631)
+-- TOC entry 2508 (class 1259 OID 23631)
 -- Name: idx_moonverify_moonid; Type: INDEX; Schema: data; Owner: spotmarketadmin
 --
 
@@ -1173,14 +1160,14 @@ CREATE INDEX idx_moonverify_moonid ON moonverify USING btree ("moonID" DESC NULL
 
 
 --
--- TOC entry 2513 (class 1259 OID 23632)
+-- TOC entry 2509 (class 1259 OID 23632)
 -- Name: idx_moonverify_typeid; Type: INDEX; Schema: data; Owner: spotmarketadmin
 --
 
 CREATE INDEX idx_moonverify_typeid ON moonverify USING btree ("typeID" DESC NULLS LAST);
 
 
--- Completed on 2016-03-31 17:12:43
+-- Completed on 2016-04-02 14:16:48
 
 --
 -- PostgreSQL database dump complete
