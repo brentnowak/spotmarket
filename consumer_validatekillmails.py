@@ -40,7 +40,7 @@ while getkmemptyvalue() != None:
     except Exception as e:
         print(e)
 
-print("[km][all killmail values populated]")
+print("[validatekillmails][all killmail values populated]")
 
 #
 # Look for KMs with bad or missing CREST JSON
@@ -59,3 +59,4 @@ while getkmbadjson() != None:
             totalBadJSON -= 1
     except Exception as e:
         print(e)
+print("[validatekillmails][all killmail json populated]")
