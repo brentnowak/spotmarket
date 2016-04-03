@@ -4,6 +4,7 @@ from _utility import *
 from _api import *
 from _dashboard import *
 from _wallet import *
+from _system import *
 
 
 #############################
@@ -31,6 +32,7 @@ def index():
                            getwalletbalances=getwalletbalances(),
                            getwalletbalancestotal=getwalletbalancestotal(),
                            getskillqueues=getskillqueues(),
+                           getdbsize=getdbsize(),
                            countsovchangelastday=countsovchangelastday())
 
 @app.route('/system/logs')
@@ -61,6 +63,12 @@ def systemsettings_zkillboard():
                            header="zKillboard",
                            timeutc=timeutc())
 
+@app.route('/system/database')
+def systemsettings_database():
+    return render_template('pages/systemSettings/database.html',
+                           title="Database",
+                           header="Database",
+                           timeutc=timeutc())
 
 @app.route('/blank.html')
 def blank():
@@ -703,3 +711,10 @@ def api_mapkills_jumpsbyregion(regionID):
 @app.route('/api/character/blueprints')
 def api_characterblueprints():
     return getcharacterblueprints()
+
+# System
+
+@app.route('/api/system/size/<element>')
+def api_systemdatabasesizes(element):
+    if element == "tables":
+        return getdbtablesizes()
