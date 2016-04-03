@@ -43,7 +43,7 @@ for typeID in ships:
 
         try:
             r = requests.get(url, headers=headers)
-        except (ConnectionError, ChunkedEncodingError) as e:
+        except (ConnectionError, ChunkedEncodingError, ValueError) as e:
             print(e)
         else:
             for kill in json.loads(r.text):
@@ -76,17 +76,17 @@ for typeID in ships:
             print("----------------------")
             sys.stdout.flush()
             pageNum += 1
+            sleep(10)  # Be nice to squizz and sleep before requesting another 200 KMs
 
     # Record state to data.killmailsitems because we're done with a specific typeID
     setzkbshipenable(typeID[0], 0)  # Successful run sets enabled to 0
     setzkbshipresult(typeID[0], 1)  # Successful run sets importResult to 1
 
-    # Be nice to squizz and sleep for 5 seconds before requesting another 200 KMs
     print("----------------------")
     print("[Completed Ship:" + str(gettypeName(typeID[0])) + "]")
     print("----------------------")
     sys.stdout.flush()
-    sleep(5)
+    sleep(10)  # Be nice to squizz and sleep before requesting another 200 KMs
 
 # Sleep for 1 hour before ending and triggering another run via supervisor
 print("----------------------")
