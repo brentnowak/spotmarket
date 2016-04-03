@@ -34,7 +34,7 @@ def main():
             insertmarkethistory(regionID[0], typeID[0])
             itemProgress = str("{0:.2f}".format(currentItem/totalItems*100)) + "%"
             regionProgress = str("{0:.2f}".format(currentRegion/totalRegions*100)) + "%"
-            print("[regionProgress:" + regionProgress  + "][regionID:" + str(regionID[0]) + "][" + str(getregionName(regionID[0])) + "][itemProgress:" + itemProgress + "][typeID:" + str(typeID[0]) + "][" + str(gettypeName(typeID[0])) + "]") # TODO cleanup on output
+            print("[regionID:" + str(regionID[0]) + "," + regionProgress + "][" + str(getregionName(regionID[0])) + "][typeID:" + str(typeID[0]) + "," + itemProgress + "][" + str(gettypeName(typeID[0])) + "]") # TODO cleanup on output
             currentItem += 1
     currentRegion += 1
 
