@@ -20,8 +20,8 @@ requests.packages.urllib3.disable_warnings()
 
 
 def main():
-    typeIDs = getmarkettypeids()
-    regionIDs = getmarketregionids()
+    typeIDs = market_typeids()
+    regionIDs = market_regionids()
 
     totalItems = float(len(typeIDs))
     currentItem = float(1)
@@ -31,12 +31,12 @@ def main():
 
     for regionID in regionIDs:
         for typeID in typeIDs:
-            insertmarkethistory(regionID[0], typeID[0])
+            count = market_getcrestdata(regionID[0], typeID[0])
             itemProgress = str("{0:.2f}".format(currentItem/totalItems*100)) + "%"
             regionProgress = str("{0:.2f}".format(currentRegion/totalRegions*100)) + "%"
-            print("[regionID:" + str(regionID[0]) + "," + regionProgress + "][" + str(getregionName(regionID[0])) + "][typeID:" + str(typeID[0]) + "," + itemProgress + "][" + str(gettypeName(typeID[0])) + "]") # TODO cleanup on output
+            print("[regionID:" + str(regionID[0]) + "," + regionProgress + "][" + str(getregionName(regionID[0])) + "][typeID:" + str(typeID[0]) + "," + itemProgress + "][insert:" + str(count) + "][" + str(gettypeName(typeID[0])) + "]")
             currentItem += 1
-    currentRegion += 1
+        currentRegion += 1
 
 if __name__ == "__main__":
     main()

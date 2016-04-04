@@ -413,31 +413,6 @@ def insertjumpsrecords(jumps_data, jumpstimestamp):
     return insertcount
 
 
-#
-# Usage         consumer_alliance.sh
-# Input         alliance_data
-# Output        'alliances' Database insert
-#
-def insertalliancesrecords(alliance_data):
-    insertcount = 0
-    for key,value in alliance_data.iteritems():
-        try:
-            allianceID = value['id']
-            ticker = value['ticker']
-            name = value['name']
-            conn = psycopg2.connect(conn_string)
-            cursor = conn.cursor()
-            sql = 'INSERT INTO data."alliances" ("allianceID", "ticker", "name") VALUES (%s, %s, %s)'
-            data = (allianceID, ticker, name, )
-            cursor.execute(sql, data, )
-        except psycopg2.IntegrityError:
-            conn.rollback()
-        else:
-            conn.commit()
-            insertcount += 1
-    return insertcount
-
-
 def insertconquerablestations(station_data):
     insertcount = 0
     for key,value in station_data.iteritems():
@@ -470,57 +445,6 @@ def jumpsinsertrecord(timestamp, id, jumps):
     sql = 'INSERT INTO data."mapjumps" (timestamp, "solarSystemID", "shipJumps") VALUES (%s, %s, %s)'
     data = (timestamp, id, jumps, )
     cursor.execute(sql, data)
-    conn.commit()
-    return 0
-
-
-#
-# Input     CREST JSON
-# Output    Database insert
-
-def insertmarketrecord(regionID, typeID, history):
-    count = 0
-    for row in history['items']:
-        volume = row['volume']
-        orderCount =  row['orderCount']
-        lowPrice = row['lowPrice']
-        highPrice = row['highPrice']
-        avgPrice = row['avgPrice']
-        timestamp = row['date']
-        result = markethistorycheckrowexists(typeID, regionID, timestamp, volume, orderCount)
-        if len(result) == 0:
-            markethistoryinsertrecord(typeID, regionID, timestamp, volume, orderCount, lowPrice, highPrice, avgPrice)
-            count += 1
-    return count
-
-
-#
-# Check if markethistory record exists
-#
-def markethistorycheckrowexists(typeID, regionID, timestamp, volume, orderCount):
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
-    sql = '''SELECT * FROM data."markethistory" WHERE
-          "markethistory"."typeID" = %s AND
-          "markethistory"."regionID" = %s AND
-          timestamp = %s AND
-          "markethistory"."volume" = %s AND
-          "markethistory"."orderCount" = %s'''
-    data = (typeID, regionID, timestamp, volume, orderCount, )
-    cursor.execute(sql, data)
-    result = cursor.fetchall()
-    return result
-
-
-#
-# Insert markethistory record
-#
-def markethistoryinsertrecord(typeID, regionID, timestamp, volume, orderCount, lowPrice, highPrice, avgPrice):
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
-    sql = 'INSERT INTO data."markethistory" ("typeID", "regionID", timestamp, "volume", "orderCount", "lowPrice", "highPrice", "avgPrice") VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'
-    data = (typeID, regionID, timestamp, volume, orderCount, lowPrice, highPrice, avgPrice, )
-    cursor.execute(sql, data, )
     conn.commit()
     return 0
 
@@ -1501,7 +1425,7 @@ def getsovevents():
       alliances.ticker
     FROM
       data.mapsov,
-      data.alliances,
+      meta.alliances,
       public."mapSolarSystems",
       public."mapRegions"
     WHERE
@@ -1551,7 +1475,7 @@ def getsovbyregion(regionID):
       alliances.ticker,
       alliances.name
     FROM
-      data.alliances,
+      meta.alliances,
       public."mapSolarSystems",
       data.mapsov,
       public."mapRegions"
@@ -1583,7 +1507,7 @@ def getrattingbyregion(regionID):
       SUM(mapkills."factionKills") as SUM_factionKills,
       mapkills."timestamp"
     FROM
-      data.alliances,
+      meta.alliances,
       public."mapSolarSystems",
       data.mapsov,
       data.mapkills
@@ -1614,7 +1538,7 @@ def gettoprattingbyregion(regionID):
       mapsov."allianceID",
       SUM(mapkills."factionKills") as SUM_factionKills
     FROM
-      data.alliances,
+      meta.alliances,
       public."mapSolarSystems",
       data.mapsov,
       data.mapkills
@@ -1697,7 +1621,7 @@ def getmoonmineralsbyregion(regionID):  # TODO change join to return results whe
       public."invTypes",
       public."mapSolarSystems",
       public."mapRegions",
-      data.alliances,
+      meta.alliances,
       data.mapsov
     WHERE
       "mapDenormalize"."itemID" = moonminerals."moonID" AND
@@ -1738,7 +1662,7 @@ def getmoonmineralsbytypeid(typeID):
       public."invTypes",
       public."mapSolarSystems",
       public."mapRegions",
-      data.alliances,
+      meta.alliances,
       data.mapsov
     WHERE
       "mapDenormalize"."itemID" = moonminerals."moonID" AND
@@ -1770,7 +1694,7 @@ def getmoonmineralsbyalliance(typeID):
       public."invTypes",
       public."mapSolarSystems",
       public."mapRegions",
-      data.alliances,
+      meta.alliances,
       data.mapsov
     WHERE
       "mapDenormalize"."itemID" = moonminerals."moonID" AND
@@ -1806,7 +1730,7 @@ def getmoonmineralsbysov():
       public."invTypes",
       public."mapSolarSystems",
       public."mapRegions",
-      data.alliances,
+      meta.alliances,
       data.mapsov
     WHERE
       "mapDenormalize"."itemID" = moonminerals."moonID" AND
@@ -1846,7 +1770,7 @@ def getdeadendsystems(gateCountLimit):
       public."mapSolarSystems",
       public."mapRegions",
       data.mapsov,
-      data.alliances,
+      meta.alliances,
       data.conquerablestations
     WHERE
       "mapSolarSystemJumps"."toSolarSystemID" = "mapSolarSystems"."solarSystemID" AND
@@ -1886,7 +1810,7 @@ def getconquerablestationslist():
       "mapRegions"."regionName"
     FROM
       data.conquerablestations,
-      data.alliances,
+      meta.alliances,
       data.mapsov,
       public."mapSolarSystems",
       public."mapRegions"

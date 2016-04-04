@@ -7,7 +7,7 @@
 #-----------------------------------------------------------------------------
 
 import evelink.eve
-from _utility import *
+from _consumer_alliances import *
 
 # API
 allianceapi = evelink.eve.EVE()
