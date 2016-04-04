@@ -859,21 +859,21 @@ def getmarkethistory_typeID(typeID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      markethistory."typeID",
+      history."typeID",
       "invTypes"."typeName",
-      markethistory."regionID",
-      to_char(markethistory."timestamp", 'YYYY-MM-dd') AS timestamp,
-      markethistory.volume,
-      markethistory."orderCount",
-      markethistory."lowPrice",
-      markethistory."highPrice",
-      markethistory."avgPrice"
+      history."regionID",
+      to_char(history."timestamp", 'YYYY-MM-dd') AS timestamp,
+      history.volume,
+      history."orderCount",
+      history."lowPrice",
+      history."highPrice",
+      history."avgPrice"
     FROM
       public."invTypes",
-      data.markethistory
-     WHERE markethistory."typeID" = "invTypes"."typeID" AND
-     markethistory."typeID" = %s
-     ORDER BY markethistory."timestamp" DESC'''
+      market.history
+     WHERE history."typeID" = "invTypes"."typeID" AND
+     history."typeID" = %s
+     ORDER BY history."timestamp" DESC'''
     data = (typeID, )
     cursor.execute(sql, data, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
@@ -887,12 +887,12 @@ def getmarkethistory_avgprice(typeID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      to_char(markethistory."timestamp", 'YYYY-MM-dd') AS timestamp,
-      markethistory."avgPrice"
+      to_char(history."timestamp", 'YYYY-MM-dd') AS timestamp,
+      history."avgPrice"
     FROM
-      data.markethistory
-     WHERE markethistory."typeID" = %s
-     ORDER BY markethistory."timestamp" DESC'''
+      market.history
+     WHERE history."typeID" = %s
+     ORDER BY history."timestamp" DESC'''
     data = (typeID, )
     cursor.execute(sql, data, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
@@ -2043,14 +2043,14 @@ def getindextypeids(typeIDlist, divisor):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-          (markethistory.volume * markethistory."avgPrice" * markethistory."orderCount") / %s AS index,
-          markethistory."timestamp"
+          (history.volume * history."avgPrice" * history."orderCount") / %s AS index,
+          history."timestamp"
         FROM
-          data.markethistory
+          market.history
         WHERE
-          markethistory."typeID" IN %s
-        GROUP BY index, markethistory."timestamp"
-        ORDER BY markethistory."timestamp" ASC'''
+          history."typeID" IN %s
+        GROUP BY index, history."timestamp"
+        ORDER BY history."timestamp" ASC'''
     data = (divisor, typeIDlist, )
     cursor.execute(sql, data, )
     df = pd.DataFrame(cursor.fetchall(),columns=['index','timestamp'])

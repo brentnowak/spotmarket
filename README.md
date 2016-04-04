@@ -53,7 +53,7 @@ Services
 **consumer_alliance.py**
 
 Input: XML API.  
-Output: Populate 'data.alliances' table with list of current Alliances.  
+Output: Populate 'meta.alliances' table with list of current Alliances.  
 
 **consumer_conquerablestation.py**
 
@@ -68,7 +68,7 @@ Output: Populate 'data.mapjumps', 'data.mapkills', and 'data.mapsov' with statis
 **consumer_markethistory.py**
 
 Input: CREST API, list of typeIDs from 'data.marketitems' table.  
-Output: Populate 'data.markethistory' table with market data.  
+Output: Populate 'market.history' table with market data.  
 
 **consumer_siphon.py**
 

@@ -33,7 +33,7 @@ def countdatamarkethistory():
     cursor = conn.cursor()
     sql = '''SELECT
         COUNT(*)
-        FROM data.markethistory'''
+        FROM market.history'''
     cursor.execute(sql, )
     result = cursor.fetchone()
     return result[0]
@@ -152,35 +152,41 @@ def getlatestprice(typeID, regionID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      markethistory."avgPrice"
+      history."avgPrice"
     FROM
-      data.markethistory
-    WHERE markethistory."typeID" = %s AND
-    markethistory."regionID" = %s
+      market.history
+    WHERE history."typeID" = %s AND
+    history."regionID" = %s
     ORDER BY timestamp DESC
     LIMIT 1'''
     data = (typeID, regionID, )
     cursor.execute(sql, data)
     result = cursor.fetchone()
-    return result[0]
+    if result == None:
+        return 0
+    else:
+        return result[0]
 
 
 def getpricepercentchange(typeID, regionID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      (1 - markethistory."avgPrice" / LAG(markethistory."avgPrice") OVER (ORDER BY markethistory."timestamp")) * 100 AS pct_change
+      (1 - history."avgPrice" / LAG(history."avgPrice") OVER (ORDER BY history."timestamp")) * 100 AS pct_change
     FROM
-      data.markethistory
+      market.history
     WHERE
-      markethistory."typeID" = 29668 AND
-      markethistory."regionID" = 10000002
+      history."typeID" = 29668 AND
+      history."regionID" = 10000002
     ORDER BY timestamp DESC
     LIMIT 1'''
     data = (typeID, regionID, )
     cursor.execute(sql, data)
     result = cursor.fetchone()
-    return result[0]
+    if result == None:
+        return 0
+    else:
+        return result[0]
 
 
 def getwallettransactions(limit):

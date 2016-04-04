@@ -4,10 +4,12 @@
 #-----------------------------------------------------------------------------
 # Version: 0.1
 # - Initial release
+# Version: 0.2
+# - Migration to market.history
 #-----------------------------------------------------------------------------
 #
-# Input: List of typeIDs from 'data.marketitems' table that have 'enabled' set to 1.
-# Output: Populate 'data.markethistory' table. Prices are currenlty only set for the Forge.
+# Input: List of typeIDs from 'market.tracking' table that have 'enabled' set to 1.
+# Output: Populate 'market.history' table.
 #-----------------------------------------------------------------------------
 
 from _utility import *

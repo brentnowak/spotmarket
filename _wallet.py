@@ -77,20 +77,20 @@ def getregionalstats(typeID):
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
       DISTINCT ON ("mapRegions"."regionName") "mapRegions"."regionName",
-      markethistory."avgPrice",
-      markethistory.volume
+      history."avgPrice",
+      history.volume
     FROM
-      data.markethistory,
+      market.history,
       public."mapRegions"
     WHERE
-      "mapRegions"."regionID" = markethistory."regionID" AND
+      "mapRegions"."regionID" = history."regionID" AND
       "typeID" = %s
     GROUP BY
       "mapRegions"."regionName",
-      markethistory."avgPrice",
-      markethistory.volume,
+      history."avgPrice",
+      history.volume,
       "mapRegions"."regionName",
-      markethistory."timestamp"
+      history."timestamp"
     ORDER BY
      "mapRegions"."regionName" DESC
     '''

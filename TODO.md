@@ -1,23 +1,11 @@
-0.5 Release
-==================
-
-- [x] [new] Character Blueprints table and page  
-- [ ] [new] Character Orders table and page  
-- [ ] [new] Character Journal table and page  
-- [ ] [new] Character Wallet table and page  
-- [x] [new] Work on data.killmails indexes to improve performance  
-- [x] [new] Create process to fill in killmails that lack JSON data or zKb values  
-- [ ] [bug] Security reports have hardcoded time range for data that calculates ratting rate  
-- [x] [enhancement] Change graphs to exclude last 24 hours as it causes graphs to improperly trend  
-- [x] [enhancement] Personalize 404 error page  
-- [x] [enhancement] Change factionReport charts to be driven by JSON  
-
 0.6 Release
 ==================
 
 - [ ] [bug] On most graphs, label for line appears to the left  
 - [ ] [bug] bootstrap-table table headers that contain icons do not align correctly with rows  
+- [ ] [bug] Security reports have hardcoded time range for data that calculates ratting rate  
 - [ ] [new] Create freighter security index based on killmails  
+- [ ] [new] Character Orders table and page  
 - [ ] [enhancement] Add functional buttons on Settings page to control imports  
 - [ ] [enhancement] Learn how to use Classes and clean up utility scripts  
 - [ ] [enhancement] Add second axis to d3js charts to denote Eve expansions  
@@ -52,3 +40,15 @@
 - [x] [enhancement] Add paging to zKillboard consumer
 - [x] [enhancement] Add check to resume from last recorded page for zKillboard consumer  
 - [x] [enhancement] Add basic exception handling to zKillboard consumer  
+
+0.5 Release (Completed)
+==================
+
+- [x] [new] Character Blueprints table and page  
+- [x] [new] Character Journal table and page  
+- [x] [new] Character Wallet table and page  
+- [x] [new] Work on data.killmails indexes to improve performance  
+- [x] [new] Create process to fill in killmails that lack JSON data or zKb values    
+- [x] [enhancement] Change graphs to exclude last 24 hours as it causes graphs to improperly trend  
+- [x] [enhancement] Personalize 404 error page  
+- [x] [enhancement] Change factionReport charts to be driven by JSON  
