@@ -37,6 +37,7 @@ def main():
             itemProgress = str("{0:.2f}".format(currentItem/totalItems*100)) + "%"
             regionProgress = str("{0:.2f}".format(currentRegion/totalRegions*100)) + "%"
             print("[regionID:" + str(regionID[0]) + "," + regionProgress + "][" + str(getregionName(regionID[0])) + "][typeID:" + str(typeID[0]) + "," + itemProgress + "][insert:" + str(count) + "][" + str(gettypeName(typeID[0])) + "]")
+            sys.stdout.flush()
             currentItem += 1
         currentRegion += 1
         market_setimportresult(regionID[0], 1)  # Set import to true so we can skip this region if we crash
