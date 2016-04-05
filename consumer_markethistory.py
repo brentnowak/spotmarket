@@ -26,14 +26,11 @@ def main():
     regionIDs = market_regionids()
 
     totalItems = float(len(typeIDs))
-    currentItem = float(1)
-
     totalRegions = float(len(regionIDs))
-    currentRegion = float(1)
 
-    currentRegion = 0  # Reset counter
+    currentRegion = float(1)  # Reset counter
     for regionID in regionIDs:
-        currentItem = 0  # Reset counter
+        currentItem = float(1)  # Reset counter
         for typeID in typeIDs:
             count = market_getcrestdata(regionID[0], typeID[0])
             itemProgress = str("{0:.2f}".format(currentItem/totalItems*100)) + "%"
