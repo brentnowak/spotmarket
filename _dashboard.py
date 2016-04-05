@@ -22,7 +22,7 @@ def countdatawallet():
     cursor = conn.cursor()
     sql = '''SELECT
         COUNT(*)
-        FROM "character".characters'''
+        FROM "character".wallet'''
     cursor.execute(sql, )
     result = cursor.fetchone()
     return result[0]
