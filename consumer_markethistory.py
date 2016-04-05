@@ -12,13 +12,13 @@
 # Output: Populate 'market.history' table.
 #-----------------------------------------------------------------------------
 
-from _utility import *
+import sys
+from time import sleep
 from _market import *
 import requests.packages.urllib3
 
 requests.packages.urllib3.disable_warnings()
 #  Suppress InsecurePlatformWarning messages
-
 
 
 def main():
@@ -39,6 +39,11 @@ def main():
             print("[regionID:" + str(regionID[0]) + "," + regionProgress + "][" + str(getregionName(regionID[0])) + "][typeID:" + str(typeID[0]) + "," + itemProgress + "][insert:" + str(count) + "][" + str(gettypeName(typeID[0])) + "]")
             currentItem += 1
         currentRegion += 1
+        market_setimportresult(regionID[0], 1)  # Set import to true so we can skip this region if we crash
+
+    print("[Completed Run:Sleeping for 1 Hour]")
+    sys.stdout.flush()
+    sleep(3600)
 
 if __name__ == "__main__":
     main()

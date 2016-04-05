@@ -200,7 +200,9 @@ mv config.ini.change config.ini
 
 As root
 ```shell
-mv spotmarket.conf /etc/supervisor/conf.d/
+cp spotmarket.conf /etc/supervisor/conf.d/
+cp consumer_markethistory.conf /etc/supervisor/conf.d/
+cp consumer_zkillboard.conf /etc/supervisor/conf.d/
 service supervisor restart
 ```
 

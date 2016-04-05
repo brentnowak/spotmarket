@@ -24,7 +24,8 @@ def market_regionids():
       region."regionID"
     FROM
       market.region
-    WHERE region.enabled = 1
+    WHERE region.enabled = 1 AND
+    region."importResult" = 0
     ORDER BY rank ASC
     '''
     cursor.execute(sql, )
@@ -33,6 +34,19 @@ def market_regionids():
         return 0
     else:
         return results
+
+
+def market_setimportresult(regionID, importResult):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''UPDATE market.tracking
+            SET "importResult" = %s
+            WHERE tracking."regionID" = %s'''
+    data = (importResult, regionID, )
+    cursor.execute(sql, data, )
+    conn.commit()
+    conn.close()
+    return 0
 
 
 #
