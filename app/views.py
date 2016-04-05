@@ -1,6 +1,5 @@
 from flask import render_template
 from app import app
-from _utility import *
 from _api import *
 from _dashboard import *
 from _wallet import *

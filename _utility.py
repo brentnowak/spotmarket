@@ -1335,19 +1335,19 @@ def getmarketitems():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      marketitems."typeID",
-      marketitems."typeID" as "iconID",
+      tracking."typeID",
+      tracking."typeID" as "iconID",
       "invTypes"."typeName",
       "invMarketGroups"."marketGroupName",
-      marketitems.enabled,
-      marketitems."importResult",
-      marketitems."importTimestamp"
+      tracking.enabled,
+      tracking."importResult",
+      tracking."importTimestamp"
     FROM
-      data.marketitems,
+      market.tracking,
       public."invTypes",
       public."invMarketGroups"
     WHERE
-      marketitems."typeID" = "invTypes"."typeID" AND
+      tracking."typeID" = "invTypes"."typeID" AND
       "invTypes"."marketGroupID" = "invMarketGroups"."marketGroupID"
     '''
     cursor.execute(sql, )

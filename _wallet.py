@@ -8,32 +8,32 @@ def getwallet_typeid(typeID, transactionType):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      to_char(charwallet."transactionDateTime", 'YYYY-MM-dd HH:mm:ss') AS timestamp,
+      to_char(wallet."transactionDateTime", 'YYYY-MM-dd HH:mm:ss') AS timestamp,
       "invTypes"."typeName",
-      charwallet.quantity,
-      charwallet.price,
-      charwallet.quantity * charwallet.price as totalprice,
-      charwallet.profit,
+      wallet.quantity,
+      wallet.price,
+      wallet.quantity * wallet.price as totalprice,
+      wallet.profit,
       "mapDenormalize"."itemName" as stationName,
       "mapSolarSystems"."solarSystemName",
       "mapSolarSystems".security,
       "mapRegions"."regionName"
     FROM
-      data.charwallet,
+      "character".wallet,
       public."invTypes",
       public."mapSolarSystems",
       public."mapRegions",
       public."mapDenormalize"
     WHERE
-      charwallet."typeID" = "invTypes"."typeID" AND
+      wallet."typeID" = "invTypes"."typeID" AND
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
-      "mapDenormalize"."itemID" = charwallet."stationID" AND
+      "mapDenormalize"."itemID" = wallet."stationID" AND
       "mapDenormalize"."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
-      charwallet."typeID" = %s AND
-      charwallet."transactionType" = %s AND
+      wallet."typeID" = %s AND
+      wallet."transactionType" = %s AND
       personal = 0
     ORDER BY
-      charwallet."transactionDateTime" DESC'''
+      wallet."transactionDateTime" DESC'''
     data = (typeID, transactionType, )
     cursor.execute(sql, data, )
     df = pd.DataFrame(cursor.fetchall())
@@ -45,21 +45,21 @@ def getprofitpersolarsystem(typeID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      SUM(charwallet.profit) as sumProfit,
-      SUM(charwallet.quantity) as sumQuantity,
-      SUM(charwallet.profit) / SUM(charwallet.quantity) as averageProfit,
+      SUM(wallet.profit) as sumProfit,
+      SUM(wallet.quantity) as sumQuantity,
+      SUM(wallet.profit) / SUM(wallet.quantity) as averageProfit,
       "mapSolarSystems"."solarSystemName",
       "mapRegions"."regionName"
     FROM
-      data.charwallet,
+      "character".wallet,
       public."mapDenormalize",
       public."mapSolarSystems",
       public."mapRegions"
     WHERE
-      charwallet."stationID" = "mapDenormalize"."itemID" AND
+      wallet."stationID" = "mapDenormalize"."itemID" AND
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
       "mapDenormalize"."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
-      charwallet."typeID" = %s
+      wallet."typeID" = %s
     GROUP BY
       "mapSolarSystems"."solarSystemName",
       "mapRegions"."regionName"

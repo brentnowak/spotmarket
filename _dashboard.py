@@ -193,16 +193,16 @@ def getwallettransactions(limit):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      charwallet."typeName",
-      charwallet.quantity,
-      charwallet."typeID",
-      charwallet.price,
-      charwallet.profit,
-      charwallet."transactionDateTime" as timestamp
+      wallet."typeName",
+      wallet.quantity,
+      wallet."typeID",
+      wallet.price,
+      wallet.profit,
+      wallet."transactionDateTime" as timestamp
     FROM
-      data.charwallet
+      "character".wallet
     ORDER BY
-     charwallet."transactionDateTime" DESC
+     wallet."transactionDateTime" DESC
     LIMIT %s'''
     data = (limit, )
     cursor.execute(sql, data, )
@@ -218,19 +218,19 @@ def getwalletbalances():
     SELECT
     DISTINCT ON (characters."characterName") characters."characterName",
       characters."characterID",
-      charbalances.balance,
-      charbalances."timestamp"
+      balance.balance,
+      balance."timestamp"
     FROM
       "character".characters,
-      data.charbalances
+      "character".balance
     WHERE
-      charbalances."characterID" = characters."characterID" AND
+      balance."characterID" = characters."characterID" AND
       characters."enableWallet" = 1
     GROUP BY  characters."characterName",
-      charbalances.balance,
+      balance.balance,
       characters."characterID",
-      charbalances."timestamp"
-    ORDER BY characters."characterName", charbalances."timestamp" DESC
+      balance."timestamp"
+    ORDER BY characters."characterName", balance."timestamp" DESC
     '''
     cursor.execute(sql, )
     results = cursor.fetchall()  # TODO return dictionary rather than list
