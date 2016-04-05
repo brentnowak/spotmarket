@@ -25,7 +25,7 @@ requests.packages.urllib3.disable_warnings()
 
 def main():
     for regionID in regionIDs:
-        with concurrent.futures.ProcessPoolExecutor(max_workers=5) as executor:
+        with concurrent.futures.ProcessPoolExecutor(max_workers=15) as executor:
             for typeID in typeIDs:
                 executor.submit(market_getcrestdata, regionID[0], typeID[0])
                 print("[regionID:" + str(regionID[0]) + "," + str(getregionName(regionID[0])) + "][typeID:" + str(
