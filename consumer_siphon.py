@@ -12,7 +12,7 @@
 #-----------------------------------------------------------------------------
 
 from _utility import *
-from _consumer_kills import *
+from _kills import *
 import requests
 import requests.packages.urllib3
 

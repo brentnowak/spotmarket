@@ -58,13 +58,13 @@ def insertkillmailrecord(killID, killHash, killData, totalValue):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-          killmails."killID",
-          killmails."killHash",
-          killmails."killData"
+          mail."killID",
+          mail."killHash",
+          mail."killData"
         FROM
-          data.killmails
-        WHERE killmails."killID" = %s AND
-        killmails."killHash" = %s'''
+          kill.mail
+        WHERE mail."killID" = %s AND
+        mail."killHash" = %s'''
     data = (killID, killHash, )
     cursor.execute(sql, data, )
     results = cursor.fetchone()
@@ -73,7 +73,7 @@ def insertkillmailrecord(killID, killHash, killData, totalValue):
         try:
             conn = psycopg2.connect(conn_string)
             cursor = conn.cursor()
-            sql = '''INSERT INTO data."killmails"
+            sql = '''INSERT INTO kill."mail"
                 ("killID", "killHash", "killData", "totalValue")
                 VALUES (%s, %s, %s, %s)'''
             data = (killID, killHash, killData, totalValue, )
@@ -90,10 +90,10 @@ def insertkillmailrecord(killID, killHash, killData, totalValue):
             conn = psycopg2.connect(conn_string)
             cursor = conn.cursor()
             sql = '''UPDATE
-                data."killmails"
+                kill."mail"
                 SET "killData" = %s
-                WHERE killmails."killID" = %s AND
-                killmails."killHash" = %s'''
+                WHERE mail."killID" = %s AND
+                mail."killHash" = %s'''
             data = (killData, killID, killHash)
             cursor.execute(sql, data, )
         except psycopg2.IntegrityError:
@@ -108,10 +108,10 @@ def getzkbships():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      killmailsitems."typeID"
+      tracking."typeID"
     FROM
-      data.killmailsitems
-     WHERE killmailsitems.enabled = 1'''
+      kill."tracking"
+     WHERE tracking.enabled = 1'''
     cursor.execute(sql, )
     results = cursor.fetchall()
     return results
@@ -121,10 +121,10 @@ def getzkbpagenumber(typeID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      killmailsitems."lastPage"
+      tracking."lastPage"
     FROM
-      data.killmailsitems
-     WHERE killmailsitems."typeID" = %s'''
+      kill.tracking
+     WHERE tracking."typeID" = %s'''
     data = (typeID, )
     cursor.execute(sql, data, )
     result = cursor.fetchone()
@@ -137,9 +137,9 @@ def getzkbpagenumber(typeID):
 def setzkbshipenable(typeID, enabled):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    sql = '''UPDATE data.killmailsitems
+    sql = '''UPDATE kill.tracking
         SET enabled = %s
-        WHERE killmailsitems."typeID" = %s'''
+        WHERE tracking."typeID" = %s'''
     data = (enabled, typeID, )
     cursor.execute(sql, data, )
     conn.commit()
@@ -150,9 +150,9 @@ def setzkbshipenable(typeID, enabled):
 def setzkbshipresult(typeID, importResult):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    sql = '''UPDATE data.killmailsitems
+    sql = '''UPDATE kill.tracking
         SET "importResult" = %s
-        WHERE killmailsitems."typeID" = %s'''
+        WHERE tracking."typeID" = %s'''
     data = (importResult, typeID, )
     cursor.execute(sql, data, )
     conn.commit()
@@ -167,11 +167,11 @@ def checkforkillmail(killID, killHash):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      COUNT(killmails."killData")
+      COUNT(mail."killData")
     FROM
-      data.killmails
-    WHERE killmails."killID" = %s AND
-      killmails."killHash" = %s'''
+      kill.mail
+    WHERE mail."killID" = %s AND
+      mail."killHash" = %s'''
     data = (killID, killHash, )
     cursor.execute(sql, data, )
     result = cursor.fetchone()
@@ -184,9 +184,9 @@ def checkforkillmail(killID, killHash):
 def setzkblastpage(typeID, lastPage):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    sql = '''UPDATE data.killmailsitems
+    sql = '''UPDATE data.tracking
         SET "lastPage" = %s
-        WHERE killmailsitems."typeID" = %s'''
+        WHERE tracking."typeID" = %s'''
     data = (lastPage, typeID, )
     cursor.execute(sql, data, )
     conn.commit()
@@ -198,11 +198,11 @@ def getkmemptyvalue():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      killmails."killID",
-      killmails."killHash"
+      mail."killID",
+      mail."killHash"
     FROM
-      data.killmails
-    WHERE killmails."totalValue" IS NULL
+      kill.mail
+    WHERE mail."totalValue" IS NULL
     LIMIT 1'''
     cursor.execute(sql, )
     return cursor.fetchone()
@@ -212,11 +212,11 @@ def getkmemptyjson():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      killmails."killID",
-      killmails."killHash"
+      mail."killID",
+      mail."killHash"
     FROM
-      data.killmails
-    WHERE killmails."killData" IS NULL
+      kill.mail
+    WHERE mail."killData" IS NULL
     LIMIT 1'''
     cursor.execute(sql, )
     return cursor.fetchone()
@@ -228,8 +228,8 @@ def gettotalkmemptyvalues():
     sql = '''SELECT
       COUNT(*)
     FROM
-      data.killmails
-    WHERE killmails."totalValue" IS NULL'''
+      kill.mail
+    WHERE mail."totalValue" IS NULL'''
     cursor.execute(sql, )
     result = cursor.fetchone()
     return result[0]
@@ -238,9 +238,9 @@ def gettotalkmemptyvalues():
 def setkmtotalvalue(killID, totalValue):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    sql = '''UPDATE data.killmails
+    sql = '''UPDATE kill.mail
         SET "totalValue" = %s
-        WHERE killmails."killID" = %s'''
+        WHERE mail."killID" = %s'''
     data = (totalValue, killID, )
     cursor.execute(sql, data, )
     conn.commit()
@@ -252,9 +252,9 @@ def getminkmid():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      MIN(killmails."killmailID")
+      MIN(mail."killmailID")
     FROM
-      data.killmails'''
+      kill.mail'''
     cursor.execute(sql, )
     result = cursor.fetchone()
     return result[0]
@@ -264,9 +264,9 @@ def getmaxkmid():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      MAX(killmails."killmailID")
+      MAX(mail."killmailID")
     FROM
-      data.killmails'''
+      kill.mail'''
     cursor.execute(sql, )
     result = cursor.fetchone()
     return result[0]
@@ -275,9 +275,9 @@ def getkillid(killmailID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      killmails."killID"
+      mail."killID"
     FROM
-      data.killmails
+      kill.mail
     WHERE "killmailID" = %s'''
     data = (killmailID, )
     cursor.execute(sql, data, )
@@ -293,22 +293,22 @@ def getkmdetails(killID):
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''
     SELECT
-      killmails."killmailID",
-      killmails."killID",
-      (killmails."killData"->'victim'->'shipType'->'id')::text::int as typeID,
-      (killmails."killData"->'victim'->'character'->'id')::text::int as characterID,
-      (killmails."killData"->'victim'->'corporation'->'id')::text::int as corporationID,
-      (killmails."killData"->'solarSystem'->'id')::text::int as solarSystemID,
-      (killmails."killData"->'attackerCount')::text::int as attackerCount,
-      (killmails."killData"->'victim'->'damageTaken')::text::int as damageTaken,
-      (killmails."killData"->'killTime')::text as timestamp,
-      (killmails."killData"->'victim'->'position'->'x')::text::real as x,
-      (killmails."killData"->'victim'->'position'->'y')::text::real as y,
-      (killmails."killData"->'victim'->'position'->'z')::text::real as z,
-      killmails."totalValue"
+      mail."killmailID",
+      mail."killID",
+      (mail."killData"->'victim'->'shipType'->'id')::text::int as typeID,
+      (mail."killData"->'victim'->'character'->'id')::text::int as characterID,
+      (mail."killData"->'victim'->'corporation'->'id')::text::int as corporationID,
+      (mail."killData"->'solarSystem'->'id')::text::int as solarSystemID,
+      (mail."killData"->'attackerCount')::text::int as attackerCount,
+      (mail."killData"->'victim'->'damageTaken')::text::int as damageTaken,
+      (mail."killData"->'killTime')::text as timestamp,
+      (mail."killData"->'victim'->'position'->'x')::text::real as x,
+      (mail."killData"->'victim'->'position'->'y')::text::real as y,
+      (mail."killData"->'victim'->'position'->'z')::text::real as z,
+      mail."totalValue"
     FROM
-      data.killmails
-    WHERE killmails."killID" = %s
+      kill.mail
+    WHERE mail."killID" = %s
     '''
     data = (killID, )
     cursor.execute(sql, data, )
@@ -321,8 +321,8 @@ def gettotalbadjson():
     cursor = conn.cursor()
     sql = '''SELECT COUNT(*)
     FROM
-    data.killmails
-    WHERE (killmails."killData"->'victim'->'shipType'->'id')::text::int IS NULL
+      kill.mail
+    WHERE (mail."killData"->'victim'->'shipType'->'id')::text::int IS NULL
     '''
     cursor.execute(sql, )
     result = cursor.fetchone()
@@ -335,8 +335,8 @@ def getkmbadjson():
     sql = '''
     SELECT "killID", "killHash"
     FROM
-      data.killmails
-    WHERE (killmails."killData"->'victim'->'shipType'->'id')::text::int IS NULL
+      kill.mail
+    WHERE (mail."killData"->'victim'->'shipType'->'id')::text::int IS NULL
     LIMIT 1'''
     cursor.execute(sql, )
     results = cursor.fetchone()
@@ -346,31 +346,11 @@ def getkmbadjson():
 def setkmjson(killID, killData):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    sql = '''UPDATE data.killmails
+    sql = '''UPDATE kill.mail
     SET "killData" = %s
-    WHERE killmails."killID" = %s'''
+    WHERE mails."killID" = %s'''
     data = (killData, killID,)
     cursor.execute(sql, data, )
     conn.commit()
     conn.close()
     return 0
-
-
-def insertkillmailsumrecord(killID, characterID, corporationID, typeID, attackerCount, damageTaken, timestamp, solarSystemID, x, y, z):
-    try:
-        conn = psycopg2.connect(conn_string)
-        cursor = conn.cursor()
-        sql = '''INSERT INTO data.killmailssum(
-          "killID", "characterID", "corporationID", "typeID",
-          "attackerCount", "damageTaken", "timestamp", "solarSystemID", x, y, z)
-        VALUES
-          (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
-        '''
-        data = (killID, characterID, corporationID, typeID, attackerCount, damageTaken, timestamp, solarSystemID, x, y, z, )
-        cursor.execute(sql, data, )
-    except psycopg2.IntegrityError:
-        conn.rollback()
-    else:
-        conn.commit()
-    return 0
-

@@ -4,7 +4,7 @@
 # Output
 #
 
-from _consumer_kills import *
+from _kills import *
 
 maxkmid = getmaxkmid()
 minkmid = getminkmid()

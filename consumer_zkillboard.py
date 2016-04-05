@@ -15,8 +15,7 @@
 #-----------------------------------------------------------------------------
 
 import sys
-from _utility import *
-from _consumer_kills import *
+from _kills import *
 from requests.exceptions import ConnectionError, ChunkedEncodingError
 from time import sleep
 import requests.packages.urllib3
@@ -71,9 +70,7 @@ for typeID in ships:
             detail = "[zkb][typeID:" + str(typeID[0]) + "] insert " + str(killmailInsertCount - 1) + " @ " + str(round((killmailInsertCount - 1) / (time.time() - start_time), 3)) + " rec/sec"
             insertlog_timestamp(service, 0, detail, timestamp)
             setzkblastpage(typeID[0], pageNum)  # Keep track of paging
-            print("----------------------")
             print("[Completed Page:" + str(pageNum) + "]")
-            print("----------------------")
             sys.stdout.flush()
             pageNum += 1
             sleep(10)  # Be nice to squizz and sleep before requesting another 200 KMs
@@ -82,15 +79,11 @@ for typeID in ships:
     setzkbshipenable(typeID[0], 0)  # Successful run sets enabled to 0
     setzkbshipresult(typeID[0], 1)  # Successful run sets importResult to 1
 
-    print("----------------------")
     print("[Completed Ship:" + str(gettypeName(typeID[0])) + "]")
-    print("----------------------")
     sys.stdout.flush()
     sleep(10)  # Be nice to squizz and sleep before requesting another 200 KMs
 
 # Sleep for 1 hour before ending and triggering another run via supervisor
-print("----------------------")
 print("[Completed Run:Sleeping for 1 Hour]")
-print("----------------------")
 sys.stdout.flush()
 sleep(3600)

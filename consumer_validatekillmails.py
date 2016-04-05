@@ -9,7 +9,7 @@
 from _utility import *
 from requests.exceptions import ConnectionError, ChunkedEncodingError
 import requests.packages.urllib3
-from _consumer_kills import *
+from _kills import *
 
 requests.packages.urllib3.disable_warnings()
 #  Suppress InsecurePlatformWarning messages
