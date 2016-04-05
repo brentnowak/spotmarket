@@ -39,9 +39,9 @@ def market_regionids():
 def market_setimportresult(regionID, importResult):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    sql = '''UPDATE market.tracking
+    sql = '''UPDATE market.region
             SET "importResult" = %s
-            WHERE tracking."regionID" = %s'''
+            WHERE region."regionID" = %s'''
     data = (importResult, regionID, )
     cursor.execute(sql, data, )
     conn.commit()
