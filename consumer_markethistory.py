@@ -26,11 +26,15 @@ requests.packages.urllib3.disable_warnings()
 def main():
     for regionID in regionIDs:
         with concurrent.futures.ProcessPoolExecutor(max_workers=15) as executor:
+            currentItems = 1
             for typeID in typeIDs:
                 executor.submit(market_getcrestdata, regionID[0], typeID[0])
-                print("[regionID:" + str(regionID[0]) + "," + str(getregionName(regionID[0])) + "][typeID:" + str(
+                itemProgress = currentItems / totalItems * 100
+                itemProgress = "{0:.2f}".format(itemProgress)
+                print("[" + str(itemProgress) + "%][" + str(getregionName(regionID[0])) + "][typeID:" + str(
                     typeID[0]) + "][" + str(gettypeName(typeID[0])) + "]")
                 sys.stdout.flush()
+                currentItems += 1
 
     market_setimportresult(regionID[0], 1)  # Set import to true so we can skip this region if we crash
 
