@@ -1394,11 +1394,13 @@ def getcharacters():
       "characterID",
       "characterID" as "iconID",
       "characterName",
-      "keyID", RIGHT("vCode", 6) as "vCode",
+      "keyID",
+      "vCode",
+      RIGHT("vCode", 6) as "trunkCode",
       "enableWallet", "enableJournal", "enableOrders", "enableBlueprints",
       "displayWallet", "displayOrders", "displayBlueprints", "corpKey"
     FROM
-      data.characters'''
+      "character".characters'''
     cursor.execute(sql, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
     if len(results) < 1:     # Handle a empty table

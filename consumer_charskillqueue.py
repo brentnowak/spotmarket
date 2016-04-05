@@ -6,19 +6,17 @@
 # - Initial release
 #-----------------------------------------------------------------------------
 
-from _utility import *
-from _consumer_charskillqueue import *
+from _character import *
 import evelink.char
 import evelink.api
 
 def main():
     service = "consumer_charskillqueue.py"
 
-    # Get characters with walletEnabled = 1
-    characters = json.loads(getcharacters())  # TODO rewrite function to return results specific to each consumer
+    characters = json.loads(getcharacters())
 
     # Empty table
-    trunkcharskillqueue()
+    character_trunkskillqueue()
 
     for character in characters:
         characterID = character['characterID']
@@ -45,7 +43,7 @@ def main():
             start_ts = arrow.get(start_ts)
             start_ts = start_ts.format('YYYY-MM-DD HH:mm:ss')
 
-            insertskillqueueitems(characterID, end_ts, level, type_id, start_ts, end_sp, start_sp, position)
+            character_insertskillqueue(characterID, end_ts, level, type_id, start_ts, end_sp, start_sp, position)
 
 if __name__ == "__main__":
     main()
