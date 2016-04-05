@@ -8,6 +8,7 @@ def market_typeids():
     FROM
       market.tracking
     WHERE tracking.enabled = 1
+    ORDER BY tracking."typeID" ASC
     '''
     cursor.execute(sql, )
     results = cursor.fetchall()
