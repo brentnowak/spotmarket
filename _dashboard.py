@@ -11,7 +11,7 @@ def countdatakillmails():
     cursor = conn.cursor()
     sql = '''SELECT
         COUNT(*)
-        FROM data.killmails'''
+        FROM kill.mail'''
     cursor.execute(sql, )
     result = cursor.fetchone()
     return result[0]
