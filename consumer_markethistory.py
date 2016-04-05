@@ -6,6 +6,8 @@
 # - Initial release
 # Version: 0.2
 # - Migration to market.history
+# Version: 0.3
+# - Migration to concurrent.futures
 #-----------------------------------------------------------------------------
 #
 # Input: List of typeIDs from 'market.tracking' table that have 'enabled' set to 1.
@@ -13,6 +15,7 @@
 #-----------------------------------------------------------------------------
 
 import sys
+import concurrent.futures
 from time import sleep
 from _market import *
 import requests.packages.urllib3
@@ -20,30 +23,27 @@ import requests.packages.urllib3
 requests.packages.urllib3.disable_warnings()
 #  Suppress InsecurePlatformWarning messages
 
-
 def main():
+    for regionID in regionIDs:
+        with concurrent.futures.ProcessPoolExecutor(max_workers=5) as executor:
+            for typeID in typeIDs:
+                executor.submit(market_getcrestdata, regionID[0], typeID[0])
+                print("[regionID:" + str(regionID[0]) + "," + str(getregionName(regionID[0])) + "][typeID:" + str(
+                    typeID[0]) + "][" + str(gettypeName(typeID[0])) + "]")
+                sys.stdout.flush()
+                sleep(1)
+
+    market_setimportresult(regionID[0], 1)  # Set import to true so we can skip this region if we crash
+
+
+if __name__ == "__main__":
     typeIDs = market_typeids()
     regionIDs = market_regionids()
-
     totalItems = float(len(typeIDs))
     totalRegions = float(len(regionIDs))
 
-    currentRegion = float(1)  # Reset counter
-    for regionID in regionIDs:
-        currentItem = float(1)  # Reset counter
-        for typeID in typeIDs:
-            count = market_getcrestdata(regionID[0], typeID[0])
-            itemProgress = str("{0:.2f}".format(currentItem/totalItems*100)) + "%"
-            regionProgress = str("{0:.2f}".format(currentRegion/totalRegions*100)) + "%"
-            print("[regionID:" + str(regionID[0]) + "," + regionProgress + "][" + str(getregionName(regionID[0])) + "][typeID:" + str(typeID[0]) + "," + itemProgress + "][insert:" + str(count) + "][" + str(gettypeName(typeID[0])) + "]")
-            sys.stdout.flush()
-            currentItem += 1
-        currentRegion += 1
-        market_setimportresult(regionID[0], 1)  # Set import to true so we can skip this region if we crash
+    main()
 
     print("[Completed Run:Sleeping for 1 Hour]")
     sys.stdout.flush()
     sleep(3600)
-
-if __name__ == "__main__":
-    main()
