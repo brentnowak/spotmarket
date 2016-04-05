@@ -31,7 +31,6 @@ def main():
                 print("[regionID:" + str(regionID[0]) + "," + str(getregionName(regionID[0])) + "][typeID:" + str(
                     typeID[0]) + "][" + str(gettypeName(typeID[0])) + "]")
                 sys.stdout.flush()
-                sleep(1)
 
     market_setimportresult(regionID[0], 1)  # Set import to true so we can skip this region if we crash
 
