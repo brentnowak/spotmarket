@@ -184,7 +184,7 @@ def checkforkillmail(killID, killHash):
 def setzkblastpage(typeID, lastPage):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    sql = '''UPDATE data.tracking
+    sql = '''UPDATE kill.tracking
         SET "lastPage" = %s
         WHERE tracking."typeID" = %s'''
     data = (lastPage, typeID, )
