@@ -1362,20 +1362,20 @@ def getzkillboarditems():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      killmailsitems."typeID" as "iconID",
-      killmailsitems."typeID",
+      tracking."typeID" as "iconID",
+      tracking."typeID",
       "invTypes"."typeName",
       "invMarketGroups"."marketGroupName",
-      killmailsitems.enabled,
-      killmailsitems."lastPage",
-      killmailsitems."importResult",
-      killmailsitems."importTimestamp"
+      tracking.enabled,
+      tracking."lastPage",
+      tracking."importResult",
+      tracking."importTimestamp"
     FROM
-      data.killmailsitems,
+      kill.tracking,
       public."invTypes",
       public."invMarketGroups"
     WHERE
-      killmailsitems."typeID" = "invTypes"."typeID" AND
+      tracking."typeID" = "invTypes"."typeID" AND
       "invTypes"."marketGroupID" = "invMarketGroups"."marketGroupID"
     '''
     cursor.execute(sql, )
