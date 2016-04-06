@@ -1,3 +1,4 @@
+import sys
 from _utility import *
 
 def market_typeids():
@@ -91,4 +92,4 @@ def market_getcrestdata(regionID, typeID):
         timemark = arrow.utcnow().format('YYYY-MM-DD HH:mm:ss')
         log = "[typeID:" + str(typeID) + "][regionID:" + str(regionID) + "][insert: " + str(count) + "]"
         insertlog("consumer_markethistory.py", 0, log, timemark)
-        return 0
+        return count
