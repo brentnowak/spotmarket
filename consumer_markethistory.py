@@ -26,17 +26,16 @@ requests.packages.urllib3.disable_warnings()
 def main():
     for regionID in regionIDs:
         currentItems = 1
-        for typeID in typeIDs:
-            with concurrent.futures.ProcessPoolExecutor(max_workers=15) as executor:
-                executor.map(market_getcrestdata(regionID[0], typeID[0]))
-                #executor.submit(market_getcrestdata, regionID[0], typeID[0])
+        with concurrent.futures.ProcessPoolExecutor(max_workers=3) as executor:
+            for typeID in typeIDs:
+                futures = executor.submit(market_getcrestdata, regionID[0], typeID[0])
                 itemProgress = currentItems / totalItems * 100
                 itemProgress = "{0:.2f}".format(itemProgress)
                 print("[item:" + str(currentItems) + "][" + str(itemProgress) + "%][" + str(getregionName(regionID[0])) + "][typeID:" + str(
                 typeID[0]) + "][" + str(gettypeName(typeID[0])) + "]")
                 currentItems += 1
                 sys.stdout.flush()
-        market_setimportresult(regionID[0], 1)  # Set import to true so we can skip this region if we crash
+    market_setimportresult(regionID[0], 1)  # Set import to true so we can skip this region if we crash
 
 
 if __name__ == "__main__":
