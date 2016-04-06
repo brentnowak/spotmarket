@@ -90,6 +90,8 @@ def market_getcrestdata(regionID, typeID):
                 conn.commit()
                 count += 1
         timemark = arrow.utcnow().format('YYYY-MM-DD HH:mm:ss')
+        print("[" + str(getregionName(regionID) + "][typeID:" + str(typeID) + "][" + str(gettypeName(typeID)) + "]"))
+        sys.stdout.flush()
         log = "[typeID:" + str(typeID) + "][regionID:" + str(regionID) + "][insert: " + str(count) + "]"
         insertlog("consumer_markethistory.py", 0, log, timemark)
         return 1

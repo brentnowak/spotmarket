@@ -14,35 +14,28 @@
 # Output: Populate 'market.history' table.
 #-----------------------------------------------------------------------------
 
-import sys
 import concurrent.futures
+import requests.packages.urllib3
 from time import sleep
 from _market import *
-import requests.packages.urllib3
 
 requests.packages.urllib3.disable_warnings()
 #  Suppress InsecurePlatformWarning messages
 
+
 def main():
     for regionID in regionIDs:
         currentItems = 1
-        with concurrent.futures.ProcessPoolExecutor(max_workers=3) as executor:
-            for typeID in typeIDs:
-                futures = executor.submit(market_getcrestdata, regionID[0], typeID[0])
-                itemProgress = currentItems / totalItems * 100
-                itemProgress = "{0:.2f}".format(itemProgress)
-                print("[item:" + str(currentItems) + "][" + str(itemProgress) + "%][" + str(getregionName(regionID[0])) + "][typeID:" + str(
-                typeID[0]) + "][" + str(gettypeName(typeID[0])) + "]")
+        with concurrent.futures.ProcessPoolExecutor(max_workers=8) as executor:
+            future_to_typeid = {executor.submit(market_getcrestdata, regionID[0], typeID[0]): typeID[0] for typeID in typeIDs}
+            for future in concurrent.futures.as_completed(future_to_typeid):
                 currentItems += 1
-                sys.stdout.flush()
     market_setimportresult(regionID[0], 1)  # Set import to true so we can skip this region if we crash
 
 
 if __name__ == "__main__":
     typeIDs = market_typeids()
     regionIDs = market_regionids()
-    totalItems = float(len(typeIDs))
-    #totalRegions = float(len(regionIDs))
 
     main()
 
