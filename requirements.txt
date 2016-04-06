@@ -1,6 +1,7 @@
 ConfigParser
 psycopg2
 requests==2.9.1
+requests[security]
 evelink
 futures
 pycrest
