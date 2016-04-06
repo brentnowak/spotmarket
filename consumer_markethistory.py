@@ -15,18 +15,18 @@
 #-----------------------------------------------------------------------------
 
 import concurrent.futures
-import requests.packages.urllib3
+import multiprocessing
 from time import sleep
 from _market import *
 
-requests.packages.urllib3.disable_warnings()
-#  Suppress InsecurePlatformWarning messages
+
+maxWorkers = multiprocessing.cpu_count()  # Scale workers to machine size
 
 
 def main():
     for regionID in regionIDs:
         currentItems = 1
-        with concurrent.futures.ProcessPoolExecutor(max_workers=8) as executor:
+        with concurrent.futures.ProcessPoolExecutor(max_workers=maxWorkers) as executor:
             future_to_typeid = {executor.submit(market_getcrestdata, regionID[0], typeID[0]): typeID[0] for typeID in typeIDs}
             for future in concurrent.futures.as_completed(future_to_typeid):
                 currentItems += 1
