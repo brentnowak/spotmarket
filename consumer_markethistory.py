@@ -31,7 +31,7 @@ def main():
                 executor.submit(market_getcrestdata, regionID[0], typeID[0])
                 itemProgress = currentItems / totalItems * 100
                 itemProgress = "{0:.2f}".format(itemProgress)
-                print("[" + str(itemProgress) + "%][" + str(getregionName(regionID[0])) + "][typeID:" + str(
+                print("[" + str(currentItems) + "][" + str(itemProgress) + "%][" + str(getregionName(regionID[0])) + "][typeID:" + str(
                     typeID[0]) + "][" + str(gettypeName(typeID[0])) + "]")
                 currentItems += 1
                 sys.stdout.flush()
