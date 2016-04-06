@@ -57,48 +57,38 @@ def market_setimportresult(regionID, importResult):
 #
 def market_getcrestdata(regionID, typeID):
     eve = pycrest.EVE()
-    start_time = time.time()
     url = "https://public-crest.eveonline.com/market/" + str(regionID) + "/types/" + str(typeID) + "/history/"
     try:
-        history = eve.get(url)
-    except Exception:
+        crestData = eve.get(url)
+    except Exception as e:
         timemark = arrow.utcnow().format('YYYY-MM-DD HH:mm:ss')
-        log = "[typeID:" + str(typeID) + "][regionID:" + str(regionID) + "] Exception"
+        log = "[typeID:" + str(typeID) + "][regionID:" + str(regionID) + "][" + str(e) + "]"
         insertlog("consumer_markethistory.py", 5, log, timemark)
         return 0
     else:
-        count = market_insertrecord(regionID, typeID, history)
+        count = 0
+        for row in crestData['items']:
+            volume = row['volume']
+            orderCount = row['orderCount']
+            lowPrice = row['lowPrice']
+            highPrice = row['highPrice']
+            avgPrice = row['avgPrice']
+            timestamp = row['date']
+            try:
+                conn = psycopg2.connect(conn_string)
+                cursor = conn.cursor()
+                sql = '''INSERT INTO market.history ("typeID", "regionID", timestamp,
+                 "volume", "orderCount", "lowPrice",
+                  "highPrice", "avgPrice")
+                  VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'''
+                data = (typeID, regionID, timestamp, volume, orderCount, lowPrice, highPrice, avgPrice,)
+                cursor.execute(sql, data, )
+            except psycopg2.IntegrityError:
+                conn.rollback()
+            else:
+                conn.commit()
+                count += 1
         timemark = arrow.utcnow().format('YYYY-MM-DD HH:mm:ss')
-        log = "[typeID:" + str(typeID) + "][regionID:" + str(regionID) + "] insert: " + str(count) + " @ " + str(round(count/(time.time() - start_time), 2)) + " rec/sec"
+        log = "[typeID:" + str(typeID) + "][regionID:" + str(regionID) + "][insert: " + str(count) + "]"
         insertlog("consumer_markethistory.py", 0, log, timemark)
         return 0
-
-
-#
-# Input     CREST market history
-# Output    Database insert
-
-def market_insertrecord(regionID, typeID, history):
-    count = 0
-    for row in history['items']:
-        volume = row['volume']
-        orderCount = row['orderCount']
-        lowPrice = row['lowPrice']
-        highPrice = row['highPrice']
-        avgPrice = row['avgPrice']
-        timestamp = row['date']
-        try:
-            conn = psycopg2.connect(conn_string)
-            cursor = conn.cursor()
-            sql = '''INSERT INTO market.history ("typeID", "regionID", timestamp,
-             "volume", "orderCount", "lowPrice",
-              "highPrice", "avgPrice")
-              VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'''
-            data = (typeID, regionID, timestamp, volume, orderCount, lowPrice, highPrice, avgPrice, )
-            cursor.execute(sql, data, )
-        except psycopg2.IntegrityError:
-            conn.rollback()
-        else:
-            conn.commit()
-            count += 1
-    return count
