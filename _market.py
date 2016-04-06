@@ -55,7 +55,7 @@ def market_setimportresult(regionID, importResult):
 # Get       CREST market history
 # Output    database insert
 #
-def market_getcrestdata(regionID, typeID):
+def market_getcrestdata1(regionID, typeID):
     eve = pycrest.EVE()
     start_time = time.time()
     url = "https://public-crest.eveonline.com/market/" + str(regionID) + "/types/" + str(typeID) + "/history/"
@@ -72,6 +72,9 @@ def market_getcrestdata(regionID, typeID):
         log = "[typeID:" + str(typeID) + "][regionID:" + str(regionID) + "] insert: " + str(count) + " @ " + str(round(count/(time.time() - start_time), 2)) + " rec/sec"
         insertlog("consumer_markethistory.py", 0, log, timemark)
         return 0
+
+def market_getcrestdata(regionID, typeID):
+    return 0
 
 #
 # Input     CREST market history
