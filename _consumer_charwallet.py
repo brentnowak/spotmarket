@@ -5,21 +5,21 @@ def getwallettransactions():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      to_char(charwallet."transactionDateTime", 'YYYY-MM-dd HH:mm:ss') AS transactionDateTime,
-      charwallet."transactionID",
-      charwallet."typeID",
-      charwallet."typeName",
-      charwallet.quantity,
-      charwallet.price,
-      charwallet."clientName",
-      charwallet."stationID",
-      charwallet."stationName",
-      charwallet."transactionType",
-      charwallet.personal,
-      charwallet.profit
+      to_char(wallet."transactionDateTime", 'YYYY-MM-dd HH:mm:ss') AS transactionDateTime,
+      wallet."transactionID",
+      wallet."typeID",
+      wallet."typeName",
+      wallet.quantity,
+      wallet.price,
+      wallet."clientName",
+      wallet."stationID",
+      wallet."stationName",
+      wallet."transactionType",
+      wallet.personal,
+      wallet.profit
     FROM
-      data.charwallet
-    ORDER BY charwallet."transactionDateTime" DESC
+      "character".wallet
+    ORDER BY wallet."transactionDateTime" DESC
     '''
     cursor.execute(sql, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
@@ -29,11 +29,14 @@ def getwallettransactions():
         return results
 
 
-def insertwallettransaction(transactionDateTime, transactionID, quantity, typeName, typeID, price, clientID, clientName, characterID, stationID, transactionType, personal, profit):
+def insertwallettransaction(transactionDateTime, transactionID, quantity,
+                            typeName, typeID, price, clientID, clientName,
+                            characterID, stationID, transactionType, personal,
+                            profit, transactionFor, journalTransactionID):
     try:
         conn = psycopg2.connect(conn_string)
         cursor = conn.cursor()
-        sql = '''INSERT INTO data.charwallet(
+        sql = '''INSERT INTO "character".wallet(
             "transactionDateTime",
             "transactionID",
             quantity,
@@ -46,9 +49,15 @@ def insertwallettransaction(transactionDateTime, transactionID, quantity, typeNa
             "stationID",
             "transactionType",
             personal,
-            profit)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
-        data = (transactionDateTime, transactionID, quantity, typeName, typeID, price, clientID, clientName, characterID, stationID, transactionType, personal, profit, )
+            profit,
+            "transactionFor",
+            "journalTransactionID")
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
+        data = (transactionDateTime, transactionID, quantity, typeName,
+                typeID, price, clientID, clientName, characterID, stationID,
+                transactionType, personal, profit,
+                transactionFor, journalTransactionID, )
+        print(data)
         cursor.execute(sql, data)
     except psycopg2.IntegrityError:
         conn.rollback()

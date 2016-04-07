@@ -34,7 +34,9 @@ def main():
         insertcount = 0
         for row in charresponse:
             transactionDateTime = row['timestamp']
-            transactionID = row['journal_id']
+            transactionDateTime = arrow.get(transactionDateTime)
+            transactionDateTime = transactionDateTime.format('YYYY-MM-DD HH:mm:ss')
+            transactionID = row['id']
             quantity = row['quantity']
             typeName = row['type']['name']
             typeID = row['type']['id']
@@ -45,10 +47,12 @@ def main():
             stationID = row['station']['id']
             #stationName = row['station']['name'] Not used
             transactionType = row['action']
+            transactionFor = row['for']
+            journalTransactionID = row['journal_id']
             personal = 0 # TODO allow user to true/false switch items for personal use
             profit = 0 # TODO profit calculations based on a first in/first out movement if items in a inventory table
             insertcount += insertwallettransaction(transactionDateTime, transactionID, quantity, typeName, typeID, price, clientID,
-                                    clientName, characterID, stationID, transactionType, personal, profit)
+                                    clientName, characterID, stationID, transactionType, personal, profit, transactionFor, journalTransactionID)
 
         detail = "[character:" + str(characterName) + "][insert:" + str(insertcount) + "]"
         timestamp = arrow.utcnow().format('YYYY-MM-DD HH:mm:ss')
