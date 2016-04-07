@@ -30,7 +30,7 @@ def main():
             future_to_typeid = {executor.submit(market_getcrestdata, regionID[0], typeID[0]): typeID[0] for typeID in typeIDs}
             for future in concurrent.futures.as_completed(future_to_typeid):
                 currentItems += 1
-    market_setimportresult(regionID[0], 1)  # Set import to true so we can skip this region if we crash
+        market_setimportresult(regionID[0], 1)  # Set import to true so we can skip this region if we crash
 
 
 if __name__ == "__main__":
