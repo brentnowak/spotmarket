@@ -57,7 +57,6 @@ def insertwallettransaction(transactionDateTime, transactionID, quantity,
                 typeID, price, clientID, clientName, characterID, stationID,
                 transactionType, personal, profit,
                 transactionFor, journalTransactionID, )
-        print(data)
         cursor.execute(sql, data)
     except psycopg2.IntegrityError:
         conn.rollback()

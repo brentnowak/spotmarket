@@ -717,3 +717,8 @@ def api_characterblueprints():
 def api_systemdatabasesizes(element):
     if element == "tables":
         return getdbtablesizes()
+
+# Inventory
+@app.route('/api/inventory/add/<transactionID>')
+def api_market_inventoryadd(transactionID):
+    return market_inventoryadd(transactionID)

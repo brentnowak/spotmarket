@@ -1,24 +1,24 @@
 from _utility import *
 
-def getcharacterblueprints():
+def getcharacterblueprints():  # TODO add join to display regionName and solarSystemName
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
       characters."characterName",
       "invTypes"."typeName",
       "invTypes"."typeID",
-      charblueprints.quantity,
-      charblueprints.timeefficiency,
-      charblueprints.materialefficiency,
-      charblueprints.runs
+      blueprint.quantity,
+      blueprint."timeEfficiency",
+      blueprint."materialEfficiency",
+      blueprint.runs
     FROM
-      data.charblueprints,
-      data.characters,
+      "character".blueprint,
+      "character".characters,
       public."invTypes"
     WHERE
-      charblueprints."characterID" = characters."characterID" AND
-      "invTypes"."typeID" = charblueprints."typeID" AND
-      characters."characterID" = charblueprints."characterID"'''
+      blueprint."characterID" = characters."characterID" AND
+      "invTypes"."typeID" = blueprint."typeID" AND
+      characters."characterID" = blueprint."characterID"'''
     cursor.execute(sql, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
     cursor.close()
@@ -26,3 +26,20 @@ def getcharacterblueprints():
         return "No Data"
     else:
         return results
+
+
+def market_inventoryadd(transactionID):  # Initial populate of item into market.inventory
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''INSERT INTO market.inventory(
+            "transactionID", "typeID", quantity, remaining, price)
+    SELECT "transactionID", "typeID", quantity, quantity AS remaining, price
+    FROM "character".wallet
+    WHERE wallet."transactionID" = %s
+    ON CONFLICT DO NOTHING
+    '''
+    data = (transactionID, )
+    cursor.execute(sql, data, )
+    conn.commit()
+    conn.close()
+    return transactionID

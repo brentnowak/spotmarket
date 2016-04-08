@@ -4,7 +4,7 @@ from _utility import *
 def insertwalletbalances(characterID, balance, timestamp):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    sql = '''INSERT INTO data."charbalances"
+    sql = '''INSERT INTO "character".balance
         ("characterID",
             balance,
             "timestamp")
