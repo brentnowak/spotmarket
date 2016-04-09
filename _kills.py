@@ -1,7 +1,11 @@
 from requests.exceptions import ConnectionError, ChunkedEncodingError
 from _utility import *
+import requests.packages.urllib3
 import requests
 import sys
+
+requests.packages.urllib3.disable_warnings()
+
 
 def getclosestmoon(solarSystemID, x, y, z):
     conn = psycopg2.connect(conn_string)

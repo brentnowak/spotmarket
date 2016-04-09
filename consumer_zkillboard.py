@@ -22,7 +22,7 @@ from time import sleep
 from requests.exceptions import ConnectionError, ChunkedEncodingError
 
 requests.packages.urllib3.disable_warnings()
-maxWorkers = multiprocessing.cpu_count() * 2  # Scale workers to machine size
+maxWorkers = multiprocessing.cpu_count()  # Scale workers to machine size
 
 
 def main():
