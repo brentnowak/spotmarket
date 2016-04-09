@@ -411,7 +411,7 @@ def map_sovereignty():
 
 @app.route('/map/conquerablestations')
 def map_conquerablestations():
-    return render_template('pages/mapReports/conquerablestations.html',
+    return render_template('pages/mapReports/conquerablestation.html',
                            title="Conquerable Stations",
                            header="Conquerable Stations",
                            timeutc=timeutc())
@@ -686,9 +686,9 @@ def api_getnpckills_bywar(warName):
 
 
 # Map
-@app.route('/api/map/conquerablestations')
+@app.route('/api/map/conquerablestation')
 def api_conquerablestations():
-    return getconquerablestationslist()
+    return meta_conquerablestationslist()
 
 @app.route('/api/map/jumps/<solarSystemID>')
 def api_mapjumps_solarsystemID(solarSystemID):

@@ -81,3 +81,36 @@ def market_inventoryadd(transactionID):  # Initial populate of item into market.
     conn.commit()
     conn.close()
     return transactionID
+
+
+def meta_conquerablestationslist():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''SELECT
+      conquerablestation."solarSystemID",
+      conquerablestation."stationID",
+      conquerablestation.name AS stationName,
+      alliances."allianceID",
+      alliances.ticker,
+      alliances.name AS allianceName,
+      "mapSolarSystems"."solarSystemName",
+      "mapSolarSystems".security,
+      "mapRegions"."regionName"
+    FROM
+      meta.conquerablestation,
+      meta.alliances,
+      data.mapsov,
+      public."mapSolarSystems",
+      public."mapRegions"
+    WHERE
+      conquerablestation."solarSystemID" = mapsov."solarSystemID" AND
+      conquerablestation."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      mapsov."allianceID" = alliances."allianceID" AND
+      "mapRegions"."regionID" = "mapSolarSystems"."regionID"'''
+    cursor.execute(sql, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    cursor.close()
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results

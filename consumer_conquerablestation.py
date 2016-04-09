@@ -6,8 +6,11 @@
 # - Initial release
 #-----------------------------------------------------------------------------
 
+from time import sleep
+from _meta import *
 import evelink.eve
-from _utility import *
+import sys
+
 
 # API
 conquerablestationapi = evelink.eve.EVE()
@@ -24,9 +27,12 @@ stationresponsetimestamp = conquerablestationapi_cachedUntil.format('YYYY-MM-DD 
 
 
 def main():
-    count_stationinsert = insertconquerablestations(station_data)
+    count_stationinsert = meta_insertconquerablestation(station_data)
     print(count_stationinsert)
 
 
 if __name__ == "__main__":
     main()
+    print("[Completed Run:Sleeping for 12 Hours]")
+    sys.stdout.flush()
+    sleep(43200)
