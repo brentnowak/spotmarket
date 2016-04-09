@@ -28,6 +28,44 @@ def getcharacterblueprints():  # TODO add join to display regionName and solarSy
         return results
 
 
+def getcharacterorders():  # TODO add join to display regionName and solarSystemName
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''SELECT
+      characters."characterName",
+      "invTypes"."typeName",
+      orders."typeID" as "iconID",
+      orders."volEntered",
+      orders."volRemaining",
+      orders.duration,
+      orders."orderState",
+      orders.price,
+      "mapSolarSystems"."solarSystemName",
+      "mapRegions"."regionName"
+    FROM
+      "character".orders,
+      public."invTypes",
+      public."mapDenormalize",
+      public."mapSolarSystems",
+      public."mapRegions",
+      "character".characters
+    WHERE
+      orders."stationID" = "mapDenormalize"."itemID" AND
+      orders."typeID" = "invTypes"."typeID" AND
+      "mapDenormalize"."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
+      orders.bid = 'sell' AND
+      characters."characterID" = orders."characterID"
+      '''
+    cursor.execute(sql, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    cursor.close()
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
+
+
 def market_inventoryadd(transactionID):  # Initial populate of item into market.inventory
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()

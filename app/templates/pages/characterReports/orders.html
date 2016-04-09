@@ -22,16 +22,19 @@
                        data-show-toggle="true"
                        data-striped="true"
                        data-search="true"
-                       data-url="/api/character/blueprints"
+                       data-url="/api/character/orders"
                        data-height="800">
                 <thead>
                     <tr>
-                        <th data-field="typeID" data-formatter="invTypeIconFormatter" data-width=32px data-align="right"></th>
+                        <th data-field="iconID" data-formatter="invTypeIconFormatter" data-width=32px data-align="right"></th>
                         <th data-field="typeName" data-sortable="true" data-align="right">typeName</th>
                         <th data-field="characterName" data-sortable="true" data-align="right">characterName</th>
-                        <th data-field="materialefficiency" data-sortable="true" data-align="right">ME</th>
-                        <th data-field="timeefficiency" data-sortable="true" data-align="right">TE</th>
-                        <th data-field="runs" data-sortable="true" data-align="right">runs</th>
+                        <th data-field="volEntered" data-sortable="true" data-align="right" data-formatter="numberCom">volEntered</th>
+                        <th data-field="volRemaining" data-sortable="true" data-align="right" data-formatter="numberCom">volRemaining</th>
+                        <th data-field="duration" data-sortable="true" data-align="right">duration</th>
+                        <th data-field="price" data-sortable="true" data-align="right" data-formatter="numberDec">price</th>
+                        <th data-field="solarSystemName" data-sortable="true" data-align="right">solarSystemName</th>
+                        <th data-field="regionName" data-sortable="true" data-align="right">regionName</th>
                     </tr>
                 </thead>
                 </table>

@@ -222,8 +222,16 @@ def characterreport_blueprints():
                            timeutc=timeutc())
 
 
+@app.route('/report/character/orders')
+def characterreport_orders():
+    return render_template('pages/characterReports/orders.html',
+                           title="Orders",
+                           header="Orders",
+                           timeutc=timeutc())
+
+
 @app.route('/report/character/wallet')
-def wallet():
+def characterreport_wallet():
     return render_template('pages/characterReports/wallet.html',
                            title="Wallet",
                            header="Wallet",
@@ -715,6 +723,10 @@ def api_mapkills_jumpsbyregion(regionID):
 @app.route('/api/character/blueprints')
 def api_characterblueprints():
     return getcharacterblueprints()
+
+@app.route('/api/character/orders')
+def api_characterorders():
+    return getcharacterorders()
 
 # System
 

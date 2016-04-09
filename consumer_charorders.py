@@ -49,7 +49,10 @@ def main():
             issued = arrow.get(issued)
             issued = issued.format('YYYY-MM-DD HH:mm:ss')
 
-            insertorders(characterID, orderID, stationID, volEntered, volRemaining, orderState, typeID, range, accountKey, duration, escrow, price, bid, issued)
+            orders_insertorders(characterID, orderID, stationID, volEntered,
+                                volRemaining, orderState, typeID, range,
+                                accountKey, duration, escrow, price,
+                                bid, issued)
 
 if __name__ == "__main__":
     main()

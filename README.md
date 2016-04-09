@@ -200,11 +200,14 @@ mv config.ini.change config.ini
 
 As root
 ```shell
-cp spotmarket.conf /etc/supervisor/conf.d/
-cp consumer_charwallet.conf /etc/supervisor/conf.d/
-cp consumer_markethistory.conf /etc/supervisor/conf.d/
-cp consumer_zkillboard.conf /etc/supervisor/conf.d/
+cp supervisor/*.conf /etc/supervisor/conf.d/
 service supervisor restart
+```
+
+Reload conf files, as root
+```shell
+supervisorctl reread
+supervisorctl update
 ```
 
 Confirming supervisor and database settings are correct.
