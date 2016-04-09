@@ -1,4 +1,7 @@
+from requests.exceptions import ConnectionError, ChunkedEncodingError
 from _utility import *
+import requests
+import sys
 
 def getclosestmoon(solarSystemID, x, y, z):
     conn = psycopg2.connect(conn_string)
@@ -163,16 +166,15 @@ def setzkbshipresult(typeID, importResult):
 # Input
 # Output    1 for existing killmail
 #           0 for no killmail
-def checkforkillmail(killID, killHash):
+def checkforkillmail(killID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
       COUNT(mail."killData")
     FROM
       kill.mail
-    WHERE mail."killID" = %s AND
-      mail."killHash" = %s'''
-    data = (killID, killHash, )
+    WHERE mail."killID" = %s'''
+    data = (killID, )
     cursor.execute(sql, data, )
     result = cursor.fetchone()
     if result[0] == 1:
@@ -353,4 +355,22 @@ def setkmjson(killID, killData):
     cursor.execute(sql, data, )
     conn.commit()
     conn.close()
+    return 0
+
+
+def kills_getcrestdata(typeID, pageNum, killID, killHash, killTime, solarSystemID, totalValue):
+    if checkforkillmail(killID) == False:  # Check if killmail exists, if not, fetch from CREST
+        crestURL = 'https://public-crest.eveonline.com/killmails/' + str(killID) + '/' + str(killHash) + '/'
+        print("[" + str(gettypeName(typeID)) + "][page:" + str(pageNum) + "][killTime:" + str(killTime) + "][killID:" + str(
+            killID) + "][solarSystemName:" + str(getSolarSystemName(solarSystemID)) + "]")  # Feedback
+        sys.stdout.flush()
+        try:
+            crestKill = requests.get(crestURL)
+        except (ConnectionError, ChunkedEncodingError) as e:
+            print(e)
+        else:
+            insertkillmailrecord(killID, killHash, crestKill.text, totalValue)
+    else:
+        print("[" + str(gettypeName(typeID)) + "][skip][killID:" + str(killID) + "]")
+        sys.stdout.flush()
     return 0

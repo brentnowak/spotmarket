@@ -4,6 +4,7 @@ from _api import *
 from _dashboard import *
 from _wallet import *
 from _system import *
+from _market import *
 
 
 #############################
@@ -541,6 +542,10 @@ def api_typeID(typeID):
 def api_marketavgprice(typeID):
     return getmarkethistory_avgprice(typeID)
 
+@app.route('/api/market/regional/<typeID>/hubs/<hubTypes>')
+def api_market_getregionalprices(typeID, hubTypes):
+    if hubTypes == "major":
+        return market_getregionalprices(typeID, tradeHubsmajor)
 
 # Region
 @app.route('/api/region/sovereignty/<regionID>')

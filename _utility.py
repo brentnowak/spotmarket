@@ -852,57 +852,6 @@ def getfactionkills_byfaction():
 
 
 #############################
-# Market
-#############################
-
-def getmarkethistory_typeID(typeID):
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
-    sql = '''SELECT
-      history."typeID",
-      "invTypes"."typeName",
-      history."regionID",
-      to_char(history."timestamp", 'YYYY-MM-dd') AS timestamp,
-      history.volume,
-      history."orderCount",
-      history."lowPrice",
-      history."highPrice",
-      history."avgPrice"
-    FROM
-      public."invTypes",
-      market.history
-     WHERE history."typeID" = "invTypes"."typeID" AND
-     history."typeID" = %s
-     ORDER BY history."timestamp" DESC'''
-    data = (typeID, )
-    cursor.execute(sql, data, )
-    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
-    if len(results) < 1:     # Handle a empty table
-        return "No Data"
-    else:
-        return results
-
-
-def getmarkethistory_avgprice(typeID):
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
-    sql = '''SELECT
-      to_char(history."timestamp", 'YYYY-MM-dd') AS timestamp,
-      history."avgPrice"
-    FROM
-      market.history
-     WHERE history."typeID" = %s
-     ORDER BY history."timestamp" DESC'''
-    data = (typeID, )
-    cursor.execute(sql, data, )
-    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
-    if len(results) < 1:     # Handle a empty table
-        return "No Data"
-    else:
-        return results
-
-
-#############################
 # Log File
 #############################
 

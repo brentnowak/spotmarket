@@ -2,7 +2,7 @@
 ==================
 
 - [ ] [bug] On most graphs, label for line appears to the left  
-- [ ] [bug] bootstrap-table table headers that contain icons do not align correctly with rows  
+- [X] [bug] bootstrap-table table headers that contain icons do not align correctly with rows  
 - [ ] [bug] Security reports have hardcoded time range for data that calculates ratting rate  
 - [ ] [new] Create freighter security index based on killmails  
 - [ ] [new] Character Orders table and page  

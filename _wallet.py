@@ -72,35 +72,6 @@ def getprofitpersolarsystem(typeID):
     return results
 
 
-def getregionalstats(typeID):
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
-    sql = '''SELECT
-      DISTINCT ON ("mapRegions"."regionName") "mapRegions"."regionName",
-      history."avgPrice",
-      history.volume
-    FROM
-      market.history,
-      public."mapRegions"
-    WHERE
-      "mapRegions"."regionID" = history."regionID" AND
-      "typeID" = %s
-    GROUP BY
-      "mapRegions"."regionName",
-      history."avgPrice",
-      history.volume,
-      "mapRegions"."regionName",
-      history."timestamp"
-    ORDER BY
-     "mapRegions"."regionName" DESC
-    '''
-    data = (typeID,)
-    cursor.execute(sql, data, )
-    results = cursor.fetchall()
-    cursor.close()
-    return results
-
-
 def getallwallettransactions():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
