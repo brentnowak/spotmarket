@@ -8,6 +8,8 @@
 
 from _utility import *
 from _consumer_charorders import *
+from time import sleep
+import sys
 import evelink.char
 import evelink.api
 
@@ -56,3 +58,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+    # Sleep for 1 hour + extra before ending and triggering another run via supervisor
+    print("[Completed Run:Sleeping for 1 Hour]")
+    sys.stdout.flush()
+    sleep(3900)
