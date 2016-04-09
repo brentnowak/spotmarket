@@ -6,7 +6,6 @@
 # - Initial release
 #-----------------------------------------------------------------------------
 
-from _utility import *
 from _consumer_charorders import *
 from time import sleep
 import sys
