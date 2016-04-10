@@ -64,7 +64,7 @@ def main():
 
         print("[Completed Ship:" + str(gettypeName(typeID[0])) + "]")
         sys.stdout.flush()
-        sleep(2)  # Be nice to squizz and sleep before requesting another 200 KMs
+        sleep(1)  # Be nice to squizz and sleep before requesting another 200 KMs
 
 
 if __name__ == "__main__":
