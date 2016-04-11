@@ -8,10 +8,14 @@
 # - Move configuration and functions to _utility.py
 # Version: 0.2
 # - Add Sovereignty
+# Version: 0.3
+# - Migrate to supervisor
 #-----------------------------------------------------------------------------
 
 import evelink.map
-from _utility import *
+import sys
+from _map import *
+from time import sleep
 
 # API
 killsapi = evelink.map.Map()
@@ -44,21 +48,26 @@ def main():
 
     # Run Kills import
     start_time = time.time()
-    count_mapinsert = insertkillsrecords(mapapi_data, killstimestamp)
-    detail = "[kills] insert " + str(count_mapinsert) + " @ " + str(round(count_mapinsert/(time.time() - start_time), 2)) + " rec/sec"
+    count_mapinsert = map_insertkillsrecords(mapapi_data, killstimestamp)
+    detail = "[map.kill] insert " + str(count_mapinsert) + " @ " + str(round(count_mapinsert/(time.time() - start_time), 2)) + " rec/sec"
     insertlog(service, 0, detail, killstimestamp)
 
     # Run Jumps import
     start_time = time.time()
-    count_jumpsinsert = insertjumpsrecords(jumpsapi_data, jumpstimestamp)
-    detail = "[jumps] insert " + str(count_jumpsinsert) + " @ " + str(round(count_jumpsinsert/(time.time() - start_time), 2)) + " rec/sec"
+    count_jumpsinsert = map_insertjumpsrecords(jumpsapi_data, jumpstimestamp)
+    detail = "[map.jump] insert " + str(count_jumpsinsert) + " @ " + str(round(count_jumpsinsert/(time.time() - start_time), 2)) + " rec/sec"
     insertlog(service, 0, detail, jumpstimestamp)
 
     # Run Sov import
     start_time = time.time()
-    count_sovinsert = insertsov(sovapi_data, sovtimestamp)
-    detail = "[sov] insert " + str(count_sovinsert)  + " @ " + str(round(count_sovinsert/(time.time() - start_time), 2)) + " rec/sec"
+    count_sovinsert = map_insertsov(sovapi_data, sovtimestamp)
+    detail = "[map.sov] insert " + str(count_sovinsert)  + " @ " + str(round(count_sovinsert/(time.time() - start_time), 2)) + " rec/sec"
     insertlog(service, 0, detail, sovtimestamp)
 
 if __name__ == "__main__":
     main()
+
+    # Sleep for 30 minutes before ending and triggering another run via supervisor
+    print("[Completed Run:Sleeping for 30 Minutes]")
+    sys.stdout.flush()
+    sleep(1800)

@@ -10,6 +10,10 @@ from time import sleep
 from _meta import *
 import evelink.eve
 import sys
+import requests.packages.urllib3
+
+requests.packages.urllib3.disable_warnings()
+#  Suppress InsecurePlatformWarning messages
 
 
 # API

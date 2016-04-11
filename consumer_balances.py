@@ -7,7 +7,7 @@
 #-----------------------------------------------------------------------------
 
 from _utility import *
-from _consumer_balances import *
+from _balances import *
 import evelink.char
 import evelink.api
 

@@ -1,26 +1,36 @@
 0.6 Release
 ==================
 
-- [ ] [bug] On most graphs, label for line appears to the left  
-- [X] [bug] bootstrap-table table headers that contain icons do not align correctly with rows  
-- [ ] [bug] Security reports have hardcoded time range for data that calculates ratting rate  
-- [ ] [new] Create freighter security index based on killmails  
-- [ ] [new] Character Orders table and page  
-- [ ] [enhancement] Add functional buttons on Settings page to control imports  
-- [ ] [enhancement] Learn how to use Classes and clean up utility scripts  
-- [ ] [enhancement] Add second axis to d3js charts to denote Eve expansions  
-- [ ] [enhancement] Add website favicon  
-- [ ] [enhancement] Move API items to _api.py  
+- [x] [new] Character Orders table and page  
+- [x] [bug] bootstrap-table table headers that contain icons do not align correctly with rows  
+- [x] [enhancement] Migrate consumer and process items to use Supervisor  
+- [x] [enhancement] Move API items to _api.py  
+- [x] [enhancement] Organize tables into proper schema items: 'character', 'map', 'market', etc.  
 
 0.7 Release
 ==================
-  
+
+- [ ] [bug] On most graphs, label for line appears to the left  
+- [ ] [bug] Security reports have hardcoded time range for data that calculates ratting rate  
+- [ ] [new] Create freighter security index based on killmails  
+- [ ] [enhancement] Add functional buttons on Settings page to control imports  
+- [ ] [enhancement] Add second axis to d3js charts to denote Eve expansions  
+- [ ] [enhancement] Add website favicon  
+
+0.8 Release
+==================
+
+- [ ] [enhancement] Learn how to use Classes and clean up utility scripts  
+
+0.9 Release
+==================
+
 - [ ] [enhancement] Display tags rather than numbers for severity on log pages  
 - [ ] [enhancement] Research replacing cron jobs with a better solution  
 - [ ] [enhancement] Organize API endpoints into a more logical pattern  
 - [ ] [enhancement] PostgreSQL 9.5.1 performance tuning  
 
-0.8 Release
+1.0 Release
 ==================
 
 - [ ] [enhancement] Create Docker image  

@@ -267,3 +267,51 @@ def getskillqueues():
     cursor.execute(sql, )
     results = cursor.fetchall()  # TODO return dictionary rather than list
     return results
+
+
+def databasecountmapkills():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = 'SELECT COUNT(*) FROM data."mapkills"'
+    cursor.execute(sql, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
+
+
+def databasecountmapjumps():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = 'SELECT COUNT(*) FROM data."mapjumps"'
+    cursor.execute(sql, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
+
+
+def databasecountmapsov():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = 'SELECT COUNT(*) FROM data."mapsov"'
+    cursor.execute(sql, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results
+
+
+def databasecountmarkethistory():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = 'SELECT COUNT(*) FROM data."markethistory"'
+    cursor.execute(sql, )
+    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    if len(results) < 1:     # Handle a empty table
+        return "No Data"
+    else:
+        return results

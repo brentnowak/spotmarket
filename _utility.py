@@ -364,69 +364,6 @@ def getjumps_byregionsname(regions, regionName):
 
 
 #
-# Usage         consumer_map.py
-# Input         mapapi_data, maptimestamp
-# Output        'mapkills' Database insert
-#
-def insertkillsrecords(killsapi_data, maptimestamp):
-    insertcount = 0
-    for key,value in killsapi_data.iteritems():
-        try:
-            id = value['id']
-            ship = value['ship']
-            faction = value['faction']
-            pod = value['pod']
-            conn = psycopg2.connect(conn_string)
-            cursor = conn.cursor()
-            sql = 'INSERT INTO data."mapkills" (timestamp, "solarSystemID", "shipKills", "factionKills", "podKills") VALUES (%s, %s, %s, %s, %s)'
-            data = (maptimestamp, id, ship, faction, pod, )
-            cursor.execute(sql, data, )
-        except psycopg2.IntegrityError:
-            conn.rollback()
-        else:
-            conn.commit()
-            insertcount += 1
-    return insertcount
-
-
-#
-# Usage         consumer_map.py
-# Input         jumpsapi_data, jumpstimestamp
-# Output        'mapjumps' Database insert
-#
-def insertjumpsrecords(jumps_data, jumpstimestamp):
-    insertcount = 0
-    for key,value in jumps_data.iteritems():
-        try:
-            id = key
-            jumps = value
-            conn = psycopg2.connect(conn_string)
-            cursor = conn.cursor()
-            sql = 'INSERT INTO data."mapjumps" (timestamp, "solarSystemID", "shipJumps") VALUES (%s, %s, %s)'
-            data = (jumpstimestamp, id, jumps, )
-            cursor.execute(sql, data, )
-        except psycopg2.IntegrityError:
-            conn.rollback()
-        else:
-            conn.commit()
-            insertcount += 1
-    return insertcount
-
-
-#
-# Insert jumpsapi_data record
-#
-def jumpsinsertrecord(timestamp, id, jumps):
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
-    sql = 'INSERT INTO data."mapjumps" (timestamp, "solarSystemID", "shipJumps") VALUES (%s, %s, %s)'
-    data = (timestamp, id, jumps, )
-    cursor.execute(sql, data)
-    conn.commit()
-    return 0
-
-
-#
 # Output list of ships by typeID
 #
 def getships():
@@ -750,61 +687,6 @@ def gettradehub_jitatoamarr(limit):
     return df
 
 
-#
-# Insert sov data
-#
-def insertsov(sovapi_data, sovtimestamp):
-    count_insert = 0
-    for key,value in sovapi_data.iteritems():
-        solarSystemID = value['id']
-        allianceID = value['alliance_id']
-        corporationID = value['corp_id']
-        factionID = value['faction_id'] # Not used
-        solarSystemName = value['name'] # Not used
-        if str(allianceID) != "None":   # Filter out factions
-            if getmaptopsov(solarSystemID) != corporationID:
-                insertmapsov(sovtimestamp, allianceID, corporationID, solarSystemID)
-                count_insert += 1
-    return count_insert
-
-
-#
-# Get latest sov record
-#
-def getmaptopsov(solarSystemID):
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
-    sql = '''SELECT
-      mapsov."corporationID"
-    FROM
-      data.mapsov
-    WHERE mapsov."solarSystemID" = %s
-    ORDER BY mapsov."timestamp" DESC
-    LIMIT 1
-    '''
-    data = (solarSystemID, )
-    cursor.execute(sql, data, )
-    result = cursor.fetchone()
-    if result == None:  # Error checking if table is empty
-            return 0
-    else:
-        return result[0]
-
-
-#
-# Insert latest sov record
-#
-def insertmapsov(timestamp, allianceID, corporationID, solarSystemID):
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
-    sql = 'INSERT INTO data."mapsov" (timestamp, "allianceID", "corporationID", "solarSystemID") VALUES (%s, %s, %s, %s)'
-    data = (timestamp, allianceID, corporationID, solarSystemID, )
-    cursor.execute(sql, data)
-    conn.commit()
-    conn.close()
-    return 0
-
-
 def getfactionkills_byfaction():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
@@ -840,14 +722,14 @@ def getsystemlogs():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      to_char(logs."timestamp", 'YYYY-MM-dd HH:mm:ss') AS timestamp,
-      logs."logID",
-      logs.service,
-      logs.severity,
-      logs.detail
+      to_char(log."timestamp", 'YYYY-MM-dd HH:mm:ss') AS timestamp,
+      log."logID",
+      log.service,
+      log.severity,
+      log.detail
     FROM
-      data.logs
-    ORDER BY logs."logID" DESC
+      system.log
+    ORDER BY log."logID" DESC
     LIMIT 2000
     '''
     cursor.execute(sql, )
@@ -861,7 +743,7 @@ def getsystemlogs():
 def insertlog(service, severity, detail, timestamp):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    sql = 'INSERT INTO data."logs" (timestamp, "service", "severity", "detail") VALUES (%s, %s, %s, %s)'
+    sql = 'INSERT INTO system.log (timestamp, "service", "severity", "detail") VALUES (%s, %s, %s, %s)'
     data = (timestamp, service, severity, detail, )
     cursor.execute(sql, data)
     conn.commit()
@@ -871,63 +753,11 @@ def insertlog(service, severity, detail, timestamp):
 def insertlog_timestamp(service, severity, detail, timestamp):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    sql = 'INSERT INTO data."logs" (timestamp, "service", "severity", "detail") VALUES (%s, %s, %s, %s)'
+    sql = 'INSERT INTO system.log (timestamp, "service", "severity", "detail") VALUES (%s, %s, %s, %s)'
     data = (timestamp, service, severity, detail, )
     cursor.execute(sql, data)
     conn.commit()
     return 0
-
-
-#############################
-# Dashboard
-#############################
-
-def databasecountmapkills():
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
-    sql = 'SELECT COUNT(*) FROM data."mapkills"'
-    cursor.execute(sql, )
-    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
-    if len(results) < 1:     # Handle a empty table
-        return "No Data"
-    else:
-        return results
-
-
-def databasecountmapjumps():
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
-    sql = 'SELECT COUNT(*) FROM data."mapjumps"'
-    cursor.execute(sql, )
-    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
-    if len(results) < 1:     # Handle a empty table
-        return "No Data"
-    else:
-        return results
-
-
-def databasecountmapsov():
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
-    sql = 'SELECT COUNT(*) FROM data."mapsov"'
-    cursor.execute(sql, )
-    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
-    if len(results) < 1:     # Handle a empty table
-        return "No Data"
-    else:
-        return results
-
-
-def databasecountmarkethistory():
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
-    sql = 'SELECT COUNT(*) FROM data."markethistory"'
-    cursor.execute(sql, )
-    results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
-    if len(results) < 1:     # Handle a empty table
-        return "No Data"
-    else:
-        return results
 
 
 def toprattingevents():

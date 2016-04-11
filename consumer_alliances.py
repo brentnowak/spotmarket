@@ -7,7 +7,9 @@
 #-----------------------------------------------------------------------------
 
 import evelink.eve
-from _consumer_alliances import *
+import sys
+from time import sleep
+from _alliances import *
 
 # API
 allianceapi = evelink.eve.EVE()
@@ -24,3 +26,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+    # Sleep for 30 minutes before ending and triggering another run via supervisor
+    print("[Completed Run:Sleeping for 1 Hour]")
+    sys.stdout.flush()
+    sleep(3900)

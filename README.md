@@ -94,6 +94,10 @@ Processes
 
 Output: Populate 'data.moonminerals' with CREST verified moons from 'data.moonverify' table.  
 
+**process_validatekillmails.py**
+
+Output: Check that each item in kill.mail has valid JSON and value from zKillboard.
+
 
 Install Notes
 ==================
@@ -201,8 +205,7 @@ mv config.ini.change config.ini
 As root
 ```shell
 cp supervisor/*.conf /etc/supervisor/conf.d/
-service supervisor restart
-```
+service supervisor restart```
 
 Reload conf files, as root
 ```shell
@@ -219,20 +222,7 @@ If you see the following text displayed, then it is working.
 ```shell
  * Running on http://0.0.0.0:80/ (Press CTRL+C to quit)
  * Restarting with stat
- * Debugger is active!
- * Debugger pin code: 319-334-386
 ```
-
-
-Scheduled Jobs
-==================
-
-**crontab**
-```shell 
-crontab -e
-10,40 * * * * /home/ubuntu/spotmarket/scripts/consumer_map.sh > /dev/null 2>&1
-```
-
 
 Web Front End
 ==================
@@ -242,8 +232,9 @@ Browse to http://hostname
 Tracking Tables - Work in Progress
 ==================
 Currently the following tables have to be manually populated:
-* killmailsitems - typeIDs that are used for zKillboard imports.
-* marketitems - typeIDs that are used for market prices.
+* kill.tracking - typeIDs that are used for zKillboard imports.
+* market.tracking - typeIDs that are used for market prices.
+* market.region - regionIDs that are used for market prices.
 
 
 License Info

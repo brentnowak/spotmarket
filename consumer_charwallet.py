@@ -6,12 +6,16 @@
 # - Initial release
 #-----------------------------------------------------------------------------
 
-from _consumer_charwallet import *
+from _charwallet import *
 from time import sleep
 import sys
 import evelink.char
 import evelink.api
 import evelink.parsing.wallet_transactions
+import requests.packages.urllib3
+
+requests.packages.urllib3.disable_warnings()
+#  Suppress InsecurePlatformWarning messages
 
 def main():
     service = "consumer_charwallet.py"

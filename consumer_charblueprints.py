@@ -7,7 +7,7 @@
 #-----------------------------------------------------------------------------
 
 from _utility import *
-from _consumer_charblueprints import *
+from _charblueprints import *
 import evelink.char
 import evelink.api
 

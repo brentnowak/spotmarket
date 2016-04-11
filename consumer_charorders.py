@@ -6,11 +6,15 @@
 # - Initial release
 #-----------------------------------------------------------------------------
 
-from _consumer_charorders import *
+from _charorders import *
 from time import sleep
 import sys
 import evelink.char
 import evelink.api
+import requests.packages.urllib3
+
+requests.packages.urllib3.disable_warnings()
+#  Suppress InsecurePlatformWarning messages
 
 def main():
     service = "consumer_charorders.py"
