@@ -1,8 +1,10 @@
 0.6 Release
 ==================
 
+- [x] [new] Many new Dashboard items  
 - [x] [new] Character Orders table and page  
 - [x] [bug] bootstrap-table table headers that contain icons do not align correctly with rows  
+- [x] [enhancement] Implement concurrent.futures for market and zKillboard scrapers to drastically improve performance  
 - [x] [enhancement] Migrate consumer and process items to use Supervisor  
 - [x] [enhancement] Move API items to _api.py  
 - [x] [enhancement] Organize tables into proper schema items: 'character', 'map', 'market', etc.  
@@ -34,6 +36,7 @@
 ==================
 
 - [ ] [enhancement] Create Docker image  
+- [ ] [enhancement] Migrate to Python 3.x  
 
 0.4 Release (Completed)
 ==================

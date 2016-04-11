@@ -123,11 +123,11 @@ apt-get install git
 ```
 
 **Clone GitHub Project**
-Install in /home/ubuntu due to some hardcoded paths.
+Clone in /home/ubuntu due to some hardcoded paths.
 ```shell
 git clone https://github.com/brentnowak/spotmarket
 cd spotmarket
-pip install -r requirements.txt
+sudo pip install -r requirements.txt
 ```
 
 **Make Scripts Executable**
