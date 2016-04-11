@@ -42,35 +42,45 @@ def systemsettings_logs():
     return render_template('pages/systemSettings/logs.html',
                            title="Logs",
                            header="Logs",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/system/market')
 def systemsettings_settings():
     return render_template('pages/systemSettings/market.html',
                            title="Market",
                            header="Market",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/system/characters')
 def systemsettings_characters():
     return render_template('pages/systemSettings/characters.html',
                            title="Characters",
                            header="Characters",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/system/zkillboard')
 def systemsettings_zkillboard():
     return render_template('pages/systemSettings/zkillboard.html',
                            title="zKillboard",
                            header="zKillboard",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/system/database')
 def systemsettings_database():
     return render_template('pages/systemSettings/database.html',
                            title="Database",
                            header="Database",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/blank.html')
 def blank():
@@ -126,7 +136,9 @@ def faction_report_overview():
                            title="Overview",
                            header="Overview",
                            nav="Overview",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/report/faction/angel')
 def faction_report_angel():
@@ -134,7 +146,9 @@ def faction_report_angel():
                            title="Angel Cartel",
                            header="Angel Cartel",
                            nav="Angel Cartel",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/report/faction/blood')
 def faction_report_blood():
@@ -142,7 +156,9 @@ def faction_report_blood():
                            title="Blood Raiders",
                            header="Blood Raiders",
                            nav="Blood Raiders",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/report/faction/guristas')
 def faction_report_guristas():
@@ -150,7 +166,9 @@ def faction_report_guristas():
                            title="Guristas",
                            header="Guristas",
                            nav="Guristas",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/report/faction/sansha')
 def faction_report_sansha():
@@ -158,7 +176,9 @@ def faction_report_sansha():
                            title="Sansha's Nation",
                            header="Sansha's Nation",
                            nav="Sansha's Nation",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/report/faction/serpentis')
 def faction_report_serpentis():
@@ -166,7 +186,9 @@ def faction_report_serpentis():
                            title="Serpentis",
                            header="Serpentis",
                            nav="Serpentis",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/report/faction/mordu')
 def faction_report_mordu():
@@ -174,7 +196,9 @@ def faction_report_mordu():
                            title="Mordu's Legion Command",
                            header="Mordu's Legion Command",
                            nav="Mordu's Legion Command",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/report/faction/sisters')
 def faction_report_sisters():
@@ -182,7 +206,9 @@ def faction_report_sisters():
                            title="Servant Sisters of EVE",
                            header="Servant Sisters of EVE",
                            nav="Servant Sisters of EVE",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 
 #############################
@@ -194,7 +220,9 @@ def securityreporthighsec():
                            title="Highsec",
                            header="Highsec",
                            nav="Highsec",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/report/security/lowsec')
 def securityreportlowsec():
@@ -202,7 +230,9 @@ def securityreportlowsec():
                            title="Lowsec",
                            header="Lowsec",
                            nav="Lowsec",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/report/security/nullsec')
 def securityreportnullsec():
@@ -210,7 +240,9 @@ def securityreportnullsec():
                            title="Nullsec",
                            header="Nullsec",
                            nav="Nullsec",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 #############################
 #   characterReport
@@ -221,7 +253,9 @@ def characterreport_blueprints():
                            title="Blueprints",
                            header="Blueprints",
                            nav="Blueprints",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 
 @app.route('/report/character/orders')
@@ -229,7 +263,9 @@ def characterreport_orders():
     return render_template('pages/characterReports/orders.html',
                            title="Orders",
                            header="Orders",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 
 @app.route('/report/character/wallet')
@@ -237,7 +273,9 @@ def characterreport_wallet():
     return render_template('pages/characterReports/wallet.html',
                            title="Wallet",
                            header="Wallet",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 
 #############################
@@ -253,8 +291,10 @@ def indexreport_deadend():
                            title="Dead End Systems",
                            header="Dead End Systems",
                            nav="Dead End Systems",
+                           systemList=json.loads(getdeadendsystems(1)),
                            timeutc=timeutc(),
-                           systemList=json.loads(getdeadendsystems(1)))
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/report/index/pirateships')
 def indexreport_pirateships():
@@ -262,7 +302,9 @@ def indexreport_pirateships():
                            title="Pirate Ships",
                            header="Pirate Ships",
                            nav="Pirate Ships",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/report/index/boosters')
 def indexreport_boosters():
@@ -270,7 +312,9 @@ def indexreport_boosters():
                            title="Boosters",
                            header="Boosters",
                            nav="Boosters",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/report/index/pilotservices')
 def indexreport_pilotservices():
@@ -278,7 +322,9 @@ def indexreport_pilotservices():
                            title="Pilot Services",
                            header="Pilot Services",
                            nav="Pilot Services",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/report/index/capitalships')
 def indexreport_capitalships():
@@ -286,7 +332,9 @@ def indexreport_capitalships():
                            title="Capital Ships",
                            header="Capital Ships",
                            nav="Capital Ships",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/report/index/goldenroute')
 def indexreport_goldenroute():
@@ -294,7 +342,9 @@ def indexreport_goldenroute():
                            title="Golden Route",
                            header="Golden Route",
                            nav="Golden Route",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 
 #############################
@@ -306,13 +356,17 @@ def regionreport(regionID):
         return render_template('pages/regionReports/north.html',
                                header="The North",
                                regionName=regionID,
-                               timeutc=timeutc())
+                               timeutc=timeutc(),
+                               userstq="{:,.0f}".format(countuserstq()),
+                               statustq=statustq())
     else:
         regionName = getregionName(regionID)
         return render_template('pages/regionReports/regionReport.html',
                            regionID=regionID,
                            regionName=regionName,
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 
 
@@ -325,7 +379,9 @@ def jumpreport_tradehubs():
                            title="Trade Hubs",
                            header="Trade Hubs",
                            nav="Trade Hubs",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 
 #############################
@@ -337,7 +393,9 @@ def marketreport_pilotservices():
                            title="Pilot Services",
                            header="Pilot Services",
                            nav="Pilot Services",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/report/market/item/<typeID>')
 def marketreport_item(typeID):
@@ -346,7 +404,9 @@ def marketreport_item(typeID):
                            typeName=gettypeName(typeID),
                            getprofitpersolarsystem=getprofitpersolarsystem(typeID),
                            getregionalstats=getregionalstats(typeID),
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 
 #############################
@@ -358,7 +418,9 @@ def moonreport_sov():
                            title="Sovereignty",
                            header="Sovereignty",
                            nav="Sovereignty",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/report/moon/gases')
 def moonreport_gases():
@@ -366,7 +428,9 @@ def moonreport_gases():
                            title="Gasses",
                            header="Gasses",
                            nav="Gasses",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/report/moon/r8')
 def moonreport_r8():
@@ -374,7 +438,9 @@ def moonreport_r8():
                            title="Rarity 8",
                            header="Rarity 8",
                            nav="Rarity 8",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/report/moon/r16')
 def moonreport_r16():
@@ -382,7 +448,9 @@ def moonreport_r16():
                            title="Rarity 16",
                            header="Rarity 16",
                            nav="Rarity 16",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/report/moon/r32')
 def moonreport_r32():
@@ -390,7 +458,9 @@ def moonreport_r32():
                            title="Rarity 32",
                            header="Rarity 32",
                            nav="Rarity 32",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/report/moon/r64')
 def moonreport_r64():
@@ -398,7 +468,9 @@ def moonreport_r64():
                            title="Rarity 64",
                            header="Rarity 64",
                            nav="Rarity 64",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 
 #############################
@@ -409,14 +481,18 @@ def map_sovereignty():
     return render_template('pages/mapReports/sovereignty.html',
                            title="Sovereignty",
                            header="Sovereignty",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 @app.route('/map/conquerablestations')
 def map_conquerablestations():
     return render_template('pages/mapReports/conquerablestation.html',
                            title="Conquerable Stations",
                            header="Conquerable Stations",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 
 #############################
@@ -427,7 +503,9 @@ def warreport_worldwarbee():
     return render_template('pages/warReports/worldwarbee.html',
                            title="World War Bee",
                            header="World War Bee",
-                           timeutc=timeutc())
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq())
 
 
 
