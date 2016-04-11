@@ -1207,7 +1207,7 @@ def getsoveventsumbyday():  # TODO remove hard coded date start, scrape Dotlan f
     sql = '''
     SELECT date_trunc('day', timestamp) AS timestamp,
         COUNT(*) AS sovChange
-        FROM data.mapsov
+        FROM map.sov
         WHERE timestamp >= DATE('2016-02-03')
         GROUP BY date_trunc('day', timestamp)
         ORDER BY timestamp DESC'''

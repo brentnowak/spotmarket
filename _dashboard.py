@@ -6,6 +6,40 @@ def timeutc():
     return arrow.utcnow().format('YYYY-MM-DD HH:mm:ss')
 
 
+def countuserstq():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT players
+      FROM meta.tranquility
+    ORDER BY timestamp DESC
+    LIMIT 1'''
+    cursor.execute(sql, )
+    result = cursor.fetchone()
+    if result == None:
+        return 0
+    else:
+        return result[0]
+
+
+def statustq():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT status
+      FROM meta.tranquility
+    ORDER BY timestamp DESC
+    LIMIT 1'''
+    cursor.execute(sql, )
+    result = cursor.fetchone()
+    if result == None:
+        return "Error"
+    if result[0] == True:
+        return "Online"
+    if result[0] == False:
+        return "Offline"
+    else:
+        return "Error"
+
+
 def countdatakillmails():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
@@ -14,7 +48,10 @@ def countdatakillmails():
         FROM kill.mail'''
     cursor.execute(sql, )
     result = cursor.fetchone()
-    return result[0]
+    if result == None:
+        return 0
+    else:
+        return result[0]
 
 
 def countdatawallet():
@@ -25,7 +62,10 @@ def countdatawallet():
         FROM "character".wallet'''
     cursor.execute(sql, )
     result = cursor.fetchone()
-    return result[0]
+    if result == None:
+        return 0
+    else:
+        return result[0]
 
 
 def countdatamarkethistory():
@@ -36,7 +76,10 @@ def countdatamarkethistory():
         FROM market.history'''
     cursor.execute(sql, )
     result = cursor.fetchone()
-    return result[0]
+    if result == None:
+        return 0
+    else:
+        return result[0]
 
 
 def countdatamoonminerals():
@@ -44,10 +87,13 @@ def countdatamoonminerals():
     cursor = conn.cursor()
     sql = '''SELECT
         COUNT(DISTINCT "moonID")
-        FROM data.moonminerals'''
+        FROM moon.mineral'''
     cursor.execute(sql, )
     result = cursor.fetchone()
-    return result[0]
+    if result == None:
+        return 0
+    else:
+        return result[0]
 
 
 def countdatamoonverify():
@@ -55,58 +101,70 @@ def countdatamoonverify():
     cursor = conn.cursor()
     sql = '''SELECT
         COUNT(DISTINCT "moonID")
-        FROM data.moonverify'''
+        FROM moon.killmail'''
     cursor.execute(sql, )
     result = cursor.fetchone()
-    return result[0]
+    if result == None:
+        return 0
+    else:
+        return result[0]
 
 
 def countlatestjitajump():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      mapjumps."shipJumps"
+      jump."shipJumps"
     FROM
       public."mapSolarSystems",
-      data.mapjumps
+      map.jump
     WHERE
-      mapjumps."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      jump."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
       "mapSolarSystems"."solarSystemID" = 30000142
     LIMIT 1'''
     cursor.execute(sql, )
     result = cursor.fetchone()
-    return result[0]
+    if result == None:
+        return 0
+    else:
+        return result[0]
 
 
 def latestjumpdatatime():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      mapjumps."timestamp"
+      jump."timestamp"
     FROM
       public."mapSolarSystems",
-      data.mapjumps
+      map.jump
     WHERE
-      mapjumps."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      jump."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
       "mapSolarSystems"."solarSystemID" = 30000142
     LIMIT 1'''
     cursor.execute(sql, )
     result = cursor.fetchone()
-    return result[0]
+    if result == None:
+        return 0
+    else:
+        return result[0]
 
 
 def latestsovdatatime():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      mapsov."timestamp"
+      sov."timestamp"
     FROM
-      data.mapsov
+      map.sov
     ORDER BY timestamp DESC
     LIMIT 1'''
     cursor.execute(sql, )
     result = cursor.fetchone()
-    return result[0]
+    if result == None:
+        return 0
+    else:
+        return result[0]
 
 
 def countsovchangelastday():
@@ -115,8 +173,8 @@ def countsovchangelastday():
     sql = '''SELECT
       COUNT(*)
     FROM
-      data.mapsov
-    WHERE mapsov."timestamp" >= NOW() - '1 day'::INTERVAL'''
+      map.sov
+    WHERE sov."timestamp" >= NOW() - '1 day'::INTERVAL'''
     cursor.execute(sql, )
     result = cursor.fetchone()
     return result[0]
@@ -272,7 +330,7 @@ def getskillqueues():
 def databasecountmapkills():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    sql = 'SELECT COUNT(*) FROM data."mapkills"'
+    sql = 'SELECT COUNT(*) FROM map.kills'
     cursor.execute(sql, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
     if len(results) < 1:     # Handle a empty table
@@ -284,7 +342,7 @@ def databasecountmapkills():
 def databasecountmapjumps():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    sql = 'SELECT COUNT(*) FROM data."mapjumps"'
+    sql = 'SELECT COUNT(*) FROM map.jumps'
     cursor.execute(sql, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
     if len(results) < 1:     # Handle a empty table
@@ -296,7 +354,7 @@ def databasecountmapjumps():
 def databasecountmapsov():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    sql = 'SELECT COUNT(*) FROM data."mapsov"'
+    sql = 'SELECT COUNT(*) FROM map.sov'
     cursor.execute(sql, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
     if len(results) < 1:     # Handle a empty table
@@ -308,7 +366,7 @@ def databasecountmapsov():
 def databasecountmarkethistory():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    sql = 'SELECT COUNT(*) FROM data."markethistory"'
+    sql = 'SELECT COUNT(*) FROM market.history'
     cursor.execute(sql, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
     if len(results) < 1:     # Handle a empty table

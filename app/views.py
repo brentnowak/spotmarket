@@ -15,6 +15,8 @@ from _market import *
 def index():
     return render_template('pages/dashboard.html', title="Dashboard", header="Dashboard",
                            timeutc=timeutc(),
+                           userstq="{:,.0f}".format(countuserstq()),
+                           statustq=statustq(),
                            countdatakillmails="{:,.0f}".format(countdatakillmails()),
                            countdatamoonminerals="{:,.0f}".format(countdatamoonminerals()),
                            countdatamoonverify="{:,.0f}".format(countdatamoonverify()),

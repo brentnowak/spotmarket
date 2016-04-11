@@ -12,12 +12,11 @@ def main():
     serverapi = evelink.server.Server()
     serverapiresponse = serverapi.server_status()
     serverapi_data = serverapiresponse.result
-    serverapi_cachedUntil = arrow.get(serverapiresponse.timestamp)
+    serverapi_cachedUntil = arrow.get(serverapiresponse.expires)
     servertimestamp = serverapi_cachedUntil.format('YYYY-MM-DD HH:mm:ss')
 
     players = serverapi_data['players']
     status = serverapi_data['online']
-
     eveserver_insertstatus(servertimestamp, players, status)
 
 if __name__ == "__main__":
