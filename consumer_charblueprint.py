@@ -1,12 +1,12 @@
 #-----------------------------------------------------------------------------
-# consumer_charorders.py
+# consumer_charblueprint.py
 # https://github.com/brentnowak/spotmarket
 #-----------------------------------------------------------------------------
 # Version: 0.1
 # - Initial release
 #-----------------------------------------------------------------------------
 
-from _charorders import *
+from _charblueprints import *
 from time import sleep
 import sys
 import evelink.char
@@ -17,13 +17,13 @@ requests.packages.urllib3.disable_warnings()
 #  Suppress InsecurePlatformWarning messages
 
 def main():
-    service = "consumer_charorders.py"
+    service = "consumer_charblueprint.py"
 
     # Get characters with walletEnabled = 1
-    characters = json.loads(getcharacters())
+    characters = json.loads(getcharacters())  # TODO rewrite function to return results specific to each consumer
 
     # Empty table
-    trunkcharorders()
+    trunkcharblueprints()
 
     for character in characters:
         characterID = character['characterID']
@@ -33,31 +33,20 @@ def main():
         api_key = (keyID, vCode)
         eveapi = evelink.api.API(base_url='api.eveonline.com', api_key=api_key)
         charapi = evelink.char.Char(characterID, eveapi)
-        charresponse = charapi.orders()
+        charresponse = charapi.blueprints()
         charresponse = charresponse[0]
 
         for key, value in charresponse.iteritems():
-            orderID = key
-            stationID = value['station_id']
-            volEntered = value['amount']
-            volRemaining = value['amount_left']
-            orderState = value['status']
+            itemID = key
+            locationID = value['location_id']
             typeID = value['type_id']
-            range = value['range']
-            accountKey = value['account_key']
-            duration = value['duration']
-            escrow = value['escrow']
-            price = value['price']
-            bid = value['type']
-            issued = value['timestamp']
+            quantity = value['quantity']
+            flagID = value['location_flag']
+            timeEfficiency = value['time_efficiency']
+            materialEfficiency = value['material_efficiency']
+            runs = value['runs']
 
-            issued = arrow.get(issued)
-            issued = issued.format('YYYY-MM-DD HH:mm:ss')
-
-            orders_insertorders(characterID, orderID, stationID, volEntered,
-                                volRemaining, orderState, typeID, range,
-                                accountKey, duration, escrow, price,
-                                bid, issued)
+            insertblueprintsitems(characterID, itemID, locationID, typeID, quantity, flagID, timeEfficiency, materialEfficiency, runs)
 
 if __name__ == "__main__":
     main()
@@ -65,3 +54,4 @@ if __name__ == "__main__":
     print("[Completed Run:Sleeping for 1 Hour]")
     sys.stdout.flush()
     sleep(3900)
+
