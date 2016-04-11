@@ -1,18 +1,23 @@
 #-----------------------------------------------------------------------------
-# consumer_balances.py
+# consumer_balance.py
 # https://github.com/brentnowak/spotmarket
 #-----------------------------------------------------------------------------
 # Version: 0.1
 # - Initial release
 #-----------------------------------------------------------------------------
 
-from _utility import *
 from _balances import *
+from time import sleep
+import sys
 import evelink.char
 import evelink.api
+import requests.packages.urllib3
+
+requests.packages.urllib3.disable_warnings()
+#  Suppress InsecurePlatformWarning messages
 
 def main():
-    service = "consumer_balances.py"
+    service = "consumer_balance.py"
 
     # Get characters with walletEnabled = 1
     characters = json.loads(getcharacters())  # TODO rewrite function to return results specific to each consumer
@@ -37,3 +42,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+    # Sleep for 1 hour + extra before ending and triggering another run via supervisor
+    print("[Completed Run:Sleeping for 1 Hour]")
+    sys.stdout.flush()
+    sleep(3900)

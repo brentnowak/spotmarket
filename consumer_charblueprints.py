@@ -6,10 +6,15 @@
 # - Initial release
 #-----------------------------------------------------------------------------
 
-from _utility import *
 from _charblueprints import *
+from time import sleep
+import sys
 import evelink.char
 import evelink.api
+import requests.packages.urllib3
+
+requests.packages.urllib3.disable_warnings()
+#  Suppress InsecurePlatformWarning messages
 
 def main():
     service = "consumer_charblueprints.py"
@@ -45,3 +50,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+    # Sleep for 1 hour + extra before ending and triggering another run via supervisor
+    print("[Completed Run:Sleeping for 1 Hour]")
+    sys.stdout.flush()
+    sleep(3900)
+

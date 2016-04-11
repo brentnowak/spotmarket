@@ -197,18 +197,18 @@ def getnpckills_byregions(regions, factionName):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-    SUM(mapkills."factionKills") as factionKills,
-      mapkills."timestamp"
+    SUM(kill."factionKills") as factionKills,
+      kill."timestamp"
     FROM
-      data.mapkills,
+      map.kill,
       public."mapRegions",
       public."mapSolarSystems"
     WHERE
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
-      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapSolarSystems"."solarSystemID" = kill."solarSystemID" AND
       public."mapSolarSystems"."regionID" IN %s AND
       timestamp < TIMESTAMP 'yesterday'
-    GROUP BY mapkills."timestamp"
+    GROUP BY kill."timestamp"
     ORDER BY timestamp DESC
     '''
     data = (regions, )
@@ -224,19 +224,19 @@ def getnpckills_byfaction(regions):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-    SUM(mapkills."factionKills") as factionKills,
-      mapkills."timestamp",
+    SUM(kill."factionKills") as factionKills,
+      kill."timestamp",
       "mapRegions"."regionName"
     FROM
-      data.mapkills,
+      map.kill,
       public."mapRegions",
       public."mapSolarSystems"
     WHERE
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
-      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapSolarSystems"."solarSystemID" = kill."solarSystemID" AND
       public."mapSolarSystems"."regionID" IN %s AND
       timestamp < TIMESTAMP 'yesterday'
-    GROUP BY mapkills."timestamp", "mapRegions"."regionName"
+    GROUP BY kill."timestamp", "mapRegions"."regionName"
     ORDER BY timestamp DESC'''
     data = (regions,)
     cursor.execute(sql, data)
@@ -254,12 +254,12 @@ def getnpckills_byuniverse():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = """SELECT
-      SUM(mapkills."factionKills") as factionKills, timestamp
+      SUM(kill."factionKills") as factionKills, timestamp
     FROM
-      data.mapkills
+      map.kill
     WHERE
       timestamp < TIMESTAMP 'yesterday'
-    GROUP BY mapkills."timestamp"
+    GROUP BY kill."timestamp"
     ORDER BY timestamp DESC
     """
     cursor.execute(sql)
@@ -286,15 +286,15 @@ def getnpckills_bysecurity(low, high, name):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = """SELECT
-      SUM(mapkills."factionKills") as SUM_factionKills, timestamp
+      SUM(kill."factionKills") as SUM_factionKills, timestamp
     FROM
-      data.mapkills,
+      map.kill,
       public."mapSolarSystems"
     WHERE
-      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      kill."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
      "mapSolarSystems"."security" BETWEEN %s AND %s AND
       timestamp < TIMESTAMP 'yesterday'
-    GROUP BY mapkills."timestamp"
+    GROUP BY kill."timestamp"
     ORDER BY timestamp DESC
     """
     data = (low, high, )
@@ -313,18 +313,18 @@ def getnpckills_byregionsname(regions, regionName):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-    SUM(mapkills."factionKills") as factionKills,
-      mapkills."timestamp"
+    SUM(kill."factionKills") as factionKills,
+      kill."timestamp"
     FROM
-      data.mapkills,
+      map.kill,
       public."mapRegions",
       public."mapSolarSystems"
     WHERE
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
-      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapSolarSystems"."solarSystemID" = kill."solarSystemID" AND
       public."mapSolarSystems"."regionID" IN %s AND
       timestamp < TIMESTAMP 'yesterday'
-    GROUP BY mapkills."timestamp"
+    GROUP BY kill."timestamp"
     ORDER BY timestamp DESC
     '''
     data = (regions, )
@@ -392,21 +392,21 @@ def gettoprattingsystems_nullsec(): # TODO Need to parametrize by security class
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      mapkills."solarSystemID",
+      kill."solarSystemID",
       "mapSolarSystems"."solarSystemName",
       "mapSolarSystems"."security",
-      SUM(mapkills."factionKills") AS SUM_factionKills,
+      SUM(kill."factionKills") AS SUM_factionKills,
       "mapRegions"."regionName"
     FROM
-      data.mapkills,
+      map.kill,
       public."mapSolarSystems",
       public."mapRegions"
     WHERE
-      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapSolarSystems"."solarSystemID" = kill."solarSystemID" AND
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
       "mapSolarSystems"."security" < 0.0
-     GROUP BY mapkills."solarSystemID", "mapSolarSystems"."solarSystemName", "mapRegions"."regionName", "mapSolarSystems"."security"
-     ORDER BY SUM(mapkills."factionKills") DESC'''
+     GROUP BY kill."solarSystemID", "mapSolarSystems"."solarSystemName", "mapRegions"."regionName", "mapSolarSystems"."security"
+     ORDER BY SUM(kill."factionKills") DESC'''
     cursor.execute(sql, )
     df = pd.DataFrame(cursor.fetchall(),columns=['solarSystemID', 'solarSystemName', 'security', 'SUM_factionKills', 'regionName'])
     cursor.close()
@@ -420,21 +420,21 @@ def gettoprattingsystems_lowsec(): # TODO Need to parametrize by security class
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      mapkills."solarSystemID",
+      kill."solarSystemID",
       "mapSolarSystems"."solarSystemName",
       "mapSolarSystems"."security",
-      SUM(mapkills."factionKills") AS SUM_factionKills,
+      SUM(kill."factionKills") AS SUM_factionKills,
       "mapRegions"."regionName"
     FROM
-      data.mapkills,
+      map.kill,
       public."mapSolarSystems",
       public."mapRegions"
     WHERE
-      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapSolarSystems"."solarSystemID" = kill."solarSystemID" AND
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
       "mapSolarSystems"."security" BETWEEN 0.0 and 0.5
-     GROUP BY mapkills."solarSystemID", "mapSolarSystems"."solarSystemName", "mapRegions"."regionName", "mapSolarSystems"."security"
-     ORDER BY SUM(mapkills."factionKills") DESC'''
+     GROUP BY kill."solarSystemID", "mapSolarSystems"."solarSystemName", "mapRegions"."regionName", "mapSolarSystems"."security"
+     ORDER BY SUM(kill."factionKills") DESC'''
     cursor.execute(sql, )
     df = pd.DataFrame(cursor.fetchall(),columns=['solarSystemID', 'solarSystemName', 'security', 'SUM_factionKills', 'regionName'])
     cursor.close()
@@ -449,21 +449,21 @@ def gettoprattingsystems_highsec(): # TODO Need to parametrize by security class
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      mapkills."solarSystemID",
+      kill."solarSystemID",
       "mapSolarSystems"."solarSystemName",
       "mapSolarSystems"."security",
-      SUM(mapkills."factionKills") AS SUM_factionKills,
+      SUM(kill."factionKills") AS SUM_factionKills,
       "mapRegions"."regionName"
     FROM
-      data.mapkills,
+      map.kill,
       public."mapSolarSystems",
       public."mapRegions"
     WHERE
-      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapSolarSystems"."solarSystemID" = kill."solarSystemID" AND
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
       "mapSolarSystems"."security" BETWEEN 0.5 and 1.0
-     GROUP BY mapkills."solarSystemID", "mapSolarSystems"."solarSystemName", "mapRegions"."regionName", "mapSolarSystems"."security"
-     ORDER BY SUM(mapkills."factionKills") DESC'''
+     GROUP BY kill."solarSystemID", "mapSolarSystems"."solarSystemName", "mapRegions"."regionName", "mapSolarSystems"."security"
+     ORDER BY SUM(kill."factionKills") DESC'''
     cursor.execute(sql, )
     df = pd.DataFrame(cursor.fetchall(),columns=['solarSystemID', 'solarSystemName', 'security', 'SUM_factionKills', 'regionName'])
     cursor.close()
@@ -477,14 +477,14 @@ def gettoprattingregions_nullsec():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      SUM(mapkills."factionKills") as SUM_factionKills,
+      SUM(kill."factionKills") as SUM_factionKills,
       "mapRegions"."regionName"
     FROM
-      data.mapkills,
+      map.kill,
       public."mapRegions",
       public."mapSolarSystems"
     WHERE
-      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      kill."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
       "mapSolarSystems".security < 0.0
     GROUP BY "mapRegions"."regionName"
@@ -502,14 +502,14 @@ def gettoprattingregions_lowsec():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      SUM(mapkills."factionKills") as SUM_factionKills,
+      SUM(kill."factionKills") as SUM_factionKills,
       "mapRegions"."regionName"
     FROM
-      data.mapkills,
+      map.kill,
       public."mapRegions",
       public."mapSolarSystems"
     WHERE
-      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      kill."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
       "mapSolarSystems".security BETWEEN 0.0 and 0.5
     GROUP BY "mapRegions"."regionName"
@@ -527,14 +527,14 @@ def gettoprattingregions_highsec():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      SUM(mapkills."factionKills") as SUM_factionKills,
+      SUM(kill."factionKills") as SUM_factionKills,
       "mapRegions"."regionName"
     FROM
-      data.mapkills,
+      map.kill,
       public."mapRegions",
       public."mapSolarSystems"
     WHERE
-      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      kill."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
       "mapSolarSystems".security BETWEEN 0.5 and 1.0
     GROUP BY "mapRegions"."regionName"
@@ -549,18 +549,18 @@ def getnpckills_bysecurity_bytime():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-       SUM(mapkills."factionKills") as SUM_factionKills,
-       mapkills."timestamp",
+       SUM(kill."factionKills") as SUM_factionKills,
+       kill."timestamp",
       "mapRegions"."regionName"
     FROM
-      data.mapkills,
+      map.kill,
       public."mapRegions",
       public."mapSolarSystems"
     WHERE
-      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      kill."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
       "mapSolarSystems".security < 0.0
-    GROUP BY "mapRegions"."regionName", mapkills."timestamp"'''
+    GROUP BY "mapRegions"."regionName", kill."timestamp"'''
     cursor.execute(sql, )
     df = pd.DataFrame(cursor.fetchall(),columns=['SUM_factionKills', 'timestamp', 'regionName'])
     cursor.close()
@@ -585,7 +585,7 @@ def getdaterange_mapkills():
     sql = '''SELECT
       "timestamp"
     FROM
-      data.mapkills
+      map.kill
     ORDER BY "timestamp" ASC
     LIMIT 1'''
     cursor.execute(sql, )
@@ -596,7 +596,7 @@ def getdaterange_mapkills():
     sql = '''SELECT
       "timestamp"
     FROM
-      data.mapkills
+      map.kill
     ORDER BY "timestamp" DESC
     LIMIT 1'''
     cursor.execute(sql, )
@@ -609,13 +609,13 @@ def getsolarsystemmapkills(solarSystemID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      mapkills."timestamp",
-      mapkills."factionKills",
-      mapkills."podKills",
-      mapkills."shipKills"
+      kill."timestamp",
+      kill."factionKills",
+      kill."podKills",
+      kill."shipKills"
     FROM
-      data.mapkills
-     WHERE mapkills."solarSystemID" = %s'''
+      map.kill
+     WHERE kill."solarSystemID" = %s'''
     data = (solarSystemID, )
     cursor.execute(sql, data, )
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp', 'factionKills', 'podKills', 'shipKills'])
@@ -691,18 +691,18 @@ def getfactionkills_byfaction():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      mapkills."timestamp",
-      SUM (mapkills."factionKills") AS SUM_factionKills
+      kill."timestamp",
+      SUM (kill."factionKills") AS SUM_factionKills
     FROM
-      data.mapkills,
+      map.kill,
       public."mapRegions",
       public."mapSolarSystems"
     WHERE
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
-      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapSolarSystems"."solarSystemID" = kill."solarSystemID" AND
       "mapRegions"."regionID" IN ('10000031', '10000056', '10000062', '10000061', '10000025', '10000012', '10000008', '10000006', '10000005', '10000009', '10000011', '10000014')
-    GROUP BY mapkills."timestamp"
-    ORDER BY mapkills."timestamp" DESC'''
+    GROUP BY kill."timestamp"
+    ORDER BY kill."timestamp" DESC'''
     cursor.execute(sql, )
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp', 'SUM_factionKills'])
     df = df.set_index(['timestamp'])
@@ -729,8 +729,8 @@ def getsystemlogs():
       log.detail
     FROM
       system.log
-    ORDER BY log."logID" DESC
-    LIMIT 2000
+    ORDER BY log."timestamp" DESC
+    LIMIT 500
     '''
     cursor.execute(sql, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
@@ -764,18 +764,18 @@ def toprattingevents():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      mapkills."timestamp",
-      SUM(mapkills."factionKills") AS SUM_factionKills,
+      kill."timestamp",
+      SUM(kill."factionKills") AS SUM_factionKills,
       "mapSolarSystems"."solarSystemName",
       "mapRegions"."regionName"
     FROM
-      data.mapkills,
+      map.kill,
       public."mapRegions",
       public."mapSolarSystems"
     WHERE
-      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      kill."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
       "mapSolarSystems"."regionID" = "mapRegions"."regionID"
-    GROUP BY "mapSolarSystems"."solarSystemName", mapkills."timestamp", "mapRegions"."regionName"
+    GROUP BY "mapSolarSystems"."solarSystemName", kill."timestamp", "mapRegions"."regionName"
     ORDER BY SUM_factionKills DESC
     LIMIT 30
     '''
@@ -791,16 +791,16 @@ def topnullrattingsystems():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      SUM(mapkills."factionKills") AS SUM_factionKills,
+      SUM(kill."factionKills") AS SUM_factionKills,
       "mapSolarSystems"."solarSystemName",
       "mapSolarSystems"."security",
       "mapRegions"."regionName"
     FROM
-      data.mapkills,
+      map.kill,
       public."mapRegions",
       public."mapSolarSystems"
     WHERE
-      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      kill."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
       "mapSolarSystems"."security" < 0.0
     GROUP BY "mapSolarSystems"."solarSystemName", "mapSolarSystems"."security", "mapRegions"."regionName"
@@ -819,14 +819,14 @@ def topnullrattingregions():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      SUM(mapkills."factionKills") AS SUM_factionKills,
+      SUM(kill."factionKills") AS SUM_factionKills,
       "mapRegions"."regionName"
     FROM
-      data.mapkills,
+      map.kill,
       public."mapRegions",
       public."mapSolarSystems"
     WHERE
-      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      kill."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
       "mapSolarSystems"."security" < 0.0
     GROUP BY "mapRegions"."regionName"
@@ -850,17 +850,17 @@ def getregionrecordtimestamps():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-    mapkills."timestamp"
+    kill."timestamp"
     FROM
-      data.mapkills,
+      map.kill,
       public."mapRegions",
       public."mapSolarSystems"
     WHERE
-      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      kill."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
       "mapRegions"."regionID" IN ('10000031', '10000056', '10000062', '10000061', '10000025', '10000012', '10000008', '10000006', '10000005', '10000009', '10000011', '10000014')
-    GROUP BY mapkills."timestamp"
-    ORDER BY mapkills."timestamp" DESC
+    GROUP BY kill."timestamp"
+    ORDER BY kill."timestamp" DESC
     LIMIT 20'''
     cursor.execute(sql, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
@@ -874,16 +874,16 @@ def indexrattingbyfactionkills():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      SUM(mapkills."factionKills") as SUM_factionKills,
+      SUM(kill."factionKills") as SUM_factionKills,
       "mapSolarSystems"."solarSystemName",
       "mapSolarSystems"."solarSystemID",
       "mapRegions"."regionName"
     FROM
-      data.mapkills,
+      map.kill,
       public."mapRegions",
       public."mapSolarSystems"
     WHERE
-      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      kill."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
       "mapSolarSystems"."security" < 0.0
     GROUP BY "mapSolarSystems"."solarSystemName", "mapSolarSystems"."solarSystemID", "mapRegions"."regionName"
@@ -922,13 +922,13 @@ def indexrattingbyshipkills():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      SUM(mapkills."shipKills") as SUM_shipKills,
+      SUM(kill."shipKills") as SUM_shipKills,
       "mapSolarSystems"."solarSystemID"
     FROM
-      data.mapkills,
+      map.kill,
       public."mapSolarSystems"
     WHERE
-      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      kill."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
       "mapSolarSystems"."security" < 0.0
     GROUP BY "mapSolarSystems"."solarSystemID"
     ORDER BY SUM_shipKills ASC
@@ -944,13 +944,13 @@ def indexrattingbypodkills():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      SUM(mapkills."podKills") as SUM_podKills,
+      SUM(kill."podKills") as SUM_podKills,
       "mapSolarSystems"."solarSystemID"
     FROM
-      data.mapkills,
+      map.kill,
       public."mapSolarSystems"
     WHERE
-      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      kill."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
       "mapSolarSystems"."security" < 0.0
     GROUP BY "mapSolarSystems"."solarSystemID"
     ORDER BY SUM_podKills ASC
@@ -1001,18 +1001,18 @@ def rattinghistorytopsystemsbyregion(regionID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      mapkills."solarSystemID",
-      SUM(mapkills."factionKills") as SUM_factionKills
+      kill."solarSystemID",
+      SUM(kill."factionKills") as SUM_factionKills
     FROM
-      data.mapkills,
+      map.kill,
       public."mapRegions",
       public."mapSolarSystems"
     WHERE
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
-      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapSolarSystems"."solarSystemID" = kill."solarSystemID" AND
       "mapSolarSystems"."regionID" = %s
     GROUP BY
-     mapkills."solarSystemID"
+     kill."solarSystemID"
     ORDER BY SUM_factionKills DESC
     LIMIT 20'''
     data = (regionID, )
@@ -1026,22 +1026,22 @@ def rattinghistorybyregion(regionID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      mapkills."timestamp",
-      mapkills."factionKills",
-      mapkills."solarSystemID",
+      kill."timestamp",
+      kill."factionKills",
+      kill."solarSystemID",
       "mapSolarSystems"."solarSystemName",
       "mapRegions"."regionName"
     FROM
-      data.mapkills,
+      map.kill,
       public."mapRegions",
       public."mapSolarSystems"
     WHERE
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
-      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapSolarSystems"."solarSystemID" = kill."solarSystemID" AND
       "mapSolarSystems"."regionID" = %s
-    GROUP BY mapkills."timestamp",
-     mapkills."factionKills",
-     mapkills."solarSystemID",
+    GROUP BY kill."timestamp",
+     kill."factionKills",
+     kill."solarSystemID",
      "mapSolarSystems"."solarSystemName",
      "mapRegions"."regionName"
     '''
@@ -1057,22 +1057,22 @@ def rattinghistorybysystem(solarSystemID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      mapkills."timestamp",
-      mapkills."factionKills",
-      mapkills."solarSystemID",
+      kill."timestamp",
+      kill."factionKills",
+      kill."solarSystemID",
       "mapSolarSystems"."solarSystemName",
       "mapRegions"."regionName"
     FROM
-      data.mapkills,
+      map.kill,
       public."mapRegions",
       public."mapSolarSystems"
     WHERE
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
-      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapSolarSystems"."solarSystemID" = kill."solarSystemID" AND
       "mapSolarSystems"."solarSystemID" = %s
-    GROUP BY mapkills."timestamp",
-     mapkills."factionKills",
-     mapkills."solarSystemID",
+    GROUP BY kill."timestamp",
+     kill."factionKills",
+     kill."solarSystemID",
      "mapSolarSystems"."solarSystemName",
      "mapRegions"."regionName"
     '''
@@ -1173,24 +1173,24 @@ def getsovevents():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      to_char(mapsov."timestamp", 'YYYY-MM-dd HH:mm:ss') AS timestamp,
-      mapsov."solarSystemID",
-      mapsov."allianceID",
-      mapsov."corporationID",
+      to_char(sov."timestamp", 'YYYY-MM-dd HH:mm:ss') AS timestamp,
+      sov."solarSystemID",
+      sov."allianceID",
+      sov."corporationID",
       "mapSolarSystems"."solarSystemName",
       "mapRegions"."regionName",
       alliances.name AS allianceName,
       alliances.ticker
     FROM
-      data.mapsov,
+      map.sov,
       meta.alliances,
       public."mapSolarSystems",
       public."mapRegions"
     WHERE
-        mapsov."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
-        mapsov."allianceID" = alliances."allianceID" AND
+        sov."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+        sov."allianceID" = alliances."allianceID" AND
         "mapRegions"."regionID" = "mapSolarSystems"."regionID"
-    ORDER BY mapsov."timestamp" DESC
+    ORDER BY sov."timestamp" DESC
     '''
     cursor.execute(sql, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
@@ -1235,12 +1235,12 @@ def getsovbyregion(regionID):
     FROM
       meta.alliances,
       public."mapSolarSystems",
-      data.mapsov,
+      map.sov,
       public."mapRegions"
     WHERE
-      "mapSolarSystems"."solarSystemID" = mapsov."solarSystemID" AND
+      "mapSolarSystems"."solarSystemID" = sov."solarSystemID" AND
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
-      mapsov."allianceID" = alliances."allianceID" AND
+      sov."allianceID" = alliances."allianceID" AND
       "mapRegions"."regionID" = %s
     '''
     data = (regionID, )
@@ -1252,6 +1252,7 @@ def getsovbyregion(regionID):
     else:
         return results
 
+
 def getrattingbyregion(regionID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
@@ -1262,20 +1263,20 @@ def getrattingbyregion(regionID):
       alliances.ticker,
       alliances.name,
       mapsov."allianceID",
-      SUM(mapkills."factionKills") as SUM_factionKills,
-      mapkills."timestamp"
+      SUM(kill."factionKills") as SUM_factionKills,
+      kill."timestamp"
     FROM
       meta.alliances,
       public."mapSolarSystems",
       data.mapsov,
-      data.mapkills
+      map.kill
     WHERE
       "mapSolarSystems"."solarSystemID" = mapsov."solarSystemID" AND
       mapsov."allianceID" = alliances."allianceID" AND
-      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      kill."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
       "mapSolarSystems"."regionID" = %s
     GROUP BY
-      mapkills."solarSystemID", "mapSolarSystems"."solarSystemName", "mapSolarSystems".security,  alliances.ticker, alliances.name, mapsov."allianceID", mapkills."timestamp"
+      kill."solarSystemID", "mapSolarSystems"."solarSystemName", "mapSolarSystems".security,  alliances.ticker, alliances.name, mapsov."allianceID", kill."timestamp"
     '''
     data = (regionID, )
     cursor.execute(sql, data, )
@@ -1294,19 +1295,19 @@ def gettoprattingbyregion(regionID):
       alliances.ticker,
       alliances.name,
       mapsov."allianceID",
-      SUM(mapkills."factionKills") as SUM_factionKills
+      SUM(kill."factionKills") as SUM_factionKills
     FROM
       meta.alliances,
       public."mapSolarSystems",
       data.mapsov,
-      data.mapkills
+      map.kill
     WHERE
       "mapSolarSystems"."solarSystemID" = mapsov."solarSystemID" AND
       mapsov."allianceID" = alliances."allianceID" AND
-      mapkills."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
+      kill."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
       "mapSolarSystems"."regionID" = %s
     GROUP BY
-      mapkills."solarSystemID", "mapSolarSystems"."solarSystemName", "mapSolarSystems".security,  alliances.ticker, alliances.name, mapsov."allianceID"
+      kill."solarSystemID", "mapSolarSystems"."solarSystemName", "mapSolarSystems".security,  alliances.ticker, alliances.name, mapsov."allianceID"
     '''
     data = (regionID, )
     cursor.execute(sql, data, )
@@ -1411,7 +1412,7 @@ def getmoonmineralsbytypeid(typeID):
       "mapSolarSystems"."solarSystemName",
       "mapSolarSystems".security,
       "mapRegions"."regionName",
-      mapsov."allianceID",
+      sov."allianceID",
       alliances.name,
       alliances.ticker
     FROM
@@ -1421,14 +1422,14 @@ def getmoonmineralsbytypeid(typeID):
       public."mapSolarSystems",
       public."mapRegions",
       meta.alliances,
-      data.mapsov
+      map.sov
     WHERE
       "mapDenormalize"."itemID" = moonminerals."moonID" AND
       "invTypes"."typeID" = moonminerals."typeID" AND
       "mapSolarSystems"."solarSystemID" = "mapDenormalize"."solarSystemID" AND
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
-      alliances."allianceID" = mapsov."allianceID" AND
-      mapsov."solarSystemID" = "mapDenormalize"."solarSystemID" AND
+      alliances."allianceID" = sov."allianceID" AND
+      sov."solarSystemID" = "mapDenormalize"."solarSystemID" AND
       "invTypes"."typeID" = %s
     '''
     data = (typeID, )
@@ -1453,14 +1454,14 @@ def getmoonmineralsbyalliance(typeID):
       public."mapSolarSystems",
       public."mapRegions",
       meta.alliances,
-      data.mapsov
+      map.sov
     WHERE
       "mapDenormalize"."itemID" = moonminerals."moonID" AND
       "invTypes"."typeID" = moonminerals."typeID" AND
       "mapSolarSystems"."solarSystemID" = "mapDenormalize"."solarSystemID" AND
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
-      alliances."allianceID" = mapsov."allianceID" AND
-      mapsov."solarSystemID" = "mapDenormalize"."solarSystemID" AND
+      alliances."allianceID" = sov."allianceID" AND
+      sov."solarSystemID" = "mapDenormalize"."solarSystemID" AND
       "invTypes"."typeID" = %s
     GROUP BY
       alliances.name,
@@ -1489,14 +1490,14 @@ def getmoonmineralsbysov():
       public."mapSolarSystems",
       public."mapRegions",
       meta.alliances,
-      data.mapsov
+      map.sov
     WHERE
       "mapDenormalize"."itemID" = moonminerals."moonID" AND
       "invTypes"."typeID" = moonminerals."typeID" AND
       "mapSolarSystems"."solarSystemID" = "mapDenormalize"."solarSystemID" AND
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
-      alliances."allianceID" = mapsov."allianceID" AND
-      mapsov."solarSystemID" = "mapDenormalize"."solarSystemID"
+      alliances."allianceID" = sov."allianceID" AND
+      sov."solarSystemID" = "mapDenormalize"."solarSystemID"
     GROUP BY
       alliances.name,
       alliances.ticker
@@ -1638,22 +1639,22 @@ def mapkills_npckillsbyregion(regionID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      mapkills."timestamp",
-      SUM(mapkills."factionKills") as SUM_factionKills,
+      kill."timestamp",
+      SUM(kill."factionKills") as SUM_factionKills,
       "mapRegions"."regionName"
     FROM
-      data.mapkills,
+      map.kill,
       public."mapRegions",
       public."mapSolarSystems"
     WHERE
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
-      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapSolarSystems"."solarSystemID" = kill."solarSystemID" AND
       "mapSolarSystems"."regionID" = %s AND
       timestamp < TIMESTAMP 'yesterday'
     GROUP BY
-      mapkills."timestamp",
+      kill."timestamp",
       "mapRegions"."regionName"
-    ORDER BY mapkills."timestamp" DESC
+    ORDER BY kill."timestamp" DESC
       '''
     data = (regionID, )
     cursor.execute(sql, data, )
@@ -1668,22 +1669,22 @@ def mapkills_shipkillsbyregion(regionID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      mapkills."timestamp",
-      SUM(mapkills."shipKills") as SUM_shipKills,
+      kill."timestamp",
+      SUM(kill."shipKills") as SUM_shipKills,
       "mapRegions"."regionName"
     FROM
-      data.mapkills,
+      map.kill,
       public."mapRegions",
       public."mapSolarSystems"
     WHERE
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
-      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapSolarSystems"."solarSystemID" = kill."solarSystemID" AND
       "mapSolarSystems"."regionID" = %s AND
       timestamp < TIMESTAMP 'yesterday'
     GROUP BY
-      mapkills."timestamp",
+      kill."timestamp",
       "mapRegions"."regionName"
-    ORDER BY mapkills."timestamp" DESC
+    ORDER BY kill."timestamp" DESC
       '''
     data = (regionID, )
     cursor.execute(sql, data, )
@@ -1698,22 +1699,22 @@ def mapkills_podkillsbyregion(regionID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      mapkills."timestamp",
-      SUM(mapkills."podKills") as SUM_podKills,
+      kill."timestamp",
+      SUM(kill."podKills") as SUM_podKills,
       "mapRegions"."regionName"
     FROM
-      data.mapkills,
+      map.kill,
       public."mapRegions",
       public."mapSolarSystems"
     WHERE
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
-      "mapSolarSystems"."solarSystemID" = mapkills."solarSystemID" AND
+      "mapSolarSystems"."solarSystemID" = kill."solarSystemID" AND
       "mapSolarSystems"."regionID" = %s AND
       timestamp < TIMESTAMP 'yesterday'
     GROUP BY
-      mapkills."timestamp",
+      kill."timestamp",
       "mapRegions"."regionName"
-    ORDER BY mapkills."timestamp" DESC
+    ORDER BY kill."timestamp" DESC
       '''
     data = (regionID, )
     cursor.execute(sql, data, )
@@ -1790,13 +1791,13 @@ def getkillmails_typeid_solarsystem(typeIDs, solarSystemIDs):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-     COUNT(killmails."killData"->'solarSystem'->'id') as count,
-     killmails."killData"->'killTime' as timestamp
+     COUNT(kill.mail."killData"->'solarSystem'->'id') as count,
+     kill.mail."killData"->'killTime' as timestamp
     FROM
-     data.killmails
+     kill.mail
     WHERE
-     (killmails."killData"->'victim'->'shipType'->>'id')::int IN %s AND
-     (killmails."killData"->'solarSystem'->>'id')::int IN %s
+     (kill.mail."killData"->'victim'->'shipType'->>'id')::int IN %s AND
+     (kill.mail."killData"->'solarSystem'->>'id')::int IN %s
     GROUP BY
      timestamp
     ORDER BY
