@@ -16,6 +16,10 @@ import evelink.map
 import sys
 from _map import *
 from time import sleep
+import requests.packages.urllib3
+
+requests.packages.urllib3.disable_warnings()
+#  Suppress InsecurePlatformWarning messages
 
 # API
 killsapi = evelink.map.Map()

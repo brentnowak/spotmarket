@@ -15,7 +15,7 @@ def map_insertkillsrecords(killsapi_data, maptimestamp):
             pod = value['pod']
             conn = psycopg2.connect(conn_string)
             cursor = conn.cursor()
-            sql = 'INSERT INTO map.kills (timestamp, "solarSystemID", "shipKills", "factionKills", "podKills") VALUES (%s, %s, %s, %s, %s)'
+            sql = 'INSERT INTO map.kill (timestamp, "solarSystemID", "shipKills", "factionKills", "podKills") VALUES (%s, %s, %s, %s, %s)'
             data = (maptimestamp, id, ship, faction, pod, )
             cursor.execute(sql, data, )
         except psycopg2.IntegrityError:

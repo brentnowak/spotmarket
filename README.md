@@ -130,13 +130,6 @@ cd spotmarket
 sudo pip install -r requirements.txt
 ```
 
-**Make Scripts Executable**
-```shell
-cd spotmarket
-cd scripts/
-chmod +x *
-```
-
 **PostgreSQL**
 ```shell
 sudo su - postgres
@@ -177,7 +170,7 @@ psql -d spotmarket -U spotmarketadmin -W
 **Database Creation**
 If you have setup the server instance correctly, you should be presented with a prompt that indicates you are connected.
 ```shell
-psql (9.5.1)
+psql (9.5.x)
 Type "help" for help.
 
 spotmarket=>
