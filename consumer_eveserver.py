@@ -12,7 +12,7 @@ def main():
     serverapi = evelink.server.Server()
     serverapiresponse = serverapi.server_status()
     serverapi_data = serverapiresponse.result
-    serverapi_cachedUntil = arrow.get(serverapiresponse.expires)
+    serverapi_cachedUntil = arrow.get(serverapiresponse.timestamp)
     servertimestamp = serverapi_cachedUntil.format('YYYY-MM-DD HH:mm:ss')
 
     players = serverapi_data['players']
