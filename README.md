@@ -169,6 +169,7 @@ psql -d spotmarket -U spotmarketadmin -W
 
 **Database Creation**
 If you have setup the server instance correctly, you should be presented with a prompt that indicates you are connected.
+
 ```shell
 psql (9.5.x)
 Type "help" for help.
@@ -198,7 +199,8 @@ mv config.ini.change config.ini
 As root
 ```shell
 cp supervisor/*.conf /etc/supervisor/conf.d/
-service supervisor restart```
+service supervisor restart
+```
 
 Reload conf files, as root
 ```shell
