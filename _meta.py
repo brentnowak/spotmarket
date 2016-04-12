@@ -23,6 +23,31 @@ def meta_insertconquerablestation(station_data):
     return insertcount
 
 
-def collation_insertcollation(collationName):
+def coalition_insertcollation(coalitionID, coalitionName):
+    try:
+        conn = psycopg2.connect(conn_string)
+        cursor = conn.cursor()
+        sql = 'INSERT INTO meta."coalition" ("coalitionID", "name") VALUES (%s, %s)'
+        data = (coalitionID, coalitionName, )
+        cursor.execute(sql, data, )
+    except psycopg2.IntegrityError:
+        conn.rollback()
+    else:
+        conn.commit()
+    return 0
 
+
+def collation_updatecoalition(coalitionID, allianceID):
+    try:
+        conn = psycopg2.connect(conn_string)
+        cursor = conn.cursor()
+        sql = '''UPDATE meta.alliance
+            SET "coalitionID" = %s
+            WHERE "allianceID" = %s'''
+        data = (coalitionID, allianceID, )
+        cursor.execute(sql, data, )
+    except psycopg2.IntegrityError:
+        conn.rollback()
+    else:
+        conn.commit()
     return 0

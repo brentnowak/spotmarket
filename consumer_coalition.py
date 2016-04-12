@@ -13,15 +13,14 @@ def main():
     result = result['coalitions']
 
     for row in result:
-        collationName = row['name']
-        collation_insertcollation(collationName)
+        coalitionID = row['_id']
+        coalitionName = row['name']
+        coalition_insertcollation(coalitionID, coalitionName)
         for alliance in row['alliances']:
-            ticker = alliance['shortName']
-            name = alliance['name']
+            #ticker = alliance['shortName']
+            #name = alliance['name']
             allianceID = alliance['id']
-            print(str(name) + "," + str(allianceID))
-        print("-------------------")
-
+            collation_updatecoalition(coalitionID, allianceID)
 
 
 if __name__ == "__main__":
