@@ -8,7 +8,7 @@
 
 import requests.packages.urllib3
 import random
-from _kills import *
+from _kill import *
 from time import sleep
 
 requests.packages.urllib3.disable_warnings()

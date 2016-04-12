@@ -1179,16 +1179,16 @@ def getsovevents():
       sov."corporationID",
       "mapSolarSystems"."solarSystemName",
       "mapRegions"."regionName",
-      alliances.name AS allianceName,
-      alliances.ticker
+      alliance.name AS allianceName,
+      alliance.ticker
     FROM
       map.sov,
-      meta.alliances,
+      meta.alliance,
       public."mapSolarSystems",
       public."mapRegions"
     WHERE
         sov."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
-        sov."allianceID" = alliances."allianceID" AND
+        sov."allianceID" = alliance."allianceID" AND
         "mapRegions"."regionID" = "mapSolarSystems"."regionID"
     ORDER BY sov."timestamp" DESC
     '''
@@ -1230,17 +1230,17 @@ def getsovbyregion(regionID):
       "mapSolarSystems"."solarSystemName",
       "mapSolarSystems".security,
       mapsov."allianceID",
-      alliances.ticker,
-      alliances.name
+      alliance.ticker,
+      alliance.name
     FROM
-      meta.alliances,
+      meta.alliance,
       public."mapSolarSystems",
       map.sov,
       public."mapRegions"
     WHERE
       "mapSolarSystems"."solarSystemID" = sov."solarSystemID" AND
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
-      sov."allianceID" = alliances."allianceID" AND
+      sov."allianceID" = alliance."allianceID" AND
       "mapRegions"."regionID" = %s
     '''
     data = (regionID, )
@@ -1260,23 +1260,23 @@ def getrattingbyregion(regionID):
         SELECT
       "mapSolarSystems"."solarSystemName",
       "mapSolarSystems".security,
-      alliances.ticker,
-      alliances.name,
+      alliance.ticker,
+      alliance.name,
       mapsov."allianceID",
       SUM(kill."factionKills") as SUM_factionKills,
       kill."timestamp"
     FROM
-      meta.alliances,
+      meta.alliance,
       public."mapSolarSystems",
       data.mapsov,
       map.kill
     WHERE
       "mapSolarSystems"."solarSystemID" = mapsov."solarSystemID" AND
-      mapsov."allianceID" = alliances."allianceID" AND
+      mapsov."allianceID" = alliance."allianceID" AND
       kill."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
       "mapSolarSystems"."regionID" = %s
     GROUP BY
-      kill."solarSystemID", "mapSolarSystems"."solarSystemName", "mapSolarSystems".security,  alliances.ticker, alliances.name, mapsov."allianceID", kill."timestamp"
+      kill."solarSystemID", "mapSolarSystems"."solarSystemName", "mapSolarSystems".security,  alliance.ticker, alliance.name, mapsov."allianceID", kill."timestamp"
     '''
     data = (regionID, )
     cursor.execute(sql, data, )
@@ -1292,22 +1292,22 @@ def gettoprattingbyregion(regionID):
         SELECT
       "mapSolarSystems"."solarSystemName",
       "mapSolarSystems".security,
-      alliances.ticker,
-      alliances.name,
+      alliance.ticker,
+      alliance.name,
       mapsov."allianceID",
       SUM(kill."factionKills") as SUM_factionKills
     FROM
-      meta.alliances,
+      meta.alliance,
       public."mapSolarSystems",
       data.mapsov,
       map.kill
     WHERE
       "mapSolarSystems"."solarSystemID" = mapsov."solarSystemID" AND
-      mapsov."allianceID" = alliances."allianceID" AND
+      mapsov."allianceID" = alliance."allianceID" AND
       kill."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
       "mapSolarSystems"."regionID" = %s
     GROUP BY
-      kill."solarSystemID", "mapSolarSystems"."solarSystemName", "mapSolarSystems".security,  alliances.ticker, alliances.name, mapsov."allianceID"
+      kill."solarSystemID", "mapSolarSystems"."solarSystemName", "mapSolarSystems".security,  alliance.ticker, alliance.name, mapsov."allianceID"
     '''
     data = (regionID, )
     cursor.execute(sql, data, )
@@ -1372,22 +1372,22 @@ def getmoonmineralsbyregion(regionID):  # TODO change join to return results whe
       "mapSolarSystems".security,
       "mapRegions"."regionName",
       mapsov."allianceID",
-      alliances.name,
-      alliances.ticker
+      alliance.name,
+      alliance.ticker
     FROM
       data.moonminerals,
       public."mapDenormalize",
       public."invTypes",
       public."mapSolarSystems",
       public."mapRegions",
-      meta.alliances,
+      meta.alliance,
       data.mapsov
     WHERE
       "mapDenormalize"."itemID" = moonminerals."moonID" AND
       "invTypes"."typeID" = moonminerals."typeID" AND
       "mapSolarSystems"."solarSystemID" = "mapDenormalize"."solarSystemID" AND
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
-      alliances."allianceID" = mapsov."allianceID" AND
+      alliance."allianceID" = mapsov."allianceID" AND
       mapsov."solarSystemID" = "mapDenormalize"."solarSystemID" AND
       "mapRegions"."regionID" = %s
     '''
@@ -1413,22 +1413,22 @@ def getmoonmineralsbytypeid(typeID):
       "mapSolarSystems".security,
       "mapRegions"."regionName",
       sov."allianceID",
-      alliances.name,
-      alliances.ticker
+      alliance.name,
+      alliance.ticker
     FROM
       data.moonminerals,
       public."mapDenormalize",
       public."invTypes",
       public."mapSolarSystems",
       public."mapRegions",
-      meta.alliances,
+      meta.alliance,
       map.sov
     WHERE
       "mapDenormalize"."itemID" = moonminerals."moonID" AND
       "invTypes"."typeID" = moonminerals."typeID" AND
       "mapSolarSystems"."solarSystemID" = "mapDenormalize"."solarSystemID" AND
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
-      alliances."allianceID" = sov."allianceID" AND
+      alliance."allianceID" = sov."allianceID" AND
       sov."solarSystemID" = "mapDenormalize"."solarSystemID" AND
       "invTypes"."typeID" = %s
     '''
@@ -1446,26 +1446,26 @@ def getmoonmineralsbyalliance(typeID):
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
     COUNT(moonminerals."moonID") as SUM_moonID,
-      alliances.name
+      alliance.name
     FROM
       data.moonminerals,
       public."mapDenormalize",
       public."invTypes",
       public."mapSolarSystems",
       public."mapRegions",
-      meta.alliances,
+      meta.alliance,
       map.sov
     WHERE
       "mapDenormalize"."itemID" = moonminerals."moonID" AND
       "invTypes"."typeID" = moonminerals."typeID" AND
       "mapSolarSystems"."solarSystemID" = "mapDenormalize"."solarSystemID" AND
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
-      alliances."allianceID" = sov."allianceID" AND
+      alliance."allianceID" = sov."allianceID" AND
       sov."solarSystemID" = "mapDenormalize"."solarSystemID" AND
       "invTypes"."typeID" = %s
     GROUP BY
-      alliances.name,
-      alliances.ticker
+      alliance.name,
+      alliance.ticker
     ORDER BY
       SUM_moonID DESC'''
     data = (typeID, )
@@ -1482,25 +1482,25 @@ def getmoonmineralsbysov():
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
     COUNT(moonminerals."moonID") as SUM_moonID,
-      alliances.name
+      alliance.name
     FROM
       data.moonminerals,
       public."mapDenormalize",
       public."invTypes",
       public."mapSolarSystems",
       public."mapRegions",
-      meta.alliances,
+      meta.alliance,
       map.sov
     WHERE
       "mapDenormalize"."itemID" = moonminerals."moonID" AND
       "invTypes"."typeID" = moonminerals."typeID" AND
       "mapSolarSystems"."solarSystemID" = "mapDenormalize"."solarSystemID" AND
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
-      alliances."allianceID" = sov."allianceID" AND
+      alliance."allianceID" = sov."allianceID" AND
       sov."solarSystemID" = "mapDenormalize"."solarSystemID"
     GROUP BY
-      alliances.name,
-      alliances.ticker
+      alliance.name,
+      alliance.ticker
     ORDER BY
       SUM_moonID DESC'''
     cursor.execute(sql, )
@@ -1521,29 +1521,29 @@ def getdeadendsystems(gateCountLimit):
       "mapSolarSystems"."solarSystemID",
       "mapSolarSystems"."solarSystemName",
       "mapRegions"."regionName",
-      alliances."allianceID",
-      alliances.ticker,
-      alliances.name
+      alliance."allianceID",
+      alliance.ticker,
+      alliance.name
     FROM
       public."mapSolarSystemJumps",
       public."mapSolarSystems",
       public."mapRegions",
       data.mapsov,
-      meta.alliances,
+      meta.alliance,
       meta.conquerablestations
     WHERE
       "mapSolarSystemJumps"."toSolarSystemID" = "mapSolarSystems"."solarSystemID" AND
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
       mapsov."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
-      alliances."allianceID" = mapsov."allianceID" AND
+      alliance."allianceID" = mapsov."allianceID" AND
       conquerablestations."solarSystemID" = "mapSolarSystems"."solarSystemID"
     GROUP BY
       "mapSolarSystems"."solarSystemID",
       "mapSolarSystems"."solarSystemName",
       "mapRegions"."regionName",
-      alliances."allianceID",
-      alliances.ticker,
-      alliances.name
+      alliance."allianceID",
+      alliance.ticker,
+      alliance.name
     HAVING COUNT("mapSolarSystemJumps"."fromSolarSystemID") = %s'''
     data = (gateCountLimit, )
     cursor.execute(sql, data, )

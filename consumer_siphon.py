@@ -11,7 +11,7 @@
 # Right now it is using zKillboard as filter to find killmails for Siphon units and then uses the killID+Hash to look up the CREST killmail.
 #-----------------------------------------------------------------------------
 
-from _kills import *
+from _kill import *
 from time import sleep
 import sys
 import requests

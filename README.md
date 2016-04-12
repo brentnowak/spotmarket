@@ -53,7 +53,7 @@ Services
 **consumer_alliance.py**
 
 Input: XML API.  
-Output: Populate 'meta.alliances' table with list of current Alliances.  
+Output: Populate 'meta.typeID' table with list of current typeID.  
 
 **consumer_conquerablestation.py**
 

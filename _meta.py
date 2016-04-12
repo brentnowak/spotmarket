@@ -21,3 +21,8 @@ def meta_insertconquerablestation(station_data):
             conn.commit()
             insertcount += 1
     return insertcount
+
+
+def collation_insertcollation(collationName):
+
+    return 0

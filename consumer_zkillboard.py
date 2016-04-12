@@ -17,7 +17,7 @@
 import concurrent.futures
 import multiprocessing
 import requests.packages.urllib3
-from _kills import *
+from _kill import *
 from time import sleep
 from requests.exceptions import ConnectionError, ChunkedEncodingError
 

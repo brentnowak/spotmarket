@@ -9,7 +9,7 @@
 import evelink.eve
 import sys
 from time import sleep
-from _alliances import *
+from _alliance import *
 
 # API
 allianceapi = evelink.eve.EVE()
@@ -20,8 +20,7 @@ alliance_data = allianceresponse[0]
 
 
 def main():
-    count_allianceinsert = insertalliancesrecords(alliance_data)
-    print(count_allianceinsert)
+    count_allianceinsert = alliance_insertrecords(alliance_data)
 
 
 if __name__ == "__main__":

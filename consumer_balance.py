@@ -6,7 +6,7 @@
 # - Initial release
 #-----------------------------------------------------------------------------
 
-from _balances import *
+from _balance import *
 from time import sleep
 import sys
 import evelink.char

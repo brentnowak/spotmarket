@@ -90,22 +90,22 @@ def meta_conquerablestationslist():
       conquerablestation."solarSystemID",
       conquerablestation."stationID",
       conquerablestation.name AS stationName,
-      alliances."allianceID",
-      alliances.ticker,
-      alliances.name AS allianceName,
+      alliance."allianceID",
+      alliance.ticker,
+      alliance.name AS allianceName,
       "mapSolarSystems"."solarSystemName",
       "mapSolarSystems".security,
       "mapRegions"."regionName"
     FROM
       meta.conquerablestation,
-      meta.alliances,
+      meta.alliance,
       map.sov,
       public."mapSolarSystems",
       public."mapRegions"
     WHERE
       conquerablestation."solarSystemID" = sov."solarSystemID" AND
       conquerablestation."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
-      sov."allianceID" = alliances."allianceID" AND
+      sov."allianceID" = alliance."allianceID" AND
       "mapRegions"."regionID" = "mapSolarSystems"."regionID"'''
     cursor.execute(sql, )
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)

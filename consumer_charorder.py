@@ -6,7 +6,7 @@
 # - Initial release
 #-----------------------------------------------------------------------------
 
-from _charorders import *
+from _charorder import *
 from time import sleep
 import sys
 import evelink.char

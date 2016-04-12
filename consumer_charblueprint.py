@@ -6,7 +6,7 @@
 # - Initial release
 #-----------------------------------------------------------------------------
 
-from _charblueprints import *
+from _charblueprint import *
 from time import sleep
 import sys
 import evelink.char
