@@ -5,6 +5,7 @@ from _dashboard import *
 from _wallet import *
 from _system import *
 from _market import *
+from _map import *
 
 
 #############################
