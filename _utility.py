@@ -1564,15 +1564,15 @@ def mapjumps_solarsystemID(solarSystemID):
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
       timestamp,
-      mapjumps."shipJumps",
+      jump."shipJumps",
       "mapSolarSystems"."solarSystemName"
     FROM
-      data.mapjumps,
+      map.jump,
       public."mapSolarSystems"
     WHERE mapjumps."solarSystemID" = %s AND
-      "mapSolarSystems"."solarSystemID" = mapjumps."solarSystemID" AND
+      "mapSolarSystems"."solarSystemID" = jump."solarSystemID" AND
       timestamp < TIMESTAMP 'yesterday'
-    ORDER BY mapjumps."timestamp" DESC'''
+    ORDER BY jump."timestamp" DESC'''
     data = (solarSystemID, )
     cursor.execute(sql, data, )
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','shipJumps','solarSystemName'])
@@ -1587,16 +1587,16 @@ def mapjumps_tradehubs():
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
       timestamp,
-      mapjumps."shipJumps",
+      jump."shipJumps",
       "mapSolarSystems"."solarSystemName"
     FROM
-      data.mapjumps,
+      map.jump,
       public."mapSolarSystems"
     WHERE
-      "mapSolarSystems"."solarSystemID" = mapjumps."solarSystemID" AND
-      mapjumps."solarSystemID" IN (30002187, 30000142, 30002659, 30002510) AND
+      "mapSolarSystems"."solarSystemID" = jump."solarSystemID" AND
+      jump."solarSystemID" IN (30002187, 30000142, 30002659, 30002510) AND
       timestamp < TIMESTAMP 'yesterday'
-    ORDER BY mapjumps."timestamp" DESC'''
+    ORDER BY jump."timestamp" DESC'''
     cursor.execute(sql, )
     df = pd.DataFrame(cursor.fetchall(),columns=['timestamp','shipJumps','solarSystemName'])
     cursor.close()
@@ -1609,22 +1609,22 @@ def mapkills_jumpsbyregion(regionID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''SELECT
-      mapjumps."timestamp",
-      SUM(mapjumps."shipJumps") as SUM_shipJumps,
+      jump."timestamp",
+      SUM(jump."shipJumps") as SUM_shipJumps,
       "mapRegions"."regionName"
     FROM
-      data.mapjumps,
+      map.jump,
       public."mapRegions",
       public."mapSolarSystems"
     WHERE
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
-      "mapSolarSystems"."solarSystemID" = mapjumps."solarSystemID" AND
+      "mapSolarSystems"."solarSystemID" = jump."solarSystemID" AND
       "mapSolarSystems"."regionID" = %s AND
       timestamp < TIMESTAMP 'yesterday'
     GROUP BY
-      mapjumps."timestamp",
+      jump."timestamp",
       "mapRegions"."regionName"
-    ORDER BY mapjumps."timestamp" DESC
+    ORDER BY jump."timestamp" DESC
       '''
     data = (regionID, )
     cursor.execute(sql, data, )
