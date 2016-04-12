@@ -1530,7 +1530,7 @@ def getdeadendsystems(gateCountLimit):
       public."mapRegions",
       data.mapsov,
       meta.alliances,
-      data.conquerablestations
+      meta.conquerablestations
     WHERE
       "mapSolarSystemJumps"."toSolarSystemID" = "mapSolarSystems"."solarSystemID" AND
       "mapSolarSystems"."regionID" = "mapRegions"."regionID" AND
