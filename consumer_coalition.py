@@ -1,3 +1,4 @@
+# Source    http://rischwa.net/coalitions/
 # Input     http://rischwa.net/api/coalitions/current
 # Output    meta."collation"
 
