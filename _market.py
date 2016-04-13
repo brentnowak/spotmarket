@@ -206,3 +206,104 @@ def market_getcrestdata(regionID, typeID):
         log = "[typeID:" + str(typeID) + "][regionID:" + str(regionID) + "][insert: " + str(count) + "]"
         insertlog("consumer_markethistory.py", 0, log, timemark)
         return 1
+
+
+
+def market_speculationpricechange():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''
+    SELECT
+      speculation."transactionID", speculation."typeID"
+    FROM
+      market.speculation
+    '''
+    cursor.execute(sql, )
+    transactions = cursor.fetchall()
+    cursor.close()
+
+    df = pd.DataFrame()
+    for transaction in transactions:
+        df = df.append(market_speculationpricechangeitem(transaction['typeID'], transaction['transactionID']))
+    return df.reset_index().to_json(orient='records')
+
+
+def market_speculationtotals():
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''
+    SELECT
+      speculation."transactionID", speculation."typeID"
+    FROM
+      market.speculation
+    '''
+    cursor.execute(sql, )
+    transactions = cursor.fetchall()
+    cursor.close()
+
+    df = pd.DataFrame()
+    for transaction in transactions:
+        df = df.append(market_speculationpricechangeitem(transaction['typeID'], transaction['transactionID']))
+    results = {}
+    results['purchaseValue'] = df['purchaseValue'].sum()
+    results['speculationValue'] = df['speculationValue'].sum()
+    results['valueChange'] = df['valueChange'].sum()
+    return results
+
+
+def market_speculationpricechangeitem(typeID, transactionID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''SELECT
+      speculation."transactionID",
+      speculation."typeID",
+      speculation."typeID" as "iconID",
+      "invTypes"."typeName",
+      speculation.quantity,
+      speculation.remaining,
+      speculation.price as "purchasePrice",
+      speculation.price * speculation.remaining as "purchaseValue",
+      (SELECT
+        history."avgPrice"
+        FROM
+        market.history
+        WHERE "typeID" = %s AND
+        "regionID" = 10000002
+        ORDER BY "timestamp" DESC
+        LIMIT 1) as "latestJitaPrice",
+      (SELECT
+        history."avgPrice"
+        FROM
+        market.history
+        WHERE "typeID" = %s AND
+        "regionID" = 10000002
+        ORDER BY "timestamp" DESC
+        LIMIT 1) * speculation.remaining as "speculationValue",
+      (SELECT
+        history."timestamp"
+        FROM
+        market.history
+        WHERE "typeID" = %s AND
+        "regionID" = 10000002
+        ORDER BY "timestamp" DESC
+        LIMIT 1) as "latestJitaTimestamp",
+      ((SELECT
+        history."avgPrice"
+        FROM
+        market.history
+        WHERE "typeID" = %s AND
+        "regionID" = 10000002
+        ORDER BY "timestamp" DESC
+        LIMIT 1) * speculation.remaining) - (speculation.price * speculation.remaining) as "valueChange"
+    FROM
+      market.speculation,
+      public."invTypes"
+    WHERE
+      speculation."typeID" = "invTypes"."typeID" AND
+      speculation."transactionID" = %s
+    '''
+    data = (typeID, typeID, typeID, typeID, transactionID, )
+    cursor.execute(sql, data, )
+    df = pd.DataFrame(cursor.fetchall())
+    cursor.close()
+    return df

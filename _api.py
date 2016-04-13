@@ -83,6 +83,23 @@ def market_inventoryadd(transactionID):  # Initial populate of item into market.
     return transactionID
 
 
+def market_speculationadd(transactionID):  # Initial populate of item into market.speculation
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''INSERT INTO market.speculation(
+            "transactionID", "typeID", quantity, remaining, price)
+    SELECT "transactionID", "typeID", quantity, quantity AS remaining, price
+    FROM "character".wallet
+    WHERE wallet."transactionID" = %s
+    ON CONFLICT DO NOTHING
+    '''
+    data = (transactionID, )
+    cursor.execute(sql, data, )
+    conn.commit()
+    conn.close()
+    return transactionID
+
+
 def meta_conquerablestationslist():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)

@@ -323,7 +323,7 @@ def getskillqueues():
       skillqueue."queuePosition" = 0 AND
       CAST(EXTRACT(EPOCH FROM skillqueue."endTime") AS INTEGER) != CAST(EXTRACT(EPOCH FROM skillqueue."startTime") AS INTEGER)'''
     cursor.execute(sql, )
-    results = cursor.fetchall()  # TODO return dictionary rather than list
+    results = cursor.fetchall()
     return results
 
 
