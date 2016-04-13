@@ -5,6 +5,7 @@ from _dashboard import *
 from _wallet import *
 from _system import *
 from _market import *
+from _moon import *
 from _map import *
 
 
@@ -474,6 +475,19 @@ def moonreport_r64():
                            statustq = statustq())
 
 
+@app.route('/report/moon/item/<typeID>')
+def moonreport_item(typeID):
+    return render_template('pages/moonReports/item.html',
+                           title="Rarity 64",
+                           header="Rarity 64",
+                           nav="Rarity 64",
+                           timeutc=timeutc(),
+                           userstq = "{:,.0f}".format(countuserstq()),
+                           statustq = statustq(),
+                           typeID=typeID,
+                           typeName=gettypeName(typeID))
+
+
 #############################
 # mapReports
 #############################
@@ -507,7 +521,6 @@ def warreport_worldwarbee():
                            timeutc=timeutc(),
                            userstq = "{:,.0f}".format(countuserstq()),
                            statustq = statustq())
-
 
 
 #############################
@@ -663,9 +676,17 @@ def api_moonmineralsbytype(typeID):
 def api_moonmineralsbyalliance(typeID):
     return getmoonmineralsbyalliance(typeID)
 
+@app.route('/api/moonminerals/region/pie/<typeID>')
+def api_moon_regionsummarypie(typeID):
+    return moon_regionsummarypie(typeID)
+
 @app.route('/api/moonminerals/alliance/')
 def api_moonmineralsbyallalliance():
     return getmoonmineralsbysov()
+
+@app.route('/api/moonminerals/region/<typeID>')
+def api_moon_regionsummary(typeID):
+    return moon_regionsummary(typeID)
 
 # Index
 @app.route('/api/report/index/deadend/<gateCountLimit>')

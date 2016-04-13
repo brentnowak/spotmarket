@@ -1,0 +1,138 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header"><img src="https://image.eveonline.com/Type/{{typeID}}_64.png"> {{typeName}}</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-map-marker"></span> Regional
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Forge Price
+                </div>
+            </div>
+            <div class="d3-graph-price-{{typeID}}"></div>
+            <script>
+                graphPrice({
+                    width: 670,
+                    height: 340,
+                    marginright: 50,
+                    marginleft: 80,
+                    ylegend: 'price',
+                    selector: '.d3-graph-price-{{typeID}}',
+                    json: '/api/market/avgprice/{{typeID}}'
+                });
+            </script>
+        </div>
+    </div>
+
+    <p>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="fa fa-globe"></span> Regional Location
+                </div>
+            </div>
+            <div id="pie_region_{{typeID}}"></div>
+            <script>
+            var data1 = [];
+            d3.json("/api/moonminerals/region/pie/{{typeID}}", function(error, json) {
+
+              $.each(json, function(d,i){
+                data1.push({
+                  label: i.regionName,
+                  value: i.sum_regionID
+                })
+              })
+              var pie = new d3pie("pie_region_{{typeID}}", {
+                "data": {
+                  "content": data1
+                }
+              });
+            });
+            </script>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="fa fa-globe"></span> Sovereignty
+                </div>
+            </div>
+            <div id="pie_alliance_{{typeID}}"></div>
+            <script>
+            var data2 = [];
+            d3.json("/api/moonminerals/alliance/{{typeID}}", function(error, json) {
+
+              $.each(json, function(d,i){
+                data2.push({
+                  label: i.allianceName,
+                  value: i.sum_moonID
+                })
+              })
+              var pie = new d3pie("pie_alliance_{{typeID}}", {
+                "data": {
+                  "content": data2
+                }
+              });
+            });
+            </script>
+        </div>
+    </div>
+
+     <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Locations
+                </div>
+            </div>
+                <table data-toggle="table"
+                       data-sort-name="moonID"
+                       data-sort-order="desc"
+                       data-show-refresh="true"
+                       data-striped="true"
+                       data-show-toggle="true"
+                       data-search="true"
+                       data-url="/api/moonminerals/typeid/{{typeID}}"
+                       data-height="600">
+                    <thead>
+                        <tr>
+                            <th data-field="typeID" data-formatter="invTypeIconFormatter" data-width=32px data-align="right"></th>
+                            <th data-field="typeName" data-align="right">typeName</th>
+                            <th data-field="itemName" data-align="right">itemName</th>
+                            <th data-field="solarSystemName" data-align="right">solarSystemName</th>
+                            <th data-field="regionName" data-align="right">regionName</th>
+                            <th data-field="security" data-formatter="numberDec" data-align="right">security</th>
+                            <th data-field="allianceID" data-formatter="allianceIconFormatter" data-width=32px></th>
+                            <th data-field="ticker" data-align="right">ticker</th>
+                            <th data-field="name" data-align="right">name</th>
+                        </tr>
+                    </thead>
+                </table>
+        </div><!-- /.col-lg-12 -->
+    </div><!-- /.row -->
+
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+
+{% endblock %}

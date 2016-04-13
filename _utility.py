@@ -1405,7 +1405,7 @@ def getmoonmineralsbytypeid(typeID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      moonminerals."moonID",
+      mineral."moonID",
       "mapDenormalize"."itemName",
       "invTypes"."typeID",
       "invTypes"."typeName",
@@ -1416,7 +1416,7 @@ def getmoonmineralsbytypeid(typeID):
       alliance.name,
       alliance.ticker
     FROM
-      data.moonminerals,
+      moon.mineral,
       public."mapDenormalize",
       public."invTypes",
       public."mapSolarSystems",
@@ -1424,8 +1424,8 @@ def getmoonmineralsbytypeid(typeID):
       meta.alliance,
       map.sov
     WHERE
-      "mapDenormalize"."itemID" = moonminerals."moonID" AND
-      "invTypes"."typeID" = moonminerals."typeID" AND
+      "mapDenormalize"."itemID" = mineral."moonID" AND
+      "invTypes"."typeID" = mineral."typeID" AND
       "mapSolarSystems"."solarSystemID" = "mapDenormalize"."solarSystemID" AND
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
       alliance."allianceID" = sov."allianceID" AND
@@ -1445,10 +1445,10 @@ def getmoonmineralsbyalliance(typeID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-    COUNT(moonminerals."moonID") as SUM_moonID,
-      alliance.name
+    COUNT(mineral."moonID") as "sum_moonID",
+      alliance.name as "allianceName"
     FROM
-      data.moonminerals,
+      moon.mineral,
       public."mapDenormalize",
       public."invTypes",
       public."mapSolarSystems",
@@ -1456,8 +1456,8 @@ def getmoonmineralsbyalliance(typeID):
       meta.alliance,
       map.sov
     WHERE
-      "mapDenormalize"."itemID" = moonminerals."moonID" AND
-      "invTypes"."typeID" = moonminerals."typeID" AND
+      "mapDenormalize"."itemID" = mineral."moonID" AND
+      "invTypes"."typeID" = mineral."typeID" AND
       "mapSolarSystems"."solarSystemID" = "mapDenormalize"."solarSystemID" AND
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
       alliance."allianceID" = sov."allianceID" AND
@@ -1467,24 +1467,25 @@ def getmoonmineralsbyalliance(typeID):
       alliance.name,
       alliance.ticker
     ORDER BY
-      SUM_moonID DESC'''
+      "sum_moonID" DESC'''
     data = (typeID, )
     cursor.execute(sql, data, )
-    cursor.close()
     results = json.dumps(cursor.fetchall(), indent=2, default=date_handler)
+    cursor.close()
     if len(results) < 1:     # Handle a empty table
         return "No Data"
     else:
         return results
 
+
 def getmoonmineralsbysov():
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-    COUNT(moonminerals."moonID") as SUM_moonID,
+    COUNT(mineral."moonID") as SUM_moonID,
       alliance.name
     FROM
-      data.moonminerals,
+      moon.mineral,
       public."mapDenormalize",
       public."invTypes",
       public."mapSolarSystems",
@@ -1492,8 +1493,8 @@ def getmoonmineralsbysov():
       meta.alliance,
       map.sov
     WHERE
-      "mapDenormalize"."itemID" = moonminerals."moonID" AND
-      "invTypes"."typeID" = moonminerals."typeID" AND
+      "mapDenormalize"."itemID" = mineral."moonID" AND
+      "invTypes"."typeID" = mineral."typeID" AND
       "mapSolarSystems"."solarSystemID" = "mapDenormalize"."solarSystemID" AND
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
       alliance."allianceID" = sov."allianceID" AND
