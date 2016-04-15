@@ -7,6 +7,7 @@
 #-----------------------------------------------------------------------------
 
 from _utility import *
+import sys
 
 
 def mapkill_allsolarsystems():
@@ -82,6 +83,7 @@ def main():
             results = mapkill_duplicatecheck(solarSystem[0], timestamp)
             if len(results) == 2:  # If we have duplicate
                 print("[" + str(percentSolarSystems) + "%][" + str(percentTimestamps) + "%][" + str(solarSystem[0]) + "][Duplicate][" + str(timestamp) + "]")
+                sys.stdout.flush()
                 if results[0]['factionKills'] == results[1]['factionKills']:  # We have a duplicate
                     mapkill_deleteduplicate(results[1]['systemkillID'])
             else:

@@ -7,6 +7,7 @@
 #-----------------------------------------------------------------------------
 
 from _utility import *
+import sys
 
 
 def mapjump_allsolarsystems():
@@ -82,6 +83,7 @@ def main():
             results = mapjump_duplicatecheck(solarSystem[0], timestamp)
             if len(results) == 2:  # If we have duplicate
                 print("[" + str(percentSolarSystems) + "%][" + str(percentTimestamps) + "%][" + str(solarSystem[0]) + "][Duplicate][" + str(timestamp) + "]")
+                sys.stdout.flush()
                 if results[0]['shipJumps'] == results[1]['shipJumps']:  # We have a duplicate
                     mapjump_deleteduplicate(results[1]['systemjumpID'])
             else:

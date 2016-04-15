@@ -301,16 +301,16 @@ def getkmdetails(killID):
     SELECT
       mail."killmailID",
       mail."killID",
-      (mail."killData"->'victim'->'shipType'->'id')::text::int as typeID,
-      (mail."killData"->'victim'->'character'->'id')::text::int as characterID,
-      (mail."killData"->'victim'->'corporation'->'id')::text::int as corporationID,
-      (mail."killData"->'solarSystem'->'id')::text::int as solarSystemID,
-      (mail."killData"->'attackerCount')::text::int as attackerCount,
-      (mail."killData"->'victim'->'damageTaken')::text::int as damageTaken,
-      (mail."killData"->'killTime')::text as timestamp,
-      (mail."killData"->'victim'->'position'->'x')::text::real as x,
-      (mail."killData"->'victim'->'position'->'y')::text::real as y,
-      (mail."killData"->'victim'->'position'->'z')::text::real as z,
+      (mail."killData"->'victim'->'shipType'->>'id')::int as typeID,
+      (mail."killData"->'victim'->'character'->>'id')::int as characterID,
+      (mail."killData"->'victim'->'corporation'->>'id')::int as corporationID,
+      (mail."killData"->'solarSystem'->>'id')::int as solarSystemID,
+      (mail."killData"->>'attackerCount')::int as attackerCount,
+      (mail."killData"->'victim'->>'damageTaken')::int as damageTaken,
+      (mail."killData"->>'killTime')::text as timestamp,
+      (mail."killData"->'victim'->'position'->>'x')::real as x,
+      (mail."killData"->'victim'->'position'->>'y')::real as y,
+      (mail."killData"->'victim'->'position'->>'z')::real as z,
       mail."totalValue"
     FROM
       kill.mail
@@ -354,7 +354,7 @@ def setkmjson(killID, killData):
     cursor = conn.cursor()
     sql = '''UPDATE kill.mail
     SET "killData" = %s
-    WHERE mails."killID" = %s'''
+    WHERE mail."killID" = %s'''
     data = (killData, killID,)
     cursor.execute(sql, data, )
     conn.commit()
