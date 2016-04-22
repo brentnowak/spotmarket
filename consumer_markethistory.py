@@ -18,6 +18,10 @@ import concurrent.futures
 import multiprocessing
 from time import sleep
 from _market import *
+import requests.packages.urllib3
+
+requests.packages.urllib3.disable_warnings()
+#  Suppress InsecurePlatformWarning messages
 
 
 maxWorkers = multiprocessing.cpu_count()  # Scale workers to machine size
