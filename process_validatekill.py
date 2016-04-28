@@ -22,44 +22,20 @@ def mapkill_allsolarsystems():
     return results
 
 
-def mapkill_alltimestamps(solarSystemID):
+def mapkilldeleteduplicate(solarSystemID):
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     sql = '''
-    SELECT timestamp::text
-      FROM map.kill
-    WHERE "solarSystemID" = %s
+        DELETE FROM map.kill mj1 USING map.kill mj2
+    WHERE (mj1."solarSystemID" = mj2."solarSystemID")
+    AND mj1.timestamp >= mj2.timestamp - interval '1 sec'
+    AND mj1.timestamp <= mj2.timestamp + interval '1 sec'
+    AND mj1."solarSystemID" = mj2."solarSystemID"
+    AND mj1."systemkillID" != mj2."systemkillID"
+    AND mj1."systemkillID" < mj2."systemkillID"
+    AND mj1."solarSystemID" = %s
     '''
     data = (solarSystemID, )
-    cursor.execute(sql, data, )
-    results = cursor.fetchall()
-    return results
-
-
-def mapkill_duplicatecheck(solarSystemID, timestamp):
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
-    sql = '''
-    SELECT "systemkillID", "timestamp", "factionKills", "podKills", "shipKills", "solarSystemID"
-      FROM map.kill
-    WHERE "solarSystemID" = %s AND
-    "timestamp"::text LIKE %s
-    '''
-    data = (solarSystemID, timestamp, )
-    cursor.execute(sql, data, )
-    results = cursor.fetchall()
-    return results
-
-
-def mapkill_deleteduplicate(systemkillID):
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
-    sql = '''
-    DELETE
-      FROM map.kill
-    WHERE "systemkillID" = %s
-    '''
-    data = (systemkillID, )
     cursor.execute(sql, data, )
     conn.commit()
     return 0
@@ -67,29 +43,13 @@ def mapkill_deleteduplicate(systemkillID):
 
 def main():
     solarSystems = mapkill_allsolarsystems()
-    #solarSystems = [(30002187,)]  # Testing 1 solarSystemID
     currentSolarSystems = float(1)
     totalSolarSystems = float(len(solarSystems))
     for solarSystem in solarSystems:
+        mapkilldeleteduplicate(solarSystem)
         percentSolarSystems = "{0:.2f}".format(currentSolarSystems / totalSolarSystems * 100)
-        timestamps = mapkill_alltimestamps(solarSystem)
-        currentTimestamps = float(1)
-        totalTimestamps = float(len(timestamps))
-        for timestamp in timestamps:
-            percentTimestamps = "{0:.2f}".format(currentTimestamps/totalTimestamps*100)
-            timestamp = timestamp[0]
-            timestamp = timestamp[:-2]
-            timestamp = str(timestamp) + "%"
-            results = mapkill_duplicatecheck(solarSystem[0], timestamp)
-            if len(results) == 2:  # If we have duplicate
-                print("[" + str(percentSolarSystems) + "%][" + str(percentTimestamps) + "%][" + str(solarSystem[0]) + "][Duplicate][" + str(timestamp) + "]")
-                sys.stdout.flush()
-                if results[0]['factionKills'] == results[1]['factionKills']:  # We have a duplicate
-                    mapkill_deleteduplicate(results[1]['systemkillID'])
-            else:
-                None
-                #print("[" + str(percentTimestamps) + "%][" + str(solarSystem[0]) + "][No][" + str(timestamp) + "]")
-            currentTimestamps += 1
+        print("[" + str(percentSolarSystems) + "%][" + str(getSolarSystemName(solarSystem[0])) + "]")
+        sys.stdout.flush()
         currentSolarSystems += 1
 
 if __name__ == "__main__":
