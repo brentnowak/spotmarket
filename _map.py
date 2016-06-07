@@ -269,3 +269,92 @@ def mapkills_podkillsbyregion(regionID):
     df = pd.pivot_table(df,index='timestamp',columns='regionName',values='SUM_podKills')
     df = df.resample("12H",how='sum')
     return df.reset_index().to_json(orient='records',date_format='iso')
+
+
+#
+# Regional Reports by Name
+# "The North", "The South"
+#
+def getnpckills_byregionsname(regions, regionName):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+    SUM(kill."factionKills") as factionKills,
+      kill."timestamp"
+    FROM
+      map.kill,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
+      "mapSolarSystems"."solarSystemID" = kill."solarSystemID" AND
+      public."mapSolarSystems"."regionID" IN %s AND
+      timestamp < TIMESTAMP 'yesterday'
+    GROUP BY kill."timestamp"
+    ORDER BY timestamp DESC
+    '''
+    data = (regions, )
+    cursor.execute(sql, data)
+    df = pd.DataFrame(cursor.fetchall(),columns=[regionName, 'timestamp'])
+    df = df.set_index(['timestamp'])
+    df = df.resample("12H",how='sum')
+    cursor.close()
+    return df.reset_index().to_json(orient='records', date_format='iso')
+
+
+def getjumps_byregionsname(regions, regionName):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+    SUM(jump."shipJumps") as shipJumps,
+      jump."timestamp"
+    FROM
+      map.jump,
+      public."mapRegions",
+      public."mapSolarSystems"
+    WHERE
+      "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
+      "mapSolarSystems"."solarSystemID" = jump."solarSystemID" AND
+      public."mapSolarSystems"."regionID" IN %s AND
+      timestamp < TIMESTAMP 'yesterday'
+    GROUP BY jump."timestamp"
+    ORDER BY timestamp DESC
+    '''
+    data = (regions, )
+    cursor.execute(sql, data)
+    df = pd.DataFrame(cursor.fetchall(),columns=[regionName, 'timestamp'])
+    df = df.set_index(['timestamp'])
+    df = df.resample("12H",how='sum')
+    cursor.close()
+    return df.reset_index().to_json(orient='records', date_format='iso')
+
+
+def map_solarsystems_region(regionID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+
+    sql = '''
+    SELECT "solarSystemName" as "name",
+    "solarSystemID"
+    FROM public."mapSolarSystems"
+    WHERE "regionID" = %s
+    '''
+    data = (regionID, )
+    cursor.execute(sql, data, )
+    results = cursor.fetchall()
+    return results
+
+
+def map_solarsystem_connections(solarSystemID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    sql = '''
+    SELECT "toSolarSystemID"
+    FROM public."mapSolarSystemJumps"
+    WHERE "fromSolarSystemID" = %s
+    '''
+    data = (solarSystemID,)
+    cursor.execute(sql, data, )
+    results = cursor.fetchall()
+    return results
+

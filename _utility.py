@@ -306,64 +306,6 @@ def getnpckills_bysecurity(low, high, name):
 
 
 #
-# Regional Reports by Name
-# "The North", "The South"
-#
-def getnpckills_byregionsname(regions, regionName):
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
-    sql = '''SELECT
-    SUM(kill."factionKills") as factionKills,
-      kill."timestamp"
-    FROM
-      map.kill,
-      public."mapRegions",
-      public."mapSolarSystems"
-    WHERE
-      "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
-      "mapSolarSystems"."solarSystemID" = kill."solarSystemID" AND
-      public."mapSolarSystems"."regionID" IN %s AND
-      timestamp < TIMESTAMP 'yesterday'
-    GROUP BY kill."timestamp"
-    ORDER BY timestamp DESC
-    '''
-    data = (regions, )
-    cursor.execute(sql, data)
-    df = pd.DataFrame(cursor.fetchall(),columns=[regionName, 'timestamp'])
-    df = df.set_index(['timestamp'])
-    df = df.resample("12H",how='sum')
-    cursor.close()
-    return df.reset_index().to_json(orient='records', date_format='iso')
-
-
-def getjumps_byregionsname(regions, regionName):
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
-    sql = '''SELECT
-    SUM(mapjumps."shipJumps") as shipJumps,
-      mapjumps."timestamp"
-    FROM
-      data.mapjumps,
-      public."mapRegions",
-      public."mapSolarSystems"
-    WHERE
-      "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
-      "mapSolarSystems"."solarSystemID" = mapjumps."solarSystemID" AND
-      public."mapSolarSystems"."regionID" IN %s AND
-      timestamp < TIMESTAMP 'yesterday'
-    GROUP BY mapjumps."timestamp"
-    ORDER BY timestamp DESC
-    '''
-    data = (regions, )
-    cursor.execute(sql, data)
-    df = pd.DataFrame(cursor.fetchall(),columns=[regionName, 'timestamp'])
-    df = df.set_index(['timestamp'])
-    df = df.resample("12H",how='sum')
-    cursor.close()
-    return df.reset_index().to_json(orient='records', date_format='iso')
-
-
-#
 # Output list of ships by typeID
 #
 def getships():
@@ -1294,20 +1236,20 @@ def gettoprattingbyregion(regionID):
       "mapSolarSystems".security,
       alliance.ticker,
       alliance.name,
-      mapsov."allianceID",
+      sov."allianceID",
       SUM(kill."factionKills") as SUM_factionKills
     FROM
       meta.alliance,
       public."mapSolarSystems",
-      data.mapsov,
+      map.sov,
       map.kill
     WHERE
-      "mapSolarSystems"."solarSystemID" = mapsov."solarSystemID" AND
-      mapsov."allianceID" = alliance."allianceID" AND
+      "mapSolarSystems"."solarSystemID" = sov."solarSystemID" AND
+      sov."allianceID" = alliance."allianceID" AND
       kill."solarSystemID" = "mapSolarSystems"."solarSystemID" AND
       "mapSolarSystems"."regionID" = %s
     GROUP BY
-      kill."solarSystemID", "mapSolarSystems"."solarSystemName", "mapSolarSystems".security,  alliance.ticker, alliance.name, mapsov."allianceID"
+      kill."solarSystemID", "mapSolarSystems"."solarSystemName", "mapSolarSystems".security,  alliance.ticker, alliance.name, sov."allianceID"
     '''
     data = (regionID, )
     cursor.execute(sql, data, )
@@ -1321,28 +1263,28 @@ def getkillmailsbyregion(regionID):
     cursor = conn.cursor()
     sql = '''
     SELECT
-      killmails."killData"->'killTime' as timestamp,
-      killmails."killID",
-      killmails."killHash",
-      killmails."totalValue",
-      killmails."killData"->'attackerCount' as attackerCount,
-      killmails."killData"->'victim'->'damageTaken' as damageTaken,
-      killmails."killData"->'victim'->'alliance'->'name' as allianceName,
-      (killmails."killData"->'victim'->'shipType'->>'id')::int as typeID,
+      mail."killData"->'killTime' as timestamp,
+      mail."killID",
+      mail."killHash",
+      mail."totalValue",
+      mail."killData"->'attackerCount' as attackerCount,
+      mail."killData"->'victim'->'damageTaken' as damageTaken,
+      mail."killData"->'victim'->'alliance'->'name' as allianceName,
+      (mail."killData"->'victim'->'shipType'->>'id')::int as typeID,
       "invTypes"."typeName",
       "mapSolarSystems"."solarSystemName",
       "mapSolarSystems"."security"
     FROM
-      data.killmails,
+      kill.mail,
       public."invTypes",
       public."mapRegions",
       public."mapSolarSystems"
     WHERE
-      (killmails."killData"->'victim'->'shipType'->>'id')::int = "invTypes"."typeID" AND
+      (mail."killData"->'victim'->'shipType'->>'id')::int = "invTypes"."typeID" AND
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
-      "mapSolarSystems"."solarSystemID" = (killmails."killData"->'solarSystem'->>'id')::int AND
+      "mapSolarSystems"."solarSystemID" = (mail."killData"->'solarSystem'->>'id')::int AND
       public."mapSolarSystems"."regionID" = %s AND
-      (killmails."killData"->'victim'->'shipType'->>'id')::int NOT IN (33477)
+      (mail."killData"->'victim'->'shipType'->>'id')::int NOT IN (33477)
     ORDER BY
      timestamp DESC
     LIMIT 100
@@ -1364,31 +1306,31 @@ def getmoonmineralsbyregion(regionID):  # TODO change join to return results whe
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     sql = '''SELECT
-      moonminerals."moonID",
+      mineral."moonID",
       "mapDenormalize"."itemName",
       "invTypes"."typeID",
       "invTypes"."typeName",
       "mapSolarSystems"."solarSystemName",
       "mapSolarSystems".security,
       "mapRegions"."regionName",
-      mapsov."allianceID",
+      sov."allianceID",
       alliance.name,
       alliance.ticker
     FROM
-      data.moonminerals,
+      moon.mineral,
       public."mapDenormalize",
       public."invTypes",
       public."mapSolarSystems",
       public."mapRegions",
       meta.alliance,
-      data.mapsov
+      map.sov
     WHERE
-      "mapDenormalize"."itemID" = moonminerals."moonID" AND
-      "invTypes"."typeID" = moonminerals."typeID" AND
+      "mapDenormalize"."itemID" = mineral."moonID" AND
+      "invTypes"."typeID" = mineral."typeID" AND
       "mapSolarSystems"."solarSystemID" = "mapDenormalize"."solarSystemID" AND
       "mapRegions"."regionID" = "mapSolarSystems"."regionID" AND
-      alliance."allianceID" = mapsov."allianceID" AND
-      mapsov."solarSystemID" = "mapDenormalize"."solarSystemID" AND
+      alliance."allianceID" = sov."allianceID" AND
+      sov."solarSystemID" = "mapDenormalize"."solarSystemID" AND
       "mapRegions"."regionID" = %s
     '''
     data = (regionID, )

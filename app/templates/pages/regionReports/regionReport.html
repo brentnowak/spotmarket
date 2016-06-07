@@ -3,6 +3,19 @@
 
 {% block content %}
 
+<style>
+
+.link {
+  stroke: #ccc;
+}
+
+.node text {
+  pointer-events: none;
+  font: 10px sans-serif;
+}
+
+</style>
+
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row">
@@ -14,6 +27,21 @@
 
     <div class="row">
         <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-stats"></span> Map
+                </div>
+            </div>
+            <div class="d3-force-region-{{ regionID }}"></div>
+            <script>
+                graphForce({
+                    width: 720,
+                    height: 340,
+                    selector: '.d3-force-region-{{ regionID }}',
+                    json: '/api/force/region/{{ regionID }}'
+                });
+            </script>
+
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <span class="glyphicon glyphicon-stats"></span> Ship Jumps

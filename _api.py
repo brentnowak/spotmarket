@@ -1,4 +1,5 @@
 from _utility import *
+from _map import *
 
 def getcharacterblueprints():  # TODO add join to display regionName and solarSystemName
     conn = psycopg2.connect(conn_string)
@@ -131,3 +132,30 @@ def meta_conquerablestationslist():
         return "No Data"
     else:
         return results
+
+
+def force_region(regionID):
+    links = []
+    nodes = map_solarsystems_region(regionID)
+    idcount = 0
+    value = 1
+    # assign row ids
+    for row in nodes:
+        row['id'] = idcount
+        idcount += 1
+    for row in nodes:  # for every solarSystem
+        connections = map_solarsystem_connections(row['solarSystemID'])
+        source = row['id']
+
+        for connection in connections:
+            for row in nodes:
+                if row['solarSystemID'] == connection['toSolarSystemID']:
+                    target = row['id']
+                    #print(nodes['solarSystemID'])
+                    #print(connection['toSolarSystemID'])
+                    #target = 1000
+                    link = {'source': source, 'target': target, 'value': value}
+                    links.append(link)
+
+    result = {'nodes': nodes, 'links': links}
+    return json.dumps(result)

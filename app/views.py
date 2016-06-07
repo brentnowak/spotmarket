@@ -862,3 +862,8 @@ def api_market_speculationadd(transactionID):
 @app.route('/api/market/speculation')
 def api_market_speculationpricechange():
     return market_speculationpricechange()
+
+# Force
+@app.route('/api/force/region/<regionID>')
+def api_force_region(regionID):
+    return force_region(regionID)

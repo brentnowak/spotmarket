@@ -168,6 +168,7 @@ def getregionalstats(typeID):
 # Output    database insert
 #
 def market_getcrestdata(regionID, typeID):
+    latestDate = market_getlatestdate(typeID, regionID)
     eve = pycrest.EVE()
     url = "https://public-crest.eveonline.com/market/" + str(regionID) + "/types/" + str(typeID) + "/history/"
     try:
@@ -186,27 +187,31 @@ def market_getcrestdata(regionID, typeID):
             highPrice = row['highPrice']
             avgPrice = row['avgPrice']
             timestamp = row['date']
-            try:
-                conn = psycopg2.connect(conn_string)
-                cursor = conn.cursor()
-                sql = '''INSERT INTO market.history ("typeID", "regionID", timestamp,
-                 "volume", "orderCount", "lowPrice",
-                  "highPrice", "avgPrice")
-                  VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'''
-                data = (typeID, regionID, timestamp, volume, orderCount, lowPrice, highPrice, avgPrice,)
-                cursor.execute(sql, data, )
-            except psycopg2.IntegrityError:
-                conn.rollback()
-            else:
-                conn.commit()
-                count += 1
+            print(typeID)
+            print(type(latestDate))
+            print(type(timestamp))
+            if timestamp > latestDate:  # Only import if CREST data is newer
+                print("new data")
+                try:
+                    conn = psycopg2.connect(conn_string)
+                    cursor = conn.cursor()
+                    sql = '''INSERT INTO market.history ("typeID", "regionID", timestamp,
+                     "volume", "orderCount", "lowPrice",
+                      "highPrice", "avgPrice")
+                      VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'''
+                    data = (typeID, regionID, timestamp, volume, orderCount, lowPrice, highPrice, avgPrice,)
+                    cursor.execute(sql, data, )
+                except psycopg2.IntegrityError:
+                    conn.rollback()
+                else:
+                    conn.commit()
+                    count += 1
         timemark = arrow.utcnow().format('YYYY-MM-DD HH:mm:ss')
         print("[" + str(getregionName(regionID) + "][typeID:" + str(typeID) + "][" + str(gettypeName(typeID)) + "]"))
         sys.stdout.flush()
         log = "[typeID:" + str(typeID) + "][regionID:" + str(regionID) + "][insert: " + str(count) + "]"
         insertlog("consumer_markethistory.py", 0, log, timemark)
         return 1
-
 
 
 def market_speculationpricechange():
@@ -307,3 +312,25 @@ def market_speculationpricechangeitem(typeID, transactionID):
     df = pd.DataFrame(cursor.fetchall())
     cursor.close()
     return df
+
+
+def market_getlatestdate(typeID, regionID):
+    conn = psycopg2.connect(conn_string)
+    cursor = conn.cursor()
+    sql = '''SELECT
+      history."timestamp"
+    FROM
+      market.history
+    WHERE
+      history."typeID" = %s AND
+      history."regionID" = %s
+    ORDER BY history."timestamp" DESC
+    LIMIT 1
+    '''
+    data = (typeID, regionID, )
+    cursor.execute(sql, data, )
+    result = cursor.fetchone()
+    if result == None:
+            return 0
+    else:
+        return result[0]
